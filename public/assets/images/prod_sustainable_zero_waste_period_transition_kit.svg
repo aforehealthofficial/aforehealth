@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <linearGradient id="pGrad22" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBFD" />
+      <stop offset="100%" stop-color="#F7EDF2" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" rx="30" fill="url(#pGrad22)"/>
+  
+  <!-- Decorative backdrop aura -->
+  <circle cx="300" cy="270" r="190" fill="#E8C5D3" opacity="0.6"/>
+  <circle cx="300" cy="270" r="140" fill="#5E3C57" opacity="0.12"/>
+  
+  <!-- Silhouette Art -->
+  <g transform="translate(170, 140)">
+    <path d="M 30 50 Q 130 110 230 50 Q 210 180 130 215 Q 50 180 30 50 Z" fill="#5E3C57" opacity="0.9" filter="drop-shadow(0 15px 25px rgba(37,33,38,0.12))"/>
+    <path d="M 65 70 Q 130 100 195 70 Q 180 160 130 190 Q 80 160 65 70 Z" fill="#E8C5D3" opacity="0.75"/>
+    <!-- Center gusset / seal contour -->
+    <path d="M 100 100 Q 130 120 160 100 Q 150 155 130 175 Q 110 155 100 100 Z" fill="#FFF9FA" opacity="0.9"/>
+  </g>
+
+  <!-- Tag Pill -->
+  <rect x="180" y="420" width="240" height="34" rx="17" fill="#FFFFFF" filter="drop-shadow(0 4px 12px rgba(139,94,131,0.12))"/>
+  <text x="300" y="442" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" letter-spacing="1.5" fill="#5E3C57" text-anchor="middle">COMPLETE KIT</text>
+  
+  <!-- Product Label text -->
+  <text x="300" y="495" font-family="'Plus Jakarta Sans', sans-serif" font-size="17" font-weight="700" fill="#252126" text-anchor="middle">AFOREHEALTH Sustainable Zero-Was...</text>
+  <text x="300" y="530" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="800" fill="#5E3C57" text-anchor="middle">₹1999.00 <tspan font-size="14" font-weight="500" fill="#888888" text-decoration="line-through">₹2899.00</tspan></text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <rect width="800" height="450" rx="20" fill="#FFF9FA"/>
+  <circle cx="650" cy="225" r="180" fill="#E8B7C8" opacity="0.3"/>
+  <circle cx="680" cy="180" r="120" fill="#8B5E83" opacity="0.15"/>
+  <text x="60" y="210" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="800" letter-spacing="2" fill="#8B5E83">AFOREHEALTH WELLNESS</text>
+  <text x="60" y="260" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" font-weight="800" fill="#252126">Period Panty Fit & Sizing Guide</text>
+  <text x="60" y="300" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" fill="#777777">Doctor &amp; Textile Engineer Reviewed Guide</text>
+</svg>

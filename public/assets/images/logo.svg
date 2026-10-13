@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" width="280" height="60">
+  <defs>
+    <linearGradient id="afhGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5E83" />
+      <stop offset="100%" stop-color="#693D62" />
+    </linearGradient>
+  </defs>
+  <!-- Lotus Petal / Crescent Shield Icon -->
+  <g transform="translate(6, 8)">
+    <path d="M 22 2 C 10 14 6 26 12 36 C 18 46 32 46 38 36 C 44 26 40 14 28 2 Z" fill="#E8B7C8" opacity="0.6"/>
+    <path d="M 25 8 C 17 18 15 28 20 36 C 25 42 33 42 37 36 C 41 29 37 18 29 8 Z" fill="url(#afhGrad)"/>
+    <circle cx="25" cy="22" r="4" fill="#FFF9FA"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="62" y="34" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="24" letter-spacing="2.5" fill="#252126">AFORE<tspan fill="#8B5E83">HEALTH</tspan></text>
+  <text x="63" y="48" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-weight="500" font-size="8.5" letter-spacing="1.2" fill="#777777">COMFORT &amp; PERIOD CONFIDENCE</text>
+</svg>

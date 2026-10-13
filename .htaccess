@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Deny access to sensitive root files and directories
+    RewriteRule ^(\.env|\.git|config|storage|database|controllers|models|middleware|views|routes|tests) - [F,L]
+
+    # Route requests to public directory if document root is set to project root
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

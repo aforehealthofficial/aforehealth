@@ -1,0 +1,13 @@
+# Environment & Secrets
+.env
+
+# Backups & Logs
+/storage/backups/*.sql
+/logs/*.log
+/storage/logs/*.log
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
