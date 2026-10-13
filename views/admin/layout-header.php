@@ -19,23 +19,32 @@
     <!-- Admin Sidebar -->
     <?php
         $sbDb = getDbConnection();
+        $safeCount = function(string $sql) use ($sbDb): int {
+            try {
+                $res = $sbDb->query($sql);
+                return $res ? (int)$res->fetchColumn() : 0;
+            } catch (\Throwable $e) {
+                return 0;
+            }
+        };
+
         $sbCounts = [
-            'products' => (int)$sbDb->query("SELECT COUNT(*) FROM products")->fetchColumn(),
-            'categories' => (int)$sbDb->query("SELECT COUNT(*) FROM categories")->fetchColumn(),
-            'inventory' => (int)$sbDb->query("SELECT COUNT(*) FROM products")->fetchColumn(),
-            'inventory_low' => (int)$sbDb->query("SELECT COUNT(*) FROM products WHERE stock <= low_stock_threshold")->fetchColumn(),
-            'reviews_pending' => (int)$sbDb->query("SELECT COUNT(*) FROM reviews WHERE status = 'pending'")->fetchColumn(),
-            'reviews_total' => (int)$sbDb->query("SELECT COUNT(*) FROM reviews")->fetchColumn(),
-            'questions_pending' => (int)$sbDb->query("SELECT COUNT(*) FROM product_questions WHERE status = 'pending'")->fetchColumn(),
-            'questions_total' => (int)$sbDb->query("SELECT COUNT(*) FROM product_questions")->fetchColumn(),
-            'bundles' => (int)$sbDb->query("SELECT COUNT(*) FROM bundle_products")->fetchColumn(),
-            'orders' => (int)$sbDb->query("SELECT COUNT(*) FROM orders")->fetchColumn(),
-            'customers' => (int)$sbDb->query("SELECT COUNT(*) FROM users WHERE role != 'admin'")->fetchColumn(),
-            'pincodes' => (int)$sbDb->query("SELECT COUNT(*) FROM shipping_pincodes WHERE is_serviceable = 1")->fetchColumn(),
-            'coupons' => (int)$sbDb->query("SELECT COUNT(*) FROM coupons WHERE is_active = 1")->fetchColumn(),
-            'flash_sales' => (int)$sbDb->query("SELECT COUNT(*) FROM flash_sales WHERE is_active = 1")->fetchColumn(),
-            'blog' => (int)$sbDb->query("SELECT COUNT(*) FROM blog_posts")->fetchColumn(),
-            'notifications' => (int)$sbDb->query("SELECT COUNT(*) FROM notifications WHERE is_read = 0")->fetchColumn(),
+            'products' => $safeCount("SELECT COUNT(*) FROM products"),
+            'categories' => $safeCount("SELECT COUNT(*) FROM categories"),
+            'inventory' => $safeCount("SELECT COUNT(*) FROM products"),
+            'inventory_low' => $safeCount("SELECT COUNT(*) FROM products WHERE stock <= low_stock_threshold"),
+            'reviews_pending' => $safeCount("SELECT COUNT(*) FROM reviews WHERE status = 'pending'"),
+            'reviews_total' => $safeCount("SELECT COUNT(*) FROM reviews"),
+            'questions_pending' => $safeCount("SELECT COUNT(*) FROM product_questions WHERE status = 'pending'"),
+            'questions_total' => $safeCount("SELECT COUNT(*) FROM product_questions"),
+            'bundles' => $safeCount("SELECT COUNT(*) FROM bundles"),
+            'orders' => $safeCount("SELECT COUNT(*) FROM orders"),
+            'customers' => $safeCount("SELECT COUNT(*) FROM users"),
+            'pincodes' => $safeCount("SELECT COUNT(*) FROM pincodes WHERE status = 'active'"),
+            'coupons' => $safeCount("SELECT COUNT(*) FROM coupons WHERE status = 'active'"),
+            'flash_sales' => $safeCount("SELECT COUNT(*) FROM flash_sales WHERE status = 'active'"),
+            'blog' => $safeCount("SELECT COUNT(*) FROM blog_posts"),
+            'notifications' => $safeCount("SELECT COUNT(*) FROM notifications WHERE is_read = 0"),
         ];
     ?>
     <aside class="admin-sidebar">
