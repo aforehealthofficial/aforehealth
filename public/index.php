@@ -4,9 +4,11 @@
 // Autoload helpers & config
 require_once dirname(__DIR__) . '/helpers/env.php';
 loadEnv();
+date_default_timezone_set('Asia/Kolkata');
 require_once dirname(__DIR__) . '/helpers/functions.php';
 
 // Autoload classes
+
 
 
 spl_autoload_register(function (string $class) {

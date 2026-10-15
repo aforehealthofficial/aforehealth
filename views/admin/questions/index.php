@@ -78,7 +78,7 @@
                                 <strong class="small text-dark"><?= e($q['product_name']) ?></strong>
                             </td>
                             <td>
-                                <span class="small fw-semibold"><?= e($q['customer_name'] ?: 'Guest') ?></span>
+                                <span class="small fw-semibold"><?= e($q['customer_name'] ?? 'Guest') ?></span>
                                 <small class="text-muted d-block"><?= e($q['customer_mobile'] ?? '') ?></small>
                             </td>
                             <td style="max-width: 260px;">

@@ -83,9 +83,13 @@
                     <strong class="text-success d-block">
                         <?php 
                         $pincode = $order['shipping_address']['pincode'] ?? '';
-                        $deliverySvc = new \Services\DeliveryEstimationService();
-                        $est = $deliverySvc->getEstimateForPincode($pincode);
-                        echo e($est['date_range_formatted']);
+                        try {
+                            $deliverySvc = new \Services\DeliveryEstimationService();
+                            $est = $deliverySvc->getEstimateForPincode($pincode);
+                            echo e($est['date_range_formatted'] ?? $est['formatted_dates'] ?? '3–5 business days');
+                        } catch (\Throwable $e) {
+                            echo '3–5 business days';
+                        }
                         ?>
                     </strong>
                 </div>

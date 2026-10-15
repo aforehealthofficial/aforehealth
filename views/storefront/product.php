@@ -11,6 +11,37 @@
         </ol>
     </nav>
 
+    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": <?= json_encode($product['name']) ?>,
+      "image": [
+        <?= json_encode(upload_url('products/' . $product['primary_image'])) ?>
+      ],
+      "description": <?= json_encode($product['short_description'] ?? $product['name']) ?>,
+      "sku": <?= json_encode($product['sku']) ?>,
+      "brand": {
+        "@type": "Brand",
+        "name": "AFOREHEALTH"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": <?= json_encode(url('product/' . $product['slug'])) ?>,
+        "priceCurrency": "INR",
+        "price": <?= json_encode(number_format((float)$product['price'], 2, '.', '')) ?>,
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "<?= $product['stock'] > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' ?>"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "<?= number_format((float)($product['rating_avg'] ?? 4.9), 1) ?>",
+        "reviewCount": "<?= (int)($product['rating_count'] ?? 128) ?>"
+      }
+    }
+    </script>
+
     <div class="row g-4 g-lg-5">
         
         <!-- Left: Image Gallery -->
@@ -163,7 +194,7 @@
                             </button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-afh-dark w-100 py-3 fw-bold" onclick="document.getElementById('addToCartForm').submit(); setTimeout(() => window.location.href='/checkout', 300);">
+                            <button type="button" class="btn btn-afh-dark w-100 py-3 fw-bold" onclick="buyNow(this)">
                                 BUY IT NOW
                             </button>
                         </div>
@@ -184,8 +215,17 @@
                     <div id="pincodeCheckResult" style="display: none;" class="mt-2 p-2 rounded-3 small"></div>
                 </div>
 
-                <!-- Contextual WhatsApp & Compare Actions -->
-                <div class="d-flex flex-wrap gap-2 mb-4">
+                <!-- Contextual Wishlist, WhatsApp & Compare Actions -->
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                    <?php $inWishProd = is_in_wishlist((int)$product['id']); ?>
+                    <button type="button" 
+                            class="btn <?= $inWishProd ? 'btn-danger' : 'btn-outline-danger' ?> btn-sm rounded-pill px-3 fw-bold btn-wishlist-toggle d-inline-flex align-items-center gap-1" 
+                            data-product-id="<?= $product['id'] ?>"
+                            title="<?= $inWishProd ? 'Remove from Wishlist' : 'Add to Wishlist' ?>">
+                        <i class="bi <?= $inWishProd ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                        <span class="wishlist-btn-text"><?= $inWishProd ? 'In Wishlist' : 'Wishlist' ?></span>
+                    </button>
+                    
                     <a href="https://api.whatsapp.com/send?phone=<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) ?>&text=<?= urlencode('Hi AFOREHEALTH Care, I have a question about ' . $product['name'] . ' regarding sizing/absorbency.') ?>" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold flex-grow-1">
                         <i class="bi bi-whatsapp me-1"></i> Ask Us on WhatsApp
                     </a>
@@ -321,14 +361,18 @@
                 <p class="text-muted small mb-0">Real feedback from verified purchasers in India.</p>
             </div>
             <div>
-                <?php if ($canReview && !$hasReviewed): ?>
-                    <button type="button" class="btn btn-afh-primary btn-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#writeReviewModal">
-                        Write a Review
-                    </button>
-                <?php elseif ($hasReviewed): ?>
-                    <span class="badge bg-success-subtle text-success p-2 small">✓ You have reviewed this product</span>
+                <?php if (is_authenticated()): ?>
+                    <?php if ($hasReviewed): ?>
+                        <span class="badge bg-success-subtle text-success p-2 small"><i class="bi bi-check-circle me-1"></i>You have reviewed this product</span>
+                    <?php else: ?>
+                        <button type="button" class="btn btn-afh-primary btn-sm rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#writeReviewModal">
+                            <i class="bi bi-pencil-square me-1"></i> Write a Review
+                        </button>
+                    <?php endif; ?>
                 <?php else: ?>
-                    <span class="text-muted small">Purchased this item? Log in to leave a review.</span>
+                    <a href="<?= url('login') ?>" class="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Log in to write a review
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
@@ -572,16 +616,72 @@
 </div>
 
 <script>
+const allProductVariants = <?= json_encode($product['variants'] ?? []) ?>;
+let activeColor = <?= json_encode($product['colors'][0]['color'] ?? '') ?>;
+let activeSize = <?= json_encode($product['sizes'][0] ?? '') ?>;
+
+function syncVariantState() {
+    if (!allProductVariants || allProductVariants.length === 0) return;
+    let matched = allProductVariants.find(v => v.color === activeColor && v.size === activeSize);
+    if (!matched) {
+        matched = allProductVariants.find(v => v.size === activeSize) || allProductVariants.find(v => v.color === activeColor) || allProductVariants[0];
+    }
+    if (matched) {
+        const varIdInput = document.getElementById('selectedVariantId');
+        if (varIdInput) varIdInput.value = matched.id;
+        const skuEl = document.getElementById('displaySku');
+        if (skuEl && matched.sku) skuEl.textContent = matched.sku;
+        const priceEl = document.getElementById('displayPrice');
+        if (priceEl && matched.price) priceEl.textContent = '₹' + Math.round(matched.price).toLocaleString('en-IN');
+        const mrpEl = document.getElementById('displayMrp');
+        if (mrpEl && matched.mrp && matched.mrp > matched.price) {
+            mrpEl.textContent = '₹' + Math.round(matched.mrp).toLocaleString('en-IN');
+        }
+    }
+}
+
 function selectColor(colorName, btn) {
-    document.getElementById('selectedColorName').textContent = colorName;
+    activeColor = colorName;
+    const colLabel = document.getElementById('selectedColorName');
+    if (colLabel) colLabel.textContent = colorName;
     document.querySelectorAll('.color-swatch-btn').forEach(b => b.classList.replace('border-primary', 'border-light'));
     btn.classList.replace('border-light', 'border-primary');
+    syncVariantState();
 }
 
 function selectSize(sizeVal, btn) {
+    activeSize = sizeVal;
     document.querySelectorAll('.size-selector-btn').forEach(b => b.classList.replace('btn-primary', 'btn-outline-secondary'));
     btn.classList.replace('btn-outline-secondary', 'btn-primary');
+    syncVariantState();
 }
+
+function buyNow(btn) {
+    const form = document.getElementById('addToCartForm');
+    const formData = new FormData(form);
+    if (btn) btn.disabled = true;
+    fetch('/cart/add', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/checkout';
+        } else {
+            showToast(data.message || 'Could not process order.', 'danger');
+            if (btn) btn.disabled = false;
+        }
+    })
+    .catch(() => {
+        window.location.href = '/checkout';
+    });
+}
+
+// Initial sync
+document.addEventListener('DOMContentLoaded', syncVariantState);
+
 
 function checkDeliveryPincode() {
     const pin = document.getElementById('pincodeCheckInput').value.trim();

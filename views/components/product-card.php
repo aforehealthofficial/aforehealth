@@ -36,12 +36,13 @@ $isLowStock = ($product['stock'] <= ($product['low_stock_threshold'] ?? 5) && $p
         </div>
 
         <!-- Float Wishlist Heart -->
+        <?php $inWishlist = is_in_wishlist((int)$product['id']); ?>
         <button type="button" 
-                class="wishlist-btn-float btn-wishlist-toggle" 
+                class="wishlist-btn-float btn-wishlist-toggle <?= $inWishlist ? 'active in-wishlist' : '' ?>" 
                 data-product-id="<?= $product['id'] ?>" 
-                title="Add to Wishlist" 
+                title="<?= $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' ?>" 
                 aria-label="Wishlist">
-            <i class="bi bi-heart"></i>
+            <i class="bi <?= $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' ?>"></i>
         </button>
     </div>
 

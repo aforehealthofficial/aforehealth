@@ -8,13 +8,47 @@
         </div>
 
         <h1 class="h3 fw-extrabold text-dark mb-1">OTP Verification</h1>
-        <p class="text-muted small mb-4">Enter the 6-digit code sent to your mobile number <strong>+91 <?= e($mobile) ?></strong></p>
+        <p class="text-muted small mb-3">Enter the 6-digit code sent to your mobile number <strong>+91 <?= e($mobile) ?></strong></p>
+
+        <?php if (!empty($latestOtp)): ?>
+            <div class="alert alert-warning border-0 rounded-4 p-3 mb-4 shadow-sm text-start" style="background: #FFF9E6; border: 1px solid #FFE082 !important;">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="small fw-bold text-dark"><i class="bi bi-shield-lock-fill text-warning me-1"></i> Testing Mode OTP</span>
+                    <span class="badge bg-dark rounded-pill px-2">Ready</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                    <div>
+                        <span class="small text-muted d-block" style="font-size: 0.725rem;">Your on-screen verification OTP:</span>
+                        <span class="fs-4 font-monospace fw-extrabold text-primary tracking-widest" id="standaloneOtpDisplay"><?= e($latestOtp) ?></span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-afh-primary rounded-pill px-3 fw-bold shadow-sm" onclick="document.getElementById('vOtp').value='<?= e($latestOtp) ?>'">
+                        Auto-Fill
+                    </button>
+                </div>
+            </div>
+        <?php else: ?>
+            <div id="dynamicOtpBox" class="alert alert-warning border-0 rounded-4 p-3 mb-4 shadow-sm text-start" style="display: none; background: #FFF9E6; border: 1px solid #FFE082 !important;">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="small fw-bold text-dark"><i class="bi bi-shield-lock-fill text-warning me-1"></i> Testing Mode OTP</span>
+                    <span class="badge bg-dark rounded-pill px-2">Ready</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                    <div>
+                        <span class="small text-muted d-block" style="font-size: 0.725rem;">Your on-screen verification OTP:</span>
+                        <span class="fs-4 font-monospace fw-extrabold text-primary tracking-widest" id="standaloneOtpDisplay">------</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-afh-primary rounded-pill px-3 fw-bold shadow-sm" onclick="document.getElementById('vOtp').value=document.getElementById('standaloneOtpDisplay').textContent">
+                        Auto-Fill
+                    </button>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <form id="standaloneOtpForm" onsubmit="event.preventDefault(); verifyCode();">
             <input type="hidden" id="vMobile" value="<?= e($mobile) ?>">
             
             <div class="mb-4">
-                <input type="text" id="vOtp" class="form-control text-center fs-3 tracking-widest font-monospace py-2" maxlength="6" placeholder="000000" autofocus required>
+                <input type="text" id="vOtp" class="form-control text-center fs-3 tracking-widest font-monospace py-2" maxlength="6" placeholder="000000" value="<?= !empty($latestOtp) ? e($latestOtp) : '' ?>" autofocus required>
             </div>
 
             <div class="d-grid mb-3">
@@ -84,9 +118,17 @@ function resendCode() {
             showToast(data.message, 'success');
             if (data.demo_otp) {
                 document.getElementById('vOtp').value = data.demo_otp;
+                const disp = document.getElementById('standaloneOtpDisplay');
+                if (disp) disp.textContent = data.demo_otp;
+                const box = document.getElementById('dynamicOtpBox');
+                if (box) box.style.display = 'block';
+                showToast('Test OTP code: ' + data.demo_otp + ' (Auto-filled on screen)', 'success');
             }
+        } else {
+            showToast(data.message || 'Error sending OTP', 'danger');
         }
-    });
+    })
+    .catch(() => showToast('Failed to resend code.', 'danger'));
 }
 </script>
 

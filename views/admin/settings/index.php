@@ -58,6 +58,11 @@
                     </button>
                 </li>
                 <li class="nav-item">
+                    <button class="nav-link rounded-pill px-4 fw-bold" id="email-tab" data-bs-toggle="pill" data-bs-target="#email" type="button">
+                        <i class="bi bi-envelope-at me-1"></i> Email &amp; SMTP
+                    </button>
+                </li>
+                <li class="nav-item">
                     <button class="nav-link rounded-pill px-4 fw-bold" id="analytics-tab" data-bs-toggle="pill" data-bs-target="#analytics" type="button">
                         <i class="bi bi-graph-up me-1"></i> Analytics &amp; Pixels
                     </button>
@@ -80,7 +85,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Support Email</label>
-                                <input type="email" name="store_email" class="form-control" value="<?= e($settings['store_email'] ?? 'care@aforehealth.com') ?>">
+                                <input type="email" name="store_email" class="form-control" value="<?= e($settings['store_email'] ?? 'info@aforehealth.com') ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Official Support Phone</label>
@@ -330,6 +335,105 @@
                     </div>
                 </div>
 
+                <!-- Email & SMTP Tab (Hostinger Business Email) -->
+                <div class="tab-pane fade" id="email" role="tabpanel">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 border-bottom pb-3 mb-4">
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+                                    <i class="bi bi-envelope-check-fill text-success"></i> Hostinger Business Email &amp; SMTP
+                                </h5>
+                                <p class="text-muted small mb-0">
+                                    Every customer receipt, tracking notice, admin alert, and support notification is sent directly from <strong class="text-dark">info@aforehealth.com</strong>.
+                                </p>
+                            </div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold">
+                                <i class="bi bi-patch-check-fill me-1"></i> Mailbox: info@aforehealth.com
+                            </span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Sender Email (From Address) <span class="text-danger">*</span></label>
+                                <input type="email" name="smtp_from" class="form-control" value="<?= e($settings['smtp_from'] ?? 'info@aforehealth.com') ?>" required>
+                                <div class="form-text text-muted">All emails across the website will be sent from this email (<strong>info@aforehealth.com</strong>).</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Sender Display Name <span class="text-danger">*</span></label>
+                                <input type="text" name="smtp_from_name" class="form-control" value="<?= e($settings['smtp_from_name'] ?? 'AFOREHEALTH') ?>" required>
+                                <div class="form-text text-muted">The brand name shown in customer email inboxes (e.g. <code>AFOREHEALTH</code>).</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">SMTP Host <span class="text-danger">*</span></label>
+                                <input type="text" name="smtp_host" class="form-control" value="<?= e($settings['smtp_host'] ?? 'smtp.hostinger.com') ?>" required>
+                                <div class="form-text text-muted">Hostinger Outgoing Mail Server: <code>smtp.hostinger.com</code></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">SMTP Port <span class="text-danger">*</span></label>
+                                <input type="number" name="smtp_port" class="form-control" value="<?= e($settings['smtp_port'] ?? '465') ?>" required>
+                                <div class="form-text text-muted">Port <code>465</code> (SSL) or <code>587</code> (TLS).</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Encryption Security <span class="text-danger">*</span></label>
+                                <select name="smtp_encryption" class="form-select">
+                                    <option value="ssl" <?= ($settings['smtp_encryption'] ?? 'ssl') === 'ssl' ? 'selected' : '' ?>>SSL (Port 465 Recommended)</option>
+                                    <option value="tls" <?= ($settings['smtp_encryption'] ?? '') === 'tls' ? 'selected' : '' ?>>TLS / STARTTLS (Port 587)</option>
+                                </select>
+                                <div class="form-text text-muted">Use SSL with port 465 for Hostinger.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">SMTP Username / Mailbox <span class="text-danger">*</span></label>
+                                <input type="text" name="smtp_user" class="form-control" value="<?= e($settings['smtp_user'] ?? 'info@aforehealth.com') ?>" required>
+                                <div class="form-text text-muted">Your active Hostinger email address: <code>info@aforehealth.com</code></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">SMTP Mailbox Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="smtp_pass_field" name="smtp_pass" class="form-control" placeholder="<?= !empty($settings['smtp_pass']) ? '•••••••• (Password configured)' : 'Enter password for info@aforehealth.com' ?>">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="const f=document.getElementById('smtp_pass_field'); f.type = f.type==='password'?'text':'password';">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text text-muted">The password set during mailbox creation in Hostinger hPanel. Leave empty to keep unchanged.</div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-light border mt-4 mb-0 rounded-3 p-3">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-info-circle-fill text-primary mt-1"></i>
+                                <div class="small text-muted">
+                                    <strong>Hostinger SMTP Reference:</strong> Server: <code>smtp.hostinger.com</code> &bull; Port: <code>465</code> (SSL) &bull; Username: <code>info@aforehealth.com</code>. Once your mailbox password is saved above, click <strong>Save All Settings</strong> then test using the verification tool below.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test Email Diagnostic Section -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                                <i class="bi bi-send-check text-primary"></i> Live Test Email Sender
+                            </h6>
+                            <span class="badge bg-light text-secondary border">Sender: info@aforehealth.com</span>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Test the live SMTP handshake and deliver a real verification message to any inbox from <strong>info@aforehealth.com</strong>.
+                        </p>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-8">
+                                <input type="email" id="testEmailInput" form="testEmailForm" name="test_email" class="form-control" placeholder="Enter recipient email (e.g. your personal Gmail/work email)" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" form="testEmailForm" class="btn btn-dark w-100 fw-bold">
+                                    <i class="bi bi-send me-1"></i> Send Test Verification
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Analytics Tab -->
                 <div class="tab-pane fade" id="analytics" role="tabpanel">
                     <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
@@ -358,7 +462,24 @@
                 </button>
             </div>
         </form>
+
+        <!-- Hidden standalone form for Test Email submission -->
+        <form id="testEmailForm" action="<?= url('admin/settings/test-email') ?>" method="POST" style="display: none;"></form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check URL hash to switch to appropriate tab automatically
+    const hash = window.location.hash;
+    if (hash) {
+        const tabTrigger = document.querySelector(`button[data-bs-target="${hash}"]`);
+        if (tabTrigger) {
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+        }
+    }
+});
+</script>
 
 <?php require __DIR__ . '/../layout-footer.php'; ?>

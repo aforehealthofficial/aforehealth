@@ -1,5 +1,7 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
-
+<?php
+$products = $products ?? ($items ?? []);
+require __DIR__ . '/../layouts/header.php';
+?>
 <div class="container py-4">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-3">

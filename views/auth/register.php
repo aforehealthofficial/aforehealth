@@ -3,9 +3,17 @@
 <div class="container py-5" style="max-width: 520px;">
     <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
         
-        <div class="text-center mb-4">
+        <div class="text-center mb-3">
             <h1 class="h3 fw-extrabold text-dark mb-1">Create an Account</h1>
             <p class="text-muted small">Join AFOREHEALTH for personalized sizing, order tracking &amp; rewards.</p>
+        </div>
+
+        <div class="alert alert-light border d-flex align-items-center justify-content-between p-3 rounded-3 mb-4 shadow-sm" style="background: #faf8f9;">
+            <div class="pe-2">
+                <div class="fw-bold text-dark small"><i class="bi bi-shield-check text-primary me-1"></i> Prefer Mobile OTP?</div>
+                <div class="text-muted" style="font-size: 0.78rem;">Instant passwordless login &amp; automatic account creation with Mobile OTP.</div>
+            </div>
+            <a href="<?= url('login') ?>" class="btn btn-sm btn-outline-primary fw-bold text-nowrap">Use Mobile OTP →</a>
         </div>
 
         <form action="<?= url('register') ?>" method="POST">

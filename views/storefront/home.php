@@ -1,40 +1,106 @@
 <?php require __DIR__ . '/../layouts/header.php'; ?>
 
 <!-- 1. Hero Banner Section -->
-<section class="hero-banner py-5" style="background: linear-gradient(135deg, #FFF9FA 0%, #F8ECF3 100%); border-bottom: 1px solid #F3E1EC;">
-    <div class="container py-lg-4">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <div class="badge bg-white text-primary px-3 py-2 rounded-pill shadow-sm mb-3 border fw-bold">
-                    🌸 Everyday Comfort. Period Confidence.
+<section class="hero-banner py-4 py-lg-5" style="background: linear-gradient(135deg, #FFF9FA 0%, #F8ECF3 100%); border-bottom: 1px solid #F3E1EC;">
+    <div class="container py-lg-3">
+        <?php if (!empty($heroBanners) && count($heroBanners) > 1): ?>
+            <!-- Multiple Banners Carousel -->
+            <div id="homeHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4500">
+                <div class="carousel-indicators mb-2">
+                    <?php foreach ($heroBanners as $bIdx => $b): ?>
+                        <button type="button" data-bs-target="#homeHeroCarousel" data-bs-slide-to="<?= $bIdx ?>" class="<?= $bIdx === 0 ? 'active' : '' ?>" aria-label="Slide <?= $bIdx + 1 ?>"></button>
+                    <?php endforeach; ?>
                 </div>
-                <h1 class="display-4 fw-extrabold text-dark mb-3 lh-sm" style="font-weight: 800; letter-spacing: -0.02em;">
-                    Comfort That Moves <br><span style="color: #8B5E83;">With You.</span>
-                </h1>
-                <p class="lead text-muted mb-4" style="font-size: 1.15rem; line-height: 1.6;">
-                    Thoughtfully designed leakproof underwear, buttery-soft everyday panties, and pH-balanced essentials engineered specifically for Indian bodies and tropical climates.
-                </p>
-                <div class="d-flex flex-wrap gap-3 mb-4">
-                    <a href="<?= url('shop') ?>" class="btn btn-afh-primary btn-lg px-4 py-3 shadow-sm">
-                        SHOP ALL COLLECTION →
-                    </a>
-                    <a href="<?= url('category/period-panties') ?>" class="btn btn-afh-secondary btn-lg px-4 py-3">
-                        EXPLORE PERIOD PANTIES
-                    </a>
+                <div class="carousel-inner rounded-4 shadow-sm">
+                    <?php foreach ($heroBanners as $bIdx => $b): ?>
+                        <div class="carousel-item <?= $bIdx === 0 ? 'active' : '' ?>">
+                            <div class="row align-items-center g-4 p-3 p-lg-4 bg-white rounded-4 border">
+                                <div class="col-lg-6 order-2 order-lg-1">
+                                    <div class="badge bg-white text-primary px-3 py-2 rounded-pill shadow-sm mb-2 border fw-bold">
+                                        🌸 Everyday Comfort. Period Confidence.
+                                    </div>
+                                    <h1 class="hero-title text-dark mb-2 lh-sm">
+                                        <?= e($b['title']) ?>
+                                    </h1>
+                                    <?php if (!empty($b['subtitle'])): ?>
+                                        <p class="hero-lead text-muted mb-3">
+                                            <?= e($b['subtitle']) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                    <div class="hero-buttons d-flex flex-wrap gap-2 mb-3">
+                                        <a href="<?= e(url(ltrim($b['link'], '/'))) ?>" class="btn btn-afh-primary px-4 py-2.5 shadow-sm fw-bold">
+                                            <?= e($b['cta_text'] ?: 'SHOP NOW') ?> →
+                                        </a>
+                                        <a href="<?= url('category/period-panties') ?>" class="btn btn-afh-secondary px-4 py-2.5 fw-bold">
+                                            EXPLORE PERIOD PANTIES
+                                        </a>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 pt-1">
+                                        <div class="text-warning small">★★★★★</div>
+                                        <div class="small fw-semibold text-dark">
+                                            Rated <strong>4.9 / 5</strong> by 50,000+ Indian Women
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                    <a href="<?= e(url(ltrim($b['link'], '/'))) ?>" class="d-block text-decoration-none">
+                                        <picture>
+                                            <source media="(max-width: 767px)" srcset="<?= upload_url('banners/' . ($b['image_mobile'] ?: $b['image_desktop'])) ?>">
+                                            <img src="<?= upload_url('banners/' . $b['image_desktop']) ?>" alt="<?= e($b['title']) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
+                                        </picture>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="d-flex align-items-center gap-3 pt-2">
-                    <div class="text-warning fs-5">★★★★★</div>
-                    <div class="small fw-semibold text-dark">
-                        Rated <strong>4.9 / 5</strong> by 50,000+ Indian Women
+            </div>
+        <?php else: ?>
+            <?php 
+                $activeBanner = !empty($heroBanners[0]) ? $heroBanners[0] : null;
+                $heroTitle = $activeBanner['title'] ?? 'Comfort That Moves With You.';
+                $heroSubtitle = $activeBanner['subtitle'] ?? 'Thoughtfully designed leakproof underwear, buttery-soft everyday panties, and pH-balanced essentials engineered specifically for Indian bodies and tropical climates.';
+                $heroLink = !empty($activeBanner['link']) ? url(ltrim($activeBanner['link'], '/')) : url('shop');
+                $heroCta = !empty($activeBanner['cta_text']) ? $activeBanner['cta_text'] : 'SHOP ALL COLLECTION →';
+                $heroDeskImg = !empty($activeBanner['image_desktop']) ? upload_url('banners/' . $activeBanner['image_desktop']) : asset('images/hero_banner_1.svg');
+                $heroMobImg = !empty($activeBanner['image_mobile']) ? upload_url('banners/' . $activeBanner['image_mobile']) : $heroDeskImg;
+            ?>
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6 order-2 order-lg-1">
+                    <div class="badge bg-white text-primary px-3 py-2 rounded-pill shadow-sm mb-2 border fw-bold">
+                        🌸 Everyday Comfort. Period Confidence.
+                    </div>
+                    <h1 class="hero-title text-dark mb-2 lh-sm">
+                        <?= e($heroTitle) ?>
+                    </h1>
+                    <p class="hero-lead text-muted mb-3">
+                        <?= e($heroSubtitle) ?>
+                    </p>
+                    <div class="hero-buttons d-flex flex-wrap gap-2 mb-3">
+                        <a href="<?= e($heroLink) ?>" class="btn btn-afh-primary px-4 py-2.5 shadow-sm fw-bold">
+                            <?= e($heroCta) ?>
+                        </a>
+                        <a href="<?= url('category/period-panties') ?>" class="btn btn-afh-secondary px-4 py-2.5 fw-bold">
+                            EXPLORE PERIOD PANTIES
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 pt-1">
+                        <div class="text-warning small">★★★★★</div>
+                        <div class="small fw-semibold text-dark">
+                            Rated <strong>4.9 / 5</strong> by 50,000+ Indian Women
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <div class="position-relative">
-                    <img src="<?= asset('images/hero_banner_1.svg') ?>" alt="AFOREHEALTH Hero" class="img-fluid rounded-4 shadow-sm" style="max-height: 480px; width: 100%; object-fit: cover;">
+                <div class="col-lg-6 order-1 order-lg-2 text-center">
+                    <a href="<?= e($heroLink) ?>" class="d-block text-decoration-none">
+                        <picture>
+                            <source media="(max-width: 767px)" srcset="<?= e($heroMobImg) ?>">
+                            <img src="<?= e($heroDeskImg) ?>" alt="<?= e($heroTitle) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
+                        </picture>
+                    </a>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -337,17 +403,44 @@
 </section>
 
 <!-- 10. WhatsApp Community Call-To-Action Banner -->
-<section class="py-5" style="background: linear-gradient(135deg, #E8F5EE 0%, #D8EDE1 100%); border-top: 1px solid #C5E5D1;">
-    <div class="container text-center py-lg-3" style="max-width: 760px;">
-        <div class="display-6 fw-bold text-dark mb-3">
-            Join the AFOREHEALTH <span class="text-success">WhatsApp Sisterhood</span>
+<section class="py-4 py-md-5 bg-white border-top">
+    <div class="container" style="max-width: 960px;">
+        <div class="sisterhood-card p-4 p-md-5 text-center shadow-sm">
+            <div class="d-inline-flex align-items-center gap-2 mb-3">
+                <span class="badge bg-success text-white px-3 py-1 rounded-pill fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">
+                    <i class="bi bi-shield-lock-fill me-1"></i> Private &amp; Discreet
+                </span>
+                <div class="avatar-stack d-none d-sm-inline-flex">
+                    <span class="avatar-stack-item">🌸</span>
+                    <span class="avatar-stack-item">✨</span>
+                    <span class="avatar-stack-item">💖</span>
+                    <span class="avatar-stack-item" style="background:#198754; font-size:0.6rem;">+25k</span>
+                </div>
+            </div>
+
+            <h2 class="h2 fw-bold text-dark mb-2">
+                Join the AFOREHEALTH <span class="text-success">WhatsApp Sisterhood</span>
+            </h2>
+            <p class="text-muted mx-auto mb-4" style="max-width: 620px; font-size: 0.98rem; line-height: 1.6;">
+                Over 25,000 women share real experiences, get discreet gynecologist advice, and enjoy VIP secret discounts. 100% confidential.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2 gap-md-3 mb-4">
+                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+                    <i class="bi bi-check-circle-fill text-success me-1"></i> Free Gynaecologist Q&amp;A
+                </span>
+                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+                    <i class="bi bi-check-circle-fill text-success me-1"></i> Secret VIP Flash Drops
+                </span>
+                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+                    <i class="bi bi-check-circle-fill text-success me-1"></i> Zero Spam Guarantee
+                </span>
+            </div>
+
+            <a href="<?= e(get_setting('whatsapp_group_url') ?: 'https://chat.whatsapp.com/sample') ?>" target="_blank" class="btn btn-success btn-lg px-4 py-2 px-md-5 py-md-3 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+                <i class="bi bi-whatsapp fs-5"></i> JOIN OUR WHATSAPP COMMUNITY <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-        <p class="lead text-dark mb-4" style="font-size: 1.1rem;">
-            Over 25,000 women share real experiences, get discreet gynecologist advice, and enjoy VIP secret discounts. (We never spam or auto-add you!)
-        </p>
-        <a href="<?= e(get_setting('whatsapp_group_url')) ?>" target="_blank" class="btn btn-success btn-lg px-4 py-3 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
-            <i class="bi bi-whatsapp fs-4"></i> JOIN OUR WHATSAPP COMMUNITY
-        </a>
     </div>
 </section>
 

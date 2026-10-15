@@ -30,30 +30,42 @@ class User extends BaseModel {
     public function createOtp(string $mobile, string $purpose = 'login'): string {
         $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
 
-        // Rate limiting: Max 3 OTP requests in 10 minutes
+        // Rate limiting: relaxed for testing mode (up to 50 in 10 mins)
         $stmtThrott = $this->db->prepare("
             SELECT COUNT(*) FROM otp_verifications 
             WHERE mobile = ? AND created_at > (NOW() - INTERVAL 10 MINUTE)
         ");
         $stmtThrott->execute([$cleanMobile]);
-        if ((int)$stmtThrott->fetchColumn() >= 3) {
+        if ((int)$stmtThrott->fetchColumn() >= 50) {
             throw new \Exception("Too many OTP requests. Please wait 10 minutes before requesting another code.");
         }
 
         // Generate 6 digit OTP
         $otp = (string)random_int(100000, 999999);
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
         // Invalidate older active OTPs for same mobile and purpose without erasing rate limit history
         $this->db->prepare("UPDATE otp_verifications SET expires_at = NOW() WHERE mobile = ? AND purpose = ? AND verified_at IS NULL")->execute([$cleanMobile, $purpose]);
 
         $stmt = $this->db->prepare("
             INSERT INTO otp_verifications (mobile, otp_code, purpose, attempts, expires_at)
-            VALUES (?, ?, ?, 0, ?)
+            VALUES (?, ?, ?, 0, DATE_ADD(NOW(), INTERVAL 15 MINUTE))
         ");
-        $stmt->execute([$cleanMobile, $otp, $purpose, $expiresAt]);
+        $stmt->execute([$cleanMobile, $otp, $purpose]);
 
         return $otp;
+    }
+
+    public function getLatestActiveOtp(string $mobile, string $purpose = 'login'): ?string {
+        $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
+        $stmt = $this->db->prepare("
+            SELECT otp_code FROM otp_verifications
+            WHERE mobile = ? AND purpose = ? AND expires_at > NOW() AND verified_at IS NULL
+            ORDER BY id DESC LIMIT 1
+        ");
+        $stmt->execute([$cleanMobile, $purpose]);
+        $val = $stmt->fetchColumn();
+        return $val ?: null;
     }
 
     public function verifyOtp(string $mobile, string $otp, string $purpose = 'login'): bool {

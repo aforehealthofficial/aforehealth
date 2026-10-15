@@ -44,7 +44,7 @@ Router::get('/account', 'AccountController@dashboard', ['auth']);
 Router::get('/account/orders', 'AccountController@orders', ['auth']);
 Router::get('/account/orders/{number}', 'AccountController@orderDetail', ['auth']);
 Router::get('/account/wishlist', 'AccountController@wishlist', ['auth']);
-Router::post('/account/wishlist/toggle', 'AccountController@toggleWishlist', ['auth']);
+Router::post('/account/wishlist/toggle', 'AccountController@toggleWishlist');
 Router::get('/account/addresses', 'AccountController@addresses', ['auth']);
 Router::post('/account/addresses/save', 'AccountController@saveAddress', ['auth']);
 Router::post('/account/addresses/delete', 'AccountController@deleteAddress', ['auth']);
@@ -77,27 +77,78 @@ Router::post('/newsletter/subscribe', 'PageController@subscribeNewsletter');
 Router::get('/sitemap.xml', function() {
     header('Content-Type: application/xml; charset=utf-8');
     $pdo = getDbConnection();
-    $products = $pdo->query("SELECT slug, updated_at FROM products WHERE status = 'published'")->fetchAll();
-    $categories = $pdo->query("SELECT slug FROM categories WHERE status = 'active'")->fetchAll();
-    $posts = $pdo->query("SELECT slug, updated_at FROM blog_posts WHERE status = 'published'")->fetchAll();
+    $products = $pdo->query("SELECT name, slug, primary_image, updated_at FROM products WHERE status = 'published'")->fetchAll();
+    $categories = $pdo->query("SELECT name, slug FROM categories WHERE status = 'active'")->fetchAll();
+    $posts = $pdo->query("SELECT title, slug, featured_image, updated_at FROM blog_posts WHERE status = 'published'")->fetchAll();
 
-    echo '<?xml version="1.0" encoding="UTF-8"?>';
-    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    echo '<url><loc>' . url('/') . '</loc><changefreq>daily</changefreq><priority>1.0</priority></url>';
-    echo '<url><loc>' . url('/shop') . '</loc><changefreq>daily</changefreq><priority>0.9</priority></url>';
-    echo '<url><loc>' . url('/combos') . '</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>';
-    echo '<url><loc>' . url('/blog') . '</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>';
+    $staticPages = [
+        '/' => ['daily', '1.0'],
+        '/shop' => ['daily', '0.9'],
+        '/combos' => ['weekly', '0.8'],
+        '/offers' => ['daily', '0.9'],
+        '/build-your-kit' => ['weekly', '0.8'],
+        '/blog' => ['daily', '0.8'],
+        '/about-us' => ['monthly', '0.6'],
+        '/faq' => ['monthly', '0.6'],
+        '/contact-us' => ['monthly', '0.6'],
+        '/shipping-policy' => ['monthly', '0.5'],
+        '/return-refund-policy' => ['monthly', '0.5'],
+        '/privacy-policy' => ['monthly', '0.5'],
+        '/terms-conditions' => ['monthly', '0.5']
+    ];
+
+    echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' . "\n";
+    
+    foreach ($staticPages as $uri => $meta) {
+        echo '  <url>' . "\n";
+        echo '    <loc>' . htmlspecialchars(url(ltrim($uri, '/')), ENT_XML1, 'UTF-8') . '</loc>' . "\n";
+        echo '    <changefreq>' . $meta[0] . '</changefreq>' . "\n";
+        echo '    <priority>' . $meta[1] . '</priority>' . "\n";
+        echo '  </url>' . "\n";
+    }
     
     foreach ($categories as $cat) {
-        echo '<url><loc>' . url('/category/' . $cat['slug']) . '</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>';
+        echo '  <url>' . "\n";
+        echo '    <loc>' . htmlspecialchars(url('category/' . $cat['slug']), ENT_XML1, 'UTF-8') . '</loc>' . "\n";
+        echo '    <changefreq>weekly</changefreq>' . "\n";
+        echo '    <priority>0.8</priority>' . "\n";
+        echo '  </url>' . "\n";
     }
+
     foreach ($products as $p) {
-        echo '<url><loc>' . url('/product/' . $p['slug']) . '</loc><lastmod>' . date('Y-m-d', strtotime($p['updated_at'])) . '</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>';
+        $lastmod = !empty($p['updated_at']) ? date('Y-m-d', strtotime($p['updated_at'])) : date('Y-m-d');
+        echo '  <url>' . "\n";
+        echo '    <loc>' . htmlspecialchars(url('product/' . $p['slug']), ENT_XML1, 'UTF-8') . '</loc>' . "\n";
+        echo '    <lastmod>' . $lastmod . '</lastmod>' . "\n";
+        echo '    <changefreq>daily</changefreq>' . "\n";
+        echo '    <priority>0.9</priority>' . "\n";
+        if (!empty($p['primary_image'])) {
+            echo '    <image:image>' . "\n";
+            echo '      <image:loc>' . htmlspecialchars(upload_url('products/' . $p['primary_image']), ENT_XML1, 'UTF-8') . '</image:loc>' . "\n";
+            echo '      <image:title>' . htmlspecialchars($p['name'], ENT_XML1, 'UTF-8') . '</image:title>' . "\n";
+            echo '    </image:image>' . "\n";
+        }
+        echo '  </url>' . "\n";
     }
+
     foreach ($posts as $post) {
-        echo '<url><loc>' . url('/blog/' . $post['slug']) . '</loc><lastmod>' . date('Y-m-d', strtotime($post['updated_at'])) . '</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>';
+        $lastmod = !empty($post['updated_at']) ? date('Y-m-d', strtotime($post['updated_at'])) : date('Y-m-d');
+        echo '  <url>' . "\n";
+        echo '    <loc>' . htmlspecialchars(url('blog/' . $post['slug']), ENT_XML1, 'UTF-8') . '</loc>' . "\n";
+        echo '    <lastmod>' . $lastmod . '</lastmod>' . "\n";
+        echo '    <changefreq>monthly</changefreq>' . "\n";
+        echo '    <priority>0.7</priority>' . "\n";
+        if (!empty($post['featured_image'])) {
+            echo '    <image:image>' . "\n";
+            echo '      <image:loc>' . htmlspecialchars(upload_url('blog/' . $post['featured_image']), ENT_XML1, 'UTF-8') . '</image:loc>' . "\n";
+            echo '      <image:title>' . htmlspecialchars($post['title'], ENT_XML1, 'UTF-8') . '</image:title>' . "\n";
+            echo '    </image:image>' . "\n";
+        }
+        echo '  </url>' . "\n";
     }
-    echo '</urlset>';
+
+    echo '</urlset>' . "\n";
     exit;
 });
 
@@ -132,6 +183,7 @@ Router::post('/admin/products/delete', 'Admin\AdminProductController@delete', ['
 
 Router::get('/admin/categories', 'Admin\AdminCategoryController@index', ['admin']);
 Router::post('/admin/categories/store', 'Admin\AdminCategoryController@store', ['admin']);
+Router::post('/admin/categories/update', 'Admin\AdminCategoryController@update', ['admin']);
 Router::post('/admin/categories/delete', 'Admin\AdminCategoryController@delete', ['admin']);
 
 // Admin Orders
@@ -150,6 +202,13 @@ Router::post('/admin/coupons/store', 'Admin\AdminCouponController@store', ['admi
 Router::post('/admin/coupons/toggle', 'Admin\AdminCouponController@toggleStatus', ['admin']);
 Router::post('/admin/coupons/delete', 'Admin\AdminCouponController@delete', ['admin']);
 
+// Admin Home Page Banners
+Router::get('/admin/banners', 'Admin\AdminBannerController@index', ['admin']);
+Router::post('/admin/banners/store', 'Admin\AdminBannerController@store', ['admin']);
+Router::post('/admin/banners/update/{id}', 'Admin\AdminBannerController@update', ['admin']);
+Router::post('/admin/banners/toggle', 'Admin\AdminBannerController@toggle', ['admin']);
+Router::post('/admin/banners/delete', 'Admin\AdminBannerController@delete', ['admin']);
+
 // Admin Customers
 Router::get('/admin/customers', 'Admin\AdminCustomerController@index', ['admin']);
 Router::get('/admin/customers/{id}', 'Admin\AdminCustomerController@show', ['admin']);
@@ -165,12 +224,15 @@ Router::get('/admin/reports/products', 'Admin\AdminReportController@products', [
 // Admin Settings & Backup
 Router::get('/admin/settings', 'Admin\AdminSettingController@index', ['admin']);
 Router::post('/admin/settings/update', 'Admin\AdminSettingController@update', ['admin']);
+Router::post('/admin/settings/test-email', 'Admin\AdminSettingController@testEmail', ['admin']);
 Router::get('/admin/settings/backup', 'Admin\AdminSettingController@backupDatabase', ['admin']);
 
 // Admin Blog
 Router::get('/admin/blog', 'Admin\AdminBlogController@index', ['admin']);
 Router::get('/admin/blog/create', 'Admin\AdminBlogController@create', ['admin']);
 Router::post('/admin/blog/store', 'Admin\AdminBlogController@store', ['admin']);
+Router::get('/admin/blog/edit/{id}', 'Admin\AdminBlogController@edit', ['admin']);
+Router::post('/admin/blog/update', 'Admin\AdminBlogController@update', ['admin']);
 Router::post('/admin/blog/delete', 'Admin\AdminBlogController@delete', ['admin']);
 
 // ==========================================

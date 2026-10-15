@@ -91,7 +91,7 @@ a:hover {
 }
 
 .header-brand img {
-  height: 48px;
+  height: 42px;
   width: auto;
   object-fit: contain;
 }
@@ -164,28 +164,39 @@ a:hover {
   background: #FFFFFF;
   border-top: 1px solid #FAF0F4;
   padding: 0;
+  overflow: visible;
 }
 .nav-main-menu {
   display: flex;
   list-style: none;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
-  gap: 28px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.nav-main-menu::-webkit-scrollbar {
-  display: none;
+  gap: clamp(6px, 1.1vw, 18px);
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 .nav-main-item > a {
-  display: block;
-  padding: 12px 0;
-  font-size: 0.84rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 2px;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--afh-dark);
   text-transform: uppercase;
   position: relative;
+  white-space: nowrap;
+}
+@media (max-width: 1399px) {
+  .nav-main-menu {
+    gap: clamp(4px, 0.8vw, 12px);
+  }
+  .nav-main-item > a {
+    font-size: 0.72rem;
+    letter-spacing: 0.005em;
+  }
 }
 .nav-main-item > a:hover,
 .nav-main-item > a.active {
@@ -212,53 +223,99 @@ a:hover {
   vertical-align: middle;
 }
 
-/* Custom Buttons */
+/* Custom Buttons & Standardized Sizing */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 700;
+  border-radius: var(--afh-radius-pill);
+  min-height: 44px;
+  padding: 10px 22px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0) !important;
+}
+.btn-sm {
+  min-height: 36px !important;
+  padding: 6px 16px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  border-radius: var(--afh-radius-pill) !important;
+}
+.btn-lg {
+  min-height: 52px !important;
+  padding: 13px 30px !important;
+  font-size: 0.98rem !important;
+  font-weight: 800 !important;
+  border-radius: var(--afh-radius-pill) !important;
+}
+
 .btn-afh-primary {
   background-color: var(--afh-primary);
   color: #FFFFFF;
   border: 1px solid var(--afh-primary);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 12px 24px;
-  border-radius: var(--afh-radius);
-  transition: var(--afh-transition);
+  box-shadow: 0 4px 12px rgba(166, 58, 80, 0.2);
 }
 .btn-afh-primary:hover {
   background-color: var(--afh-primary-hover);
   border-color: var(--afh-primary-hover);
   color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: var(--afh-shadow-md);
+  box-shadow: 0 8px 22px rgba(166, 58, 80, 0.32);
 }
 
 .btn-afh-secondary {
   background-color: #FFFFFF;
   color: var(--afh-primary);
   border: 1.5px solid var(--afh-primary);
-  font-weight: 700;
-  padding: 11px 22px;
-  border-radius: var(--afh-radius);
-  transition: var(--afh-transition);
 }
 .btn-afh-secondary:hover {
   background-color: var(--afh-secondary-light);
   color: var(--afh-primary-dark);
-  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(166, 58, 80, 0.12);
 }
 
 .btn-afh-dark {
   background-color: var(--afh-dark);
   color: #FFFFFF;
   border: none;
-  font-weight: 700;
-  padding: 12px 24px;
-  border-radius: var(--afh-radius);
-  transition: var(--afh-transition);
+  box-shadow: 0 4px 12px rgba(28, 24, 30, 0.2);
 }
 .btn-afh-dark:hover {
   background-color: #151216;
   color: #FFFFFF;
-  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(28, 24, 30, 0.32);
+}
+
+/* Site-wide Subtle Micro Animations */
+@keyframes pageFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up,
+.card,
+.product-card,
+.sisterhood-card {
+  animation: pageFadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.hover-lift:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px rgba(45, 40, 46, 0.09) !important;
 }
 
 /* Trust Badges Bar */
@@ -594,17 +651,18 @@ a:hover {
 }
 
 .cart-items-scrollable {
-  flex-grow: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  padding: 20px 24px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 .cart-drawer-item {
   display: flex;
   gap: 14px;
-  padding-bottom: 16px;
+  padding-bottom: 14px;
   border-bottom: 1px solid #FAF0F4;
 }
 .cart-item-thumb {
@@ -663,9 +721,11 @@ a:hover {
 }
 
 .cart-drawer-footer {
-  padding: 20px 24px;
+  padding: 14px 20px 20px;
   background: #FFFFFF;
   border-top: 1px solid var(--afh-border);
+  flex-shrink: 0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
 }
 
 /* Mobile Bottom Navigation */
@@ -772,7 +832,7 @@ a:hover {
   color: #9E8D9A;
 }
 
-/* Responsive Grids */
+/* Responsive Grids & Mobile Optimizations */
 @media (max-width: 576px) {
   .product-grid-col {
     width: 50% !important; /* 2 columns on mobile */
@@ -794,3 +854,322 @@ a:hover {
     font-size: 0.75rem;
   }
 }
+
+/* ==========================================================================
+   Hero Banner & Mobile Polish
+   ========================================================================== */
+.hero-banner {
+  background: linear-gradient(135deg, #FFF9FA 0%, #F8ECF3 100%);
+  border-bottom: 1px solid #F3E1EC;
+  padding: 3rem 0;
+  position: relative;
+}
+
+.hero-title {
+  font-size: clamp(1.85rem, 4.5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.hero-lead {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.hero-carousel-card {
+  position: relative;
+  border-radius: var(--afh-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--afh-shadow-md);
+  background: #FFF9FA;
+  border: 1px solid var(--afh-border);
+}
+
+.hero-carousel-card img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-carousel-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(37,33,38,0) 0%, rgba(37,33,38,0.85) 100%);
+  padding: 30px 24px 24px;
+  color: #FFFFFF;
+}
+
+@media (max-width: 991px) {
+  .hero-banner {
+    padding: 1.5rem 0 2rem;
+  }
+  .hero-carousel-card img {
+    height: 320px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-main .container {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  .header-brand img {
+    height: 34px !important;
+  }
+  .announcement-bar {
+    font-size: 0.72rem;
+    padding: 6px 8px;
+    line-height: 1.35;
+  }
+  .hero-banner {
+    padding: 1rem 0 1.5rem;
+  }
+  .hero-carousel-card img {
+    height: 220px;
+    border-radius: 14px;
+  }
+  .hero-carousel-overlay {
+    padding: 16px 14px;
+  }
+  .hero-carousel-overlay h3 {
+    font-size: 1.15rem;
+  }
+  .hero-carousel-overlay p {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+  }
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  .hero-buttons .btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Checkout Page Helpers */
+.bg-light-brand {
+  background-color: #FFF9FA !important;
+}
+.shadow-xs {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.transition-all {
+  transition: all 0.2s ease-in-out;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.address-select-card:hover {
+  border-color: var(--afh-primary) !important;
+  transform: translateY(-1px);
+}
+.payment-option-card:hover {
+  border-color: var(--afh-primary) !important;
+}
+
+/* ==========================================================================
+   Accordion & FAQ Luxury Styling (Fix for default Bootstrap blue box)
+   ========================================================================== */
+.accordion-flush .accordion-item {
+  border: 1px solid #EFE4EA !important;
+  border-radius: 14px !important;
+  margin-bottom: 14px !important;
+  background: #FFFFFF !important;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(45, 40, 46, 0.04) !important;
+  transition: all 0.25s ease-in-out;
+}
+.accordion-flush .accordion-item:hover {
+  border-color: rgba(166, 58, 80, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(166, 58, 80, 0.08) !important;
+}
+.accordion-button {
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  color: var(--afh-dark) !important;
+  background-color: #FFFFFF !important;
+  padding: 18px 22px !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+.accordion-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+.accordion-button:not(.collapsed) {
+  background: #FFF7F9 !important;
+  color: var(--afh-primary) !important;
+  border-bottom: 1px solid #F5E6ED !important;
+}
+.accordion-button::after {
+  background-size: 14px !important;
+  transition: transform 0.25s ease-in-out !important;
+}
+.accordion-button:not(.collapsed)::after {
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(325deg) brightness(90%) contrast(92%);
+}
+.accordion-body {
+  padding: 18px 22px 22px 22px !important;
+  background: #FFFFFF !important;
+  color: #5C545E !important;
+  font-size: 0.92rem !important;
+  line-height: 1.75 !important;
+}
+
+/* ==========================================================================
+   Order Tracking Connected Timeline (Fix for Screenshot 2)
+   ========================================================================== */
+.track-stepper-container {
+  position: relative;
+  margin: 30px 0 20px 0;
+  padding: 0 10px;
+}
+.track-stepper-progress-bg {
+  position: absolute;
+  top: 20px;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background: #E8E3E6;
+  z-index: 1;
+  border-radius: 4px;
+}
+.track-stepper-progress-bar {
+  position: absolute;
+  top: 20px;
+  left: 5%;
+  height: 4px;
+  background: linear-gradient(90deg, #198754, #20c997);
+  z-index: 2;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.track-stepper-steps {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.track-step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  max-width: 110px;
+}
+.track-step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: #FFFFFF;
+  border: 3px solid #E8E3E6;
+  color: #8C828D;
+  margin-bottom: 8px;
+  transition: all 0.25s ease;
+}
+.track-step-item.completed .track-step-circle {
+  background: #198754;
+  border-color: #198754;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(25, 135, 84, 0.3);
+}
+.track-step-item.active .track-step-circle {
+  background: #FFFFFF;
+  border-color: #198754;
+  color: #198754;
+  font-weight: 800;
+  box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.2);
+  animation: pulse-ring 2s infinite;
+}
+.track-step-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #7B727D;
+  line-height: 1.25;
+}
+.track-step-item.completed .track-step-label,
+.track-step-item.active .track-step-label {
+  color: #1A171B;
+  font-weight: 700;
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(25, 135, 84, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+}
+@media (max-width: 767px) {
+  .track-stepper-steps {
+    overflow-x: auto;
+    padding-bottom: 10px;
+    justify-content: flex-start;
+    gap: 16px;
+  }
+  .track-step-item {
+    min-width: 80px;
+    flex: none;
+  }
+  .track-stepper-progress-bg,
+  .track-stepper-progress-bar {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Sisterhood VIP Card Styling (Fix for Screenshot 4)
+   ========================================================================== */
+.sisterhood-card {
+  background: linear-gradient(135deg, #F3FAF5 0%, #E6F5EC 100%);
+  border: 1px solid #CBEBD6;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.sisterhood-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(40, 167, 69, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.avatar-stack {
+  display: inline-flex;
+  align-items: center;
+}
+.avatar-stack-item {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  margin-left: -8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #8B5E83;
+  color: #FFFFFF;
+}
+.avatar-stack-item:first-child {
+  margin-left: 0;
+}
+

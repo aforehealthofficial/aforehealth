@@ -7,13 +7,40 @@ class AdminInventoryController {
     public function index(): void {
         $pdo = getDbConnection();
 
-        $items = $pdo->query("
+        $search = trim($_GET['q'] ?? '');
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 50, 100]) ? (int)($_GET['per_page'] ?? 20) : 20;
+
+        $where = ["1=1"];
+        $params = [];
+        if (!empty($search)) {
+            $where[] = "(p.name LIKE ? OR p.sku LIKE ?)";
+            $s = "%{$search}%";
+            $params[] = $s;
+            $params[] = $s;
+        }
+        $whereClause = implode(' AND ', $where);
+
+        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM products p WHERE {$whereClause}");
+        $countStmt->execute($params);
+        $total = (int)$countStmt->fetchColumn();
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        $offset = ($page - 1) * $perPage;
+
+        $stmt = $pdo->prepare("
             SELECT p.id as product_id, p.name as product_name, p.sku, p.stock, p.low_stock_threshold,
                    c.name as category_name
             FROM products p
             LEFT JOIN categories c ON p.category_id = c.id
+            WHERE {$whereClause}
             ORDER BY p.stock ASC
-        ")->fetchAll();
+            LIMIT {$perPage} OFFSET {$offset}
+        ");
+        $stmt->execute($params);
+        $items = $stmt->fetchAll();
+
+        // All products for sidebar adjustment dropdown
+        $allProducts = $pdo->query("SELECT id as product_id, name as product_name, sku, stock FROM products ORDER BY name ASC")->fetchAll();
 
         // Logs
         $logs = $pdo->query("
@@ -27,7 +54,13 @@ class AdminInventoryController {
         view('admin.inventory.index', [
             'pageTitle' => 'Inventory & Stock Movements - AFOREHEALTH Admin',
             'items' => $items,
-            'logs' => $logs
+            'allProducts' => $allProducts,
+            'logs' => $logs,
+            'search' => $search,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'total' => $total
         ]);
     }
 

@@ -32,7 +32,10 @@ function url(string $path = ''): string {
  * Asset URL helper
  */
 function asset(string $path): string {
-    return url('assets/' . ltrim($path, '/'));
+    $cleanPath = ltrim($path, '/');
+    $filePath = dirname(__DIR__) . '/public/assets/' . $cleanPath;
+    $version = file_exists($filePath) ? filemtime($filePath) : '2.1';
+    return url('assets/' . $cleanPath . '?v=' . $version);
 }
 
 /**
@@ -40,6 +43,67 @@ function asset(string $path): string {
  */
 function upload_url(string $path): string {
     return url('uploads/' . ltrim($path, '/'));
+}
+
+/**
+ * Handle single file upload safely
+ */
+function upload_file(array $file, string $subfolder = 'products', array $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif']): ?string {
+    if (empty($file['tmp_name']) || $file['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'])) {
+        return null;
+    }
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExts)) {
+        return null;
+    }
+
+    $uploadDir = dirname(__DIR__) . '/public/uploads/' . trim($subfolder, '/');
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $cleanBase = slugify(pathinfo($file['name'], PATHINFO_FILENAME));
+    if (empty($cleanBase)) {
+        $cleanBase = 'file';
+    }
+    $filename = $cleanBase . '_' . time() . '_' . mt_rand(1000, 9999) . '.' . $ext;
+    $targetPath = $uploadDir . '/' . $filename;
+
+    if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+        return $filename;
+    }
+
+    return null;
+}
+
+/**
+ * Handle multiple files upload safely
+ */
+function upload_multiple_files(array $files, string $subfolder = 'products', array $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif']): array {
+    $uploaded = [];
+    if (empty($files['name']) || !is_array($files['name'])) {
+        return $uploaded;
+    }
+
+    $count = count($files['name']);
+    for ($i = 0; $i < $count; $i++) {
+        if ($files['error'][$i] === UPLOAD_ERR_OK && is_uploaded_file($files['tmp_name'][$i])) {
+            $single = [
+                'name' => $files['name'][$i],
+                'type' => $files['type'][$i],
+                'tmp_name' => $files['tmp_name'][$i],
+                'error' => $files['error'][$i],
+                'size' => $files['size'][$i],
+            ];
+            $saved = upload_file($single, $subfolder, $allowedExts);
+            if ($saved) {
+                $uploaded[] = $saved;
+            }
+        }
+    }
+
+    return $uploaded;
 }
 
 /**
@@ -100,7 +164,21 @@ function get_flashes(): array {
  * Authentication Helpers
  */
 function auth_user(): ?array {
-    return $_SESSION['user'] ?? null;
+    if (empty($_SESSION['user']['id'])) {
+        return null;
+    }
+    if (empty($_SESSION['user']['name']) || empty($_SESSION['user']['mobile'])) {
+        try {
+            $pdo = getDbConnection();
+            $stmt = $pdo->prepare("SELECT id, name, mobile, email, role FROM users WHERE id = ?");
+            $stmt->execute([$_SESSION['user']['id']]);
+            $u = $stmt->fetch();
+            if ($u) {
+                $_SESSION['user'] = array_merge($_SESSION['user'], $u);
+            }
+        } catch (\Throwable $e) {}
+    }
+    return $_SESSION['user'];
 }
 
 function is_authenticated(): bool {
@@ -222,21 +300,54 @@ function get_cart_count(): int {
  * Live Wishlist count
  */
 function get_wishlist_count(): int {
-    if (!is_authenticated()) return 0;
+    if (!is_authenticated()) {
+        return count($_SESSION['guest_wishlist'] ?? []);
+    }
     static $wCount = null;
     if ($wCount !== null) return $wCount;
 
     try {
         $pdo = getDbConnection();
-        $userId = auth_user()['id'];
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM wishlists WHERE user_id = ?");
-        $stmt->execute([$userId]);
-        $wCount = (int)$stmt->fetchColumn();
-    } catch (Exception $e) {
+        $user = auth_user();
+        if ($user) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM wishlists WHERE user_id = ?");
+            $stmt->execute([(int)$user['id']]);
+            $wCount = (int)$stmt->fetchColumn();
+        } else {
+            $wCount = 0;
+        }
+    } catch (\Throwable $e) {
         $wCount = 0;
     }
 
     return $wCount;
+}
+
+/**
+ * Check if product is in current user/guest wishlist
+ */
+function is_in_wishlist(int $productId): bool {
+    static $userWishlistIds = null;
+    if ($userWishlistIds === null) {
+        if (!is_authenticated()) {
+            $userWishlistIds = array_map('intval', $_SESSION['guest_wishlist'] ?? []);
+        } else {
+            try {
+                $pdo = getDbConnection();
+                $user = auth_user();
+                if ($user) {
+                    $stmt = $pdo->prepare("SELECT product_id FROM wishlists WHERE user_id = ?");
+                    $stmt->execute([(int)$user['id']]);
+                    $userWishlistIds = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
+                } else {
+                    $userWishlistIds = [];
+                }
+            } catch (\Throwable $e) {
+                $userWishlistIds = [];
+            }
+        }
+    }
+    return in_array($productId, $userWishlistIds, true);
 }
 
 /**

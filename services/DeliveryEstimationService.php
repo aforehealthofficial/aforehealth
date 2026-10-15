@@ -43,9 +43,14 @@ class DeliveryEstimationService {
             'min_date' => $minDate->format('Y-m-d'),
             'max_date' => $maxDate->format('Y-m-d'),
             'formatted_dates' => $formatted,
+            'date_range_formatted' => $formatted,
             'days_string' => "{$minDays}–{$maxDays} business days",
             'pincode' => $pincode
         ];
+    }
+
+    public function getEstimateForPincode(?string $pincode = null): array {
+        return $this->estimate(0, $pincode);
     }
 
     private function addBusinessDays(DateTime $date, int $days, bool $skipWeekends, array $holidays): DateTime {

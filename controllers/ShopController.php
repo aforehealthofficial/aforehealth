@@ -10,7 +10,7 @@ class ShopController {
         $categoryModel = new Category();
 
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48]) ? (int)($_GET['per_page'] ?? 20) : 20;
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48, 50]) ? (int)($_GET['per_page'] ?? 20) : 20;
 
         $filters = [
             'category' => $_GET['category'] ?? null,
@@ -53,7 +53,7 @@ class ShopController {
         }
 
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48]) ? (int)($_GET['per_page'] ?? 20) : 20;
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48, 50]) ? (int)($_GET['per_page'] ?? 20) : 20;
 
         $filters = [
             'category' => $category['id'],
@@ -87,7 +87,7 @@ class ShopController {
         $productModel = new Product();
 
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48]) ? (int)($_GET['per_page'] ?? 20) : 20;
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48, 50]) ? (int)($_GET['per_page'] ?? 20) : 20;
 
         // Category 6 is Combos & Value Packs
         $filters = [
@@ -110,7 +110,7 @@ class ShopController {
     public function offers(): void {
         $productModel = new Product();
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48]) ? (int)($_GET['per_page'] ?? 20) : 20;
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48, 50]) ? (int)($_GET['per_page'] ?? 20) : 20;
 
         $filters = [
             'discount' => 15, // Items with at least 15% discount
@@ -139,7 +139,7 @@ class ShopController {
         $query = trim($_GET['q'] ?? '');
 
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48]) ? (int)($_GET['per_page'] ?? 20) : 20;
+        $perPage = in_array((int)($_GET['per_page'] ?? 20), [10, 20, 30, 48, 50]) ? (int)($_GET['per_page'] ?? 20) : 20;
 
         $filters = [
             'q' => $query,

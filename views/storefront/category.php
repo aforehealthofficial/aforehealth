@@ -36,15 +36,27 @@
         </div>
     <?php endif; ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 pb-2 border-bottom">
         <div class="small text-muted">Showing <strong><?= count($products) ?></strong> of <strong><?= $total ?></strong> products</div>
         
         <form method="GET" class="d-flex align-items-center gap-2">
-            <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+            <?php if (!empty($filters['subcategory'])): ?>
+                <input type="hidden" name="subcategory" value="<?= e($filters['subcategory']) ?>">
+            <?php endif; ?>
+
+            <label class="small text-muted text-nowrap d-none d-sm-inline" for="catSortSelect">Sort:</label>
+            <select name="sort" id="catSortSelect" class="form-select form-select-sm" onchange="this.form.submit()">
                 <option value="popularity" <?= ($filters['sort'] ?? '') === 'popularity' ? 'selected' : '' ?>>Popularity</option>
                 <option value="newest" <?= ($filters['sort'] ?? '') === 'newest' ? 'selected' : '' ?>>Newest Arrivals</option>
                 <option value="price_low" <?= ($filters['sort'] ?? '') === 'price_low' ? 'selected' : '' ?>>Price: Low to High</option>
                 <option value="price_high" <?= ($filters['sort'] ?? '') === 'price_high' ? 'selected' : '' ?>>Price: High to Low</option>
+            </select>
+
+            <label class="small text-muted text-nowrap d-none d-sm-inline" for="catPerPageSelect">Show:</label>
+            <select name="per_page" id="catPerPageSelect" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="20" <?= ($perPage ?? 20) == 20 ? 'selected' : '' ?>>20</option>
+                <option value="30" <?= ($perPage ?? 20) == 30 ? 'selected' : '' ?>>30</option>
+                <option value="50" <?= ($perPage ?? 20) == 50 ? 'selected' : '' ?>>50</option>
             </select>
         </form>
     </div>
@@ -57,6 +69,31 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <!-- Pagination -->
+    <?php if (($totalPages ?? 1) > 1): ?>
+        <nav aria-label="Category pagination" class="mt-5 d-flex justify-content-center">
+            <ul class="pagination pagination-sm m-0">
+                <?php if ($page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">« Prev</a>
+                    </li>
+                <?php endif; ?>
+                
+                <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                    <li class="page-item <?= $p === $page ? 'active' : '' ?>">
+                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $p])) ?>"><?= $p ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <?php if ($page < $totalPages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next »</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+    <?php endif; ?>
 </div>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

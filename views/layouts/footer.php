@@ -185,7 +185,7 @@
                             data.products.forEach(p => {
                                 html += `
                                     <a href="${p.url}" class="d-flex align-items-center gap-2 p-2 rounded-3 text-decoration-none border-bottom">
-                                        <img src="${p.image_url}" style="width: 45px; height: 45px; object-fit: contain;" class="rounded border p-1" alt="">
+                                        <img src="${p.image_url}" style="width: 45px; height: 45px; object-fit: contain;" class="rounded border p-1" alt="${p.name}">
                                         <div class="flex-grow-1">
                                             <div class="small fw-bold text-dark text-truncate" style="max-width: 250px;">${p.name}</div>
                                             <div class="small fw-bold" style="color: var(--afh-primary);">${p.formatted_price}</div>

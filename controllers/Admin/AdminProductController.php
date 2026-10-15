@@ -101,7 +101,25 @@ class AdminProductController {
         $slug = slugify($name);
         $discountPct = $mrp > $price ? round((($mrp - $price) / $mrp) * 100) : 0;
 
+        // Primary Image upload
+        $primaryImage = 'cat_period_panties.svg';
+        if (!empty($_FILES['primary_image']['tmp_name'])) {
+            $uploadedPrimary = upload_file($_FILES['primary_image'], 'products');
+            if ($uploadedPrimary) {
+                $primaryImage = $uploadedPrimary;
+            }
+        }
+
         $pdo = getDbConnection();
+
+        // Check if SKU exists
+        $checkSku = $pdo->prepare("SELECT id FROM products WHERE sku = ?");
+        $checkSku->execute([$sku]);
+        if ($checkSku->fetch()) {
+            set_flash('danger', "SKU '{$sku}' already exists. Please choose a unique SKU.");
+            redirect('/admin/products/create');
+        }
+
         $stmt = $pdo->prepare("
             INSERT INTO products (
                 name, slug, sku, category_id, price, mrp, discount_percent, stock,
@@ -110,29 +128,107 @@ class AdminProductController {
             ) VALUES (
                 ?, ?, ?, ?, ?, ?, ?, ?,
                 ?, ?, ?, ?, ?,
-                'cat_period_panties.svg', 'published', ?, ?, ?
+                ?, 'published', ?, ?, ?
             )
         ");
         $stmt->execute([
             $name, $slug, $sku, $categoryId, $price, $mrp, $discountPct, $stock,
             $shortDesc, $desc, $material, $care, $hygiene,
+            $primaryImage,
             !empty($_POST['is_featured']) ? 1 : 0,
             !empty($_POST['is_bestseller']) ? 1 : 0,
             !empty($_POST['is_new_arrival']) ? 1 : 0
         ]);
 
-        $prodId = $pdo->lastInsertId();
+        $prodId = (int)$pdo->lastInsertId();
 
-        // Add standard sizes variants if period wear or underwear
-        $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
-        $stmtVar = $pdo->prepare("INSERT INTO product_variants (product_id, sku, color, color_code, size, price, mrp, stock) VALUES (?, ?, 'Classic Black', '#1F1E24', ?, ?, ?, ?)");
-        foreach ($sizes as $sz) {
-            $varSku = $sku . '-BLK-' . $sz;
-            $varStock = max(5, round($stock / count($sizes)));
-            $stmtVar->execute([$prodId, $varSku, $sz, $price, $mrp, $varStock]);
+        // Additional Gallery Images
+        if (!empty($_FILES['gallery_images']['name']) && is_array($_FILES['gallery_images']['name'])) {
+            $galleryFiles = upload_multiple_files($_FILES['gallery_images'], 'products');
+            $imgStmt = $pdo->prepare("INSERT INTO product_images (product_id, image_path, alt_text, sort_order) VALUES (?, ?, ?, ?)");
+            foreach ($galleryFiles as $idx => $gImg) {
+                $imgStmt->execute([$prodId, $gImg, $name, $idx + 1]);
+            }
         }
 
-        set_flash('success', "Product '{$name}' created with variants.");
+        // Process Variants (Color & Size)
+        $totalVariantStock = 0;
+        $variantCount = 0;
+        $stmtVar = $pdo->prepare("
+            INSERT INTO product_variants (product_id, sku, color, color_code, size, price, mrp, stock, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'active')
+        ");
+
+        // Case A: Structured variants submitted from the interactive variant matrix
+        if (!empty($_POST['variants']) && is_array($_POST['variants'])) {
+            foreach ($_POST['variants'] as $v) {
+                $vColor = trim($v['color'] ?? 'Classic Black');
+                $vColorCode = trim($v['color_code'] ?? '#1F1E24');
+                $vSize = strtoupper(trim($v['size'] ?? 'M'));
+                $vPrice = !empty($v['price']) ? (float)$v['price'] : $price;
+                $vMrp = !empty($v['mrp']) ? (float)$v['mrp'] : $mrp;
+                $vStock = isset($v['stock']) ? max(0, (int)$v['stock']) : 20;
+                $vSku = !empty($v['sku']) ? strtoupper(trim($v['sku'])) : ($sku . '-' . strtoupper(substr(slugify($vColor), 0, 3)) . '-' . $vSize);
+
+                if (!empty($vSize) || !empty($vColor)) {
+                    try {
+                        $stmtVar->execute([$prodId, $vSku, $vColor, $vColorCode, $vSize, $vPrice, $vMrp, $vStock]);
+                        $totalVariantStock += $vStock;
+                        $variantCount++;
+                    } catch (\Throwable $e) {
+                        // In case of duplicate variant sku, append unique id
+                        $stmtVar->execute([$prodId, $vSku . '-' . mt_rand(10, 99), $vColor, $vColorCode, $vSize, $vPrice, $vMrp, $vStock]);
+                        $totalVariantStock += $vStock;
+                        $variantCount++;
+                    }
+                }
+            }
+        }
+
+        // Case B: Fallback - if no explicit variants were submitted, check selected sizes and colors checkboxes
+        if ($variantCount === 0) {
+            $selectedSizes = !empty($_POST['selected_sizes']) && is_array($_POST['selected_sizes']) 
+                ? $_POST['selected_sizes'] 
+                : ['S', 'M', 'L', 'XL', 'XXL'];
+
+            $selectedColors = [];
+            if (!empty($_POST['color_names']) && is_array($_POST['color_names'])) {
+                foreach ($_POST['color_names'] as $idx => $cName) {
+                    $cName = trim($cName);
+                    if (!empty($cName)) {
+                        $selectedColors[] = [
+                            'name' => $cName,
+                            'code' => $_POST['color_codes'][$idx] ?? '#1F1E24'
+                        ];
+                    }
+                }
+            }
+            if (empty($selectedColors)) {
+                $selectedColors = [['name' => 'Classic Black', 'code' => '#1F1E24']];
+            }
+
+            $perVarStock = max(5, (int)round($stock / (count($selectedSizes) * count($selectedColors))));
+            foreach ($selectedColors as $c) {
+                $colSlug = strtoupper(substr(slugify($c['name']), 0, 3));
+                foreach ($selectedSizes as $sz) {
+                    $sz = strtoupper(trim($sz));
+                    $varSku = $sku . '-' . $colSlug . '-' . $sz;
+                    try {
+                        $stmtVar->execute([$prodId, $varSku, $c['name'], $c['code'], $sz, $price, $mrp, $perVarStock]);
+                    } catch (\Throwable $e) {
+                        $stmtVar->execute([$prodId, $varSku . '-' . mt_rand(10, 99), $c['name'], $c['code'], $sz, $price, $mrp, $perVarStock]);
+                    }
+                    $totalVariantStock += $perVarStock;
+                }
+            }
+        }
+
+        // Update product master stock to match total variant stock if variants were created
+        if ($totalVariantStock > 0) {
+            $pdo->prepare("UPDATE products SET stock = ? WHERE id = ?")->execute([$totalVariantStock, $prodId]);
+        }
+
+        set_flash('success', "Product '{$name}' created with primary image, gallery and variants.");
         redirect('/admin/products');
     }
 
@@ -148,12 +244,14 @@ class AdminProductController {
         $categoryModel = new Category();
         $categories = $categoryModel->allActive();
         $variants = $productModel->getVariants($id);
+        $images = $productModel->getImages($id);
 
         view('admin.products.edit', [
             'pageTitle' => 'Edit Product #' . $id . ' - AFOREHEALTH Admin',
             'product' => $product,
             'categories' => $categories,
-            'variants' => $variants
+            'variants' => $variants,
+            'images' => $images
         ]);
     }
 
@@ -165,14 +263,28 @@ class AdminProductController {
         $discountPct = $mrp > $price ? round((($mrp - $price) / $mrp) * 100) : 0;
 
         $pdo = getDbConnection();
-        $stmt = $pdo->prepare("
+
+        // 1. Primary image replacement if uploaded
+        $primaryImgSql = "";
+        $primaryImgParams = [];
+        if (!empty($_FILES['primary_image']['tmp_name'])) {
+            $uploadedPrimary = upload_file($_FILES['primary_image'], 'products');
+            if ($uploadedPrimary) {
+                $primaryImgSql = ", primary_image = ?";
+                $primaryImgParams[] = $uploadedPrimary;
+            }
+        }
+
+        // 2. Update basic product information
+        $updateSql = "
             UPDATE products SET
                 name = ?, category_id = ?, price = ?, mrp = ?, discount_percent = ?, stock = ?,
                 short_description = ?, description = ?, material = ?, care_instructions = ?, hygiene_notice = ?,
                 status = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?
+                {$primaryImgSql}
             WHERE id = ?
-        ");
-        $stmt->execute([
+        ";
+        $updateParams = array_merge([
             $name,
             (int)$_POST['category_id'],
             $price,
@@ -188,10 +300,90 @@ class AdminProductController {
             !empty($_POST['is_featured']) ? 1 : 0,
             !empty($_POST['is_bestseller']) ? 1 : 0,
             !empty($_POST['is_new_arrival']) ? 1 : 0,
-            $id
-        ]);
+        ], $primaryImgParams, [$id]);
 
-        set_flash('success', 'Product updated successfully.');
+        $stmt = $pdo->prepare($updateSql);
+        $stmt->execute($updateParams);
+
+        // 3. Additional Gallery Images Upload
+        if (!empty($_FILES['gallery_images']['name']) && is_array($_FILES['gallery_images']['name'])) {
+            $newGalleryFiles = upload_multiple_files($_FILES['gallery_images'], 'products');
+            $imgStmt = $pdo->prepare("INSERT INTO product_images (product_id, image_path, alt_text, sort_order) VALUES (?, ?, ?, 0)");
+            foreach ($newGalleryFiles as $gImg) {
+                $imgStmt->execute([$id, $gImg, $name]);
+            }
+        }
+
+        // 4. Delete removed gallery images
+        if (!empty($_POST['delete_images']) && is_array($_POST['delete_images'])) {
+            $delStmt = $pdo->prepare("DELETE FROM product_images WHERE id = ? AND product_id = ?");
+            foreach ($_POST['delete_images'] as $delImgId) {
+                $delStmt->execute([(int)$delImgId, $id]);
+            }
+        }
+
+        // 5. Update Existing Variants
+        if (!empty($_POST['existing_variants']) && is_array($_POST['existing_variants'])) {
+            $updVarStmt = $pdo->prepare("
+                UPDATE product_variants SET
+                    sku = ?, color = ?, color_code = ?, size = ?, price = ?, mrp = ?, stock = ?, status = ?
+                WHERE id = ? AND product_id = ?
+            ");
+            foreach ($_POST['existing_variants'] as $vId => $vData) {
+                $updVarStmt->execute([
+                    strtoupper(trim($vData['sku'] ?? '')),
+                    trim($vData['color'] ?? ''),
+                    trim($vData['color_code'] ?? '#1F1E24'),
+                    strtoupper(trim($vData['size'] ?? '')),
+                    (float)($vData['price'] ?? $price),
+                    (float)($vData['mrp'] ?? $mrp),
+                    max(0, (int)($vData['stock'] ?? 0)),
+                    $vData['status'] ?? 'active',
+                    (int)$vId,
+                    $id
+                ]);
+            }
+        }
+
+        // 6. Delete variants marked for deletion
+        if (!empty($_POST['delete_variants']) && is_array($_POST['delete_variants'])) {
+            $delVarStmt = $pdo->prepare("DELETE FROM product_variants WHERE id = ? AND product_id = ?");
+            foreach ($_POST['delete_variants'] as $delVId) {
+                $delVarStmt->execute([(int)$delVId, $id]);
+            }
+        }
+
+        // 7. Add newly added variants in edit mode
+        if (!empty($_POST['new_variants']) && is_array($_POST['new_variants'])) {
+            $insVarStmt = $pdo->prepare("
+                INSERT INTO product_variants (product_id, sku, color, color_code, size, price, mrp, stock, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'active')
+            ");
+            foreach ($_POST['new_variants'] as $newV) {
+                $nSize = strtoupper(trim($newV['size'] ?? ''));
+                $nColor = trim($newV['color'] ?? 'Classic Black');
+                if (!empty($nSize) || !empty($nColor)) {
+                    $nSku = !empty($newV['sku']) ? strtoupper(trim($newV['sku'])) : ('AFH-' . $id . '-' . strtoupper(substr(slugify($nColor), 0, 3)) . '-' . $nSize . '-' . mt_rand(10, 99));
+                    $nPrice = !empty($newV['price']) ? (float)$newV['price'] : $price;
+                    $nMrp = !empty($newV['mrp']) ? (float)$newV['mrp'] : $mrp;
+                    $nStock = isset($newV['stock']) ? max(0, (int)$newV['stock']) : 20;
+                    $nColorCode = trim($newV['color_code'] ?? '#1F1E24');
+                    try {
+                        $insVarStmt->execute([$id, $nSku, $nColor, $nColorCode, $nSize, $nPrice, $nMrp, $nStock]);
+                    } catch (\Throwable $e) {
+                        $insVarStmt->execute([$id, $nSku . '-' . mt_rand(10, 99), $nColor, $nColorCode, $nSize, $nPrice, $nMrp, $nStock]);
+                    }
+                }
+            }
+        }
+
+        // 8. Re-sync master stock with active variants sum
+        $totStock = (int)$pdo->query("SELECT COALESCE(SUM(stock), 0) FROM product_variants WHERE product_id = {$id} AND status = 'active'")->fetchColumn();
+        if ($totStock > 0) {
+            $pdo->prepare("UPDATE products SET stock = ? WHERE id = ?")->execute([$totStock, $id]);
+        }
+
+        set_flash('success', 'Product, images and variants updated successfully.');
         redirect('/admin/products');
     }
 
@@ -219,7 +411,31 @@ class AdminProductController {
                 $orig['primary_image']
             ]);
 
-            set_flash('success', 'Product duplicated as draft.');
+            $newProdId = (int)$pdo->lastInsertId();
+
+            // Duplicate variants
+            $varStmt = $pdo->prepare("SELECT * FROM product_variants WHERE product_id = ?");
+            $varStmt->execute([$id]);
+            $origVars = $varStmt->fetchAll();
+            $insVar = $pdo->prepare("
+                INSERT INTO product_variants (product_id, sku, color, color_code, size, price, mrp, stock, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            foreach ($origVars as $ov) {
+                $insVar->execute([
+                    $newProdId,
+                    $ov['sku'] . '-C-' . mt_rand(10, 99),
+                    $ov['color'],
+                    $ov['color_code'],
+                    $ov['size'],
+                    $ov['price'],
+                    $ov['mrp'],
+                    $ov['stock'],
+                    $ov['status']
+                ]);
+            }
+
+            set_flash('success', 'Product duplicated as draft with variants.');
         }
 
         redirect('/admin/products');

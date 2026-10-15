@@ -1,17 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" width="280" height="60">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 64" width="340" height="64">
   <defs>
-    <linearGradient id="afhGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8B5E83" />
-      <stop offset="100%" stop-color="#693D62" />
+    <!-- Brand Primary Gradient for Accents -->
+    <linearGradient id="afhBrandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A63A50" />
+      <stop offset="50%" stop-color="#8B5E83" />
+      <stop offset="100%" stop-color="#6E3D67" />
+    </linearGradient>
+    
+    <!-- Dark Letter Gradient for Light Backgrounds -->
+    <linearGradient id="afhDarkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2D282E" />
+      <stop offset="100%" stop-color="#18151A" />
+    </linearGradient>
+
+    <!-- Bevel highlight -->
+    <linearGradient id="afhBevel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#554B57" />
+      <stop offset="100%" stop-color="#252126" />
     </linearGradient>
   </defs>
-  <!-- Lotus Petal / Crescent Shield Icon -->
-  <g transform="translate(6, 8)">
-    <path d="M 22 2 C 10 14 6 26 12 36 C 18 46 32 46 38 36 C 44 26 40 14 28 2 Z" fill="#E8B7C8" opacity="0.6"/>
-    <path d="M 25 8 C 17 18 15 28 20 36 C 25 42 33 42 37 36 C 41 29 37 18 29 8 Z" fill="url(#afhGrad)"/>
-    <circle cx="25" cy="22" r="4" fill="#FFF9FA"/>
+
+  <!-- Wordmark Container -->
+  <g transform="translate(6, 7)">
+    
+    <!-- === LETTER 'A' with 'F' combined bars === -->
+    <!-- Left diagonal leg of A -->
+    <polygon points="22,2 34,2 12,46 0,46" fill="url(#afhDarkGrad)" />
+    <!-- Top arch/apex join -->
+    <polygon points="22,2 62,2 57,11 31,11" fill="url(#afhDarkGrad)" />
+    <!-- Right vertical of F -->
+    <polygon points="53,2 64,2 53,46 42,46" fill="url(#afhDarkGrad)" opacity="0.95" />
+    
+    <!-- Accent F-Bars in Website Brand Primary Color (#8B5E83) -->
+    <!-- Top accent bar of F -->
+    <rect x="25" y="4" width="36" height="8" rx="1.5" fill="url(#afhBrandGrad)" />
+    <rect x="27" y="4.5" width="32" height="1.8" fill="#E8B7C8" opacity="0.8" />
+    <!-- Middle accent bar of F (crossbar of A) -->
+    <polygon points="17,23 54,23 50,30 13,30" fill="url(#afhBrandGrad)" />
+    <polygon points="18,23.5 52,23.5 49,25.5 15,25.5" fill="#E8B7C8" opacity="0.7" />
+
+    <!-- === LETTER 'O' with Center Dot === -->
+    <!-- Outer Ring -->
+    <circle cx="92" cy="24" r="22" fill="url(#afhDarkGrad)" />
+    <!-- Inner Cutout -->
+    <circle cx="92" cy="24" r="13" fill="#FFFFFF" />
+    <!-- Center Dot in Brand Primary Color -->
+    <circle cx="92" cy="24" r="5.5" fill="url(#afhBrandGrad)" />
+    <circle cx="90.5" cy="22.5" r="1.8" fill="#FFF9FA" opacity="0.85" />
+
+    <!-- === LETTER 'R' === -->
+    <path d="M 124 2 L 148 2 C 158 2 164 7 164 17 C 164 24 159 28 151 30 L 165 46 L 152 46 L 138 31 L 135 31 L 135 46 L 124 46 Z M 135 12 L 135 22 L 146 22 C 151 22 153 19 153 17 C 153 14 151 12 146 12 Z" fill="url(#afhDarkGrad)" />
+
+    <!-- === LETTER 'E' === -->
+    <polygon points="174,2 206,2 206,12 185,12 185,19 203,19 203,28 185,28 185,36 207,36 207,46 174,46" fill="url(#afhDarkGrad)" />
+
+    <!-- Divider Pill -->
+    <circle cx="219" cy="24" r="2.5" fill="url(#afhBrandGrad)" />
+
+    <!-- "HEALTH" in clean geometric sans with generous space -->
+    <text x="228" y="32" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="16" letter-spacing="2" fill="#8B5E83">HEALTH</text>
   </g>
-  <!-- Wordmark -->
-  <text x="62" y="34" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="24" letter-spacing="2.5" fill="#252126">AFORE<tspan fill="#8B5E83">HEALTH</tspan></text>
-  <text x="63" y="48" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-weight="500" font-size="8.5" letter-spacing="1.2" fill="#777777">COMFORT &amp; PERIOD CONFIDENCE</text>
 </svg>

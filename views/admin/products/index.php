@@ -69,7 +69,7 @@
                         <tr>
                             <td class="text-center text-muted fw-bold small"><?= (($page ?? 1) - 1) * ($perPage ?? 20) + $idx + 1 ?></td>
                             <td>
-                                <img src="<?= upload_url('products/' . ($p['primary_image'] ?: 'cat_period_panties.svg')) ?>" alt="" class="rounded" style="width: 44px; height: 44px; object-fit: cover;">
+                                <img src="<?= upload_url('products/' . ($p['primary_image'] ?: 'cat_period_panties.svg')) ?>" alt="<?= e($p['name']) ?>" class="rounded" style="width: 44px; height: 44px; object-fit: cover;">
                             </td>
                             <td>
                                 <strong class="d-block text-dark small"><?= e($p['name']) ?></strong>

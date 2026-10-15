@@ -165,6 +165,16 @@ class Cart extends BaseModel {
     public function addItem(int $productId, ?int $variantId, int $quantity = 1): array {
         $cartId = $this->getActiveCartId();
 
+        // If no variant specified, check if product has active variants and pick first available
+        if (empty($variantId)) {
+            $vStmt = $this->db->prepare("SELECT id FROM product_variants WHERE product_id = ? AND stock > 0 ORDER BY id ASC LIMIT 1");
+            $vStmt->execute([$productId]);
+            $firstVarId = $vStmt->fetchColumn();
+            if ($firstVarId) {
+                $variantId = (int)$firstVarId;
+            }
+        }
+
         // Check if item already exists in cart
         if ($variantId) {
             $stmt = $this->db->prepare("SELECT id, quantity FROM cart_items WHERE cart_id = ? AND product_id = ? AND variant_id = ? LIMIT 1");

@@ -218,9 +218,12 @@ const CartDrawer = {
 
     render(cart) {
         // 1. Update Header & Mobile Badges
-        document.querySelectorAll('.cart-badge-count').forEach(el => {
+        document.querySelectorAll('.badge-count.cart-badge-count').forEach(el => {
             el.textContent = cart.item_count;
-            el.style.display = cart.item_count > 0 ? 'flex' : 'none';
+            el.style.display = cart.item_count > 0 ? 'inline-flex' : 'none';
+        });
+        document.querySelectorAll('.cart-drawer-item-count').forEach(el => {
+            el.textContent = cart.item_count;
         });
 
         // 2. Free shipping meter

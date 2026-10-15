@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!container) {
             container = document.createElement('div');
             container.id = 'afh-toast-container';
-            container.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 1090; display: flex; flex-direction: column; gap: 10px; max-width: 360px; pointer-events: none;';
+            container.style.cssText = 'position: fixed; bottom: 28px; left: 24px; z-index: 1099; display: flex; flex-direction: column; gap: 10px; max-width: 380px; pointer-events: none;';
             document.body.appendChild(container);
         }
 
@@ -57,18 +57,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (data.success) {
                     this.classList.toggle('active', data.added);
+                    this.classList.toggle('in-wishlist', data.added);
+                    if (this.classList.contains('btn-danger') || this.classList.contains('btn-outline-danger')) {
+                        this.classList.toggle('btn-danger', data.added);
+                        this.classList.toggle('btn-outline-danger', !data.added);
+                    }
                     const heartIcon = this.querySelector('i');
                     if (heartIcon) {
-                        heartIcon.className = data.added ? 'bi bi-heart-fill' : 'bi bi-heart';
+                        heartIcon.className = data.added ? 'bi bi-heart-fill text-danger' : 'bi bi-heart';
+                    }
+                    const textSpan = this.querySelector('.wishlist-btn-text');
+                    if (textSpan) {
+                        textSpan.textContent = data.added ? 'In Wishlist' : 'Wishlist';
                     }
                     showToast(data.message, data.added ? 'success' : 'info');
                     
                     // Update header wishlist badge
-                    const badge = document.querySelector('.wishlist-badge');
-                    if (badge) {
+                    document.querySelectorAll('.wishlist-badge').forEach(badge => {
                         badge.textContent = data.wishlist_count;
-                        badge.style.display = data.wishlist_count > 0 ? 'flex' : 'none';
-                    }
+                        badge.style.display = data.wishlist_count > 0 ? 'inline-flex' : 'none';
+                    });
                 }
             })
             .catch(() => showToast('Could not update wishlist. Please try again.', 'danger'));

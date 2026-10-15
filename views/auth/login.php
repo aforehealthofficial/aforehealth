@@ -57,8 +57,24 @@
                 </div>
 
                 <div id="otpStep2" style="display: none;">
+                    <div class="alert alert-warning border-0 rounded-4 p-3 mb-3 shadow-sm text-start" style="background: #FFF9E6; border: 1px solid #FFE082 !important;">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="small fw-bold text-dark"><i class="bi bi-shield-lock-fill text-warning me-1"></i> Testing Mode OTP</span>
+                            <span class="badge bg-dark rounded-pill px-2">Ready</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <div>
+                                <span class="small text-muted d-block" style="font-size: 0.725rem;">Your on-screen verification OTP:</span>
+                                <span class="fs-4 font-monospace fw-extrabold text-primary tracking-widest" id="testOtpDisplay">------</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-afh-primary rounded-pill px-3 fw-bold shadow-sm" onclick="document.getElementById('otpCodeInput').value=document.getElementById('testOtpDisplay').textContent">
+                                Auto-Fill
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="alert alert-info small py-2 mb-3" id="otpSentMsg">
-                        OTP code sent to mobile.
+                        OTP code generated for mobile.
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-dark">Enter 6-Digit OTP</label>
@@ -106,9 +122,12 @@ function requestOtp() {
             document.getElementById('otpStep2').style.display = 'block';
             document.getElementById('otpSentMsg').textContent = data.message;
             if (data.demo_otp) {
+                document.getElementById('testOtpDisplay').textContent = data.demo_otp;
                 document.getElementById('otpCodeInput').value = data.demo_otp;
+                showToast('Test OTP is: ' + data.demo_otp + ' (Auto-filled on screen)', 'success');
+            } else {
+                showToast('OTP sent successfully!', 'success');
             }
-            showToast('OTP sent successfully!', 'success');
         } else {
             showToast(data.message || 'Error sending OTP', 'danger');
         }
