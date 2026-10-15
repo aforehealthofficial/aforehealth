@@ -25,6 +25,15 @@ class EmailService {
     }
 
     /**
+     * Get public domain URL for email links (prevents spam filters from rejecting .test or local dev URLs)
+     */
+    public function publicUrl(string $path = ''): string {
+        $base = rtrim(get_setting('store_public_url', env('APP_PUBLIC_URL', 'https://aforehealth.com')), '/');
+        $path = ltrim($path, '/');
+        return $path !== '' ? "{$base}/{$path}" : $base;
+    }
+
+    /**
      * Send email using direct Hostinger SMTP socket connection
      * Returns array with status, message, and diagnostic logs
      */
@@ -42,6 +51,13 @@ class EmailService {
 
         // Wrapped HTML Template
         $fullHtml = $this->wrapEmailTemplate($subject, $htmlBody);
+
+        // Sanitize any local/test URLs to live public domain so MailChannels / Spam filters don't block
+        $fullHtml = str_replace(
+            ['http://aforehealth.test', 'https://aforehealth.test', 'http://127.0.0.1:8000', 'http://127.0.0.1', 'http://localhost:8000', 'http://localhost'],
+            $this->publicUrl(),
+            $fullHtml
+        );
 
         // If no SMTP password configured yet, log as simulated/pending
         if (empty($this->password)) {
@@ -150,23 +166,30 @@ class EmailService {
 
             // Build RFC-compliant multipart/alternative MIME message
             $boundary = "----=_Part_" . md5(uniqid((string)mt_rand(), true));
-            $encodedSubject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
-            $encodedFromName = "=?UTF-8?B?" . base64_encode($fromName) . "?=";
             $msgId = "<" . gmdate('YmdHis') . "." . bin2hex(random_bytes(6)) . "@aforehealth.com>";
             $date = date('r');
             $plainText = $this->htmlToPlainText($fullHtml);
 
+            // Clean header encoding: avoid excess base64 which triggers RSPAMD_FROM_EXCESS_BASE64 & RSPAMD_SUBJ_EXCESS_BASE64
+            $encodeHeader = function(string $text): string {
+                return preg_match('/[^\x20-\x7E]/', $text)
+                    ? mb_encode_mimeheader($text, 'UTF-8', 'B', "\r\n")
+                    : $text;
+            };
+
+            $cleanSubject = $encodeHeader($subject);
+            $cleanFromName = $encodeHeader($fromName);
+
             $headers = [
                 "Date: {$date}",
-                "From: {$encodedFromName} <{$fromEmail}>",
-                "Reply-To: {$encodedFromName} <{$replyTo}>",
+                "From: {$cleanFromName} <{$fromEmail}>",
+                "Reply-To: {$cleanFromName} <{$replyTo}>",
                 "To: <{$toEmail}>",
-                "Subject: {$encodedSubject}",
+                "Subject: {$cleanSubject}",
                 "Message-ID: {$msgId}",
                 "MIME-Version: 1.0",
-                "Content-Type: multipart/alternative; boundary=\"{$boundary}\"",
-                "X-Mailer: AFOREHEALTH Mailer",
-                "X-Sender: {$fromEmail}"
+                "Auto-Submitted: auto-generated",
+                "Content-Type: multipart/alternative; boundary=\"{$boundary}\""
             ];
 
             $messagePayload = implode("\r\n", $headers) . "\r\n\r\n"
@@ -176,8 +199,8 @@ class EmailService {
                 . $plainText . "\r\n\r\n"
                 . "--{$boundary}\r\n"
                 . "Content-Type: text/html; charset=UTF-8\r\n"
-                . "Content-Transfer-Encoding: base64\r\n\r\n"
-                . chunk_split(base64_encode($fullHtml)) . "\r\n"
+                . "Content-Transfer-Encoding: quoted-printable\r\n\r\n"
+                . quoted_printable_encode($fullHtml) . "\r\n\r\n"
                 . "--{$boundary}--\r\n"
                 . ".\r\n";
 
@@ -251,7 +274,7 @@ class EmailService {
         $paymentMethod = strtoupper($order['payment_method'] ?? 'ONLINE');
         $orderStatus = e($order['order_status'] ?? 'CONFIRMED');
         $communityUrl = e(get_setting('whatsapp_group_url', 'https://chat.whatsapp.com/C7fLq9wAFOREHEALTHcommunity'));
-        $trackUrl = url("track-order?order_number={$orderNumber}&mobile=" . ($order['customer_mobile'] ?? ''));
+        $trackUrl = $this->publicUrl("track-order?order_number={$orderNumber}&mobile=" . ($order['customer_mobile'] ?? ''));
 
         $html = "
             <h2 style='color: #252126; font-size: 20px; margin-top: 0; margin-bottom: 8px;'>Thank you for your order, {$customerName}!</h2>
@@ -307,7 +330,7 @@ class EmailService {
         $email = e($order['customer_email'] ?? 'N/A');
         $total = number_format((float)($order['grand_total'] ?? 0), 2);
         $method = strtoupper($order['payment_method'] ?? 'ONLINE');
-        $adminOrderUrl = url('admin/orders/' . $orderNumber);
+        $adminOrderUrl = $this->publicUrl('admin/orders/' . $orderNumber);
 
         $html = "
             <h3 style='color: #8B5E83; margin-top: 0;'>New Order Placed on AFOREHEALTH Store</h3>
@@ -337,7 +360,7 @@ class EmailService {
         
         $customerName = e($order['customer_name'] ?? 'Customer');
         $orderNumber = e($order['order_number']);
-        $trackUrl = url("track-order?order_number={$orderNumber}&mobile=" . ($order['customer_mobile'] ?? ''));
+        $trackUrl = $this->publicUrl("track-order?order_number={$orderNumber}&mobile=" . ($order['customer_mobile'] ?? ''));
 
         $courierInfo = "";
         if (!empty($courier) || !empty($tracking)) {
@@ -417,7 +440,7 @@ class EmailService {
      */
     public function sendTestEmail(string $toEmail): array {
         $subject = "Order Confirmed (Sample): #AFH-SAMPLE-0101 - AFOREHEALTH";
-        $storeUrl = url('/');
+        $storeUrl = $this->publicUrl();
         $whatsappUrl = e(get_setting('whatsapp_group_url', 'https://chat.whatsapp.com/C7fLq9wAFOREHEALTHcommunity'));
 
         $html = "
@@ -470,8 +493,8 @@ class EmailService {
         $supportEmail = e($this->fromEmail);
         $phone = e(get_setting('store_phone', '+91 98765 43210'));
         $address = e(get_setting('store_address', 'AFOREHEALTH Wellness Pvt. Ltd., Mumbai, India'));
-        $logoUrl = asset('images/logo.png');
-        $siteUrl = url('/');
+        $siteUrl = $this->publicUrl();
+        $logoUrl = $this->publicUrl('images/logo.png');
 
         return "
 <!DOCTYPE html>

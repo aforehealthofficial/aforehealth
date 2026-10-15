@@ -66,6 +66,11 @@
                             <td>
                                 <strong class="text-dark small d-block"><?= e($ord['customer_name']) ?></strong>
                                 <small class="text-muted">+91 <?= e($ord['customer_mobile']) ?></small>
+                                <?php if (!empty($ord['whatsapp_opt_in'])): ?>
+                                    <span class="badge bg-success-subtle text-success p-1 ms-1" title="Consented to WhatsApp VIP Community" style="font-size: 0.65rem;">
+                                        <i class="bi bi-whatsapp"></i> VIP
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td><?= date('d M Y, h:i A', strtotime($ord['created_at'])) ?></td>
                             <td class="fw-bold">₹<?= number_format($ord['grand_total'], 0) ?></td>

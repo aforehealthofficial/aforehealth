@@ -235,6 +235,33 @@
                         </div>
                     </div>
 
+                    <!-- WhatsApp VIP Community Consent (Voluntary Opt-in for First-Time Orders) -->
+                    <?php if (!isset($isFirstOrder) || $isFirstOrder): ?>
+                    <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4" style="background: linear-gradient(135deg, #F0FAF4 0%, #E8F7EE 100%); border: 1.5px solid #C6E9D4 !important;">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm" style="width: 44px; height: 44px;">
+                                <i class="bi bi-whatsapp fs-5"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="form-check p-0 d-flex align-items-start gap-2">
+                                    <input class="form-check-input flex-shrink-0 mt-1 ms-0 cursor-pointer" type="checkbox" name="whatsapp_opt_in" value="1" id="whatsappOptInCheck" style="width: 1.25rem; height: 1.25rem; accent-color: #25D366;">
+                                    <label class="form-check-label cursor-pointer" for="whatsappOptInCheck">
+                                        <strong class="d-block text-dark mb-1" style="font-size: 0.95rem;">
+                                            Join our AFOREHEALTH WhatsApp VIP Community <span class="badge bg-success text-white small ms-1" style="font-size: 0.7rem;">OPTIONAL</span>
+                                        </strong>
+                                        <span class="text-muted small d-block" style="font-size: 0.82rem; line-height: 1.45;">
+                                            Yes, add me to the private WhatsApp sisterhood group for doctor-backed period care tips, discreet hygiene updates, and member-only flash discounts.
+                                        </span>
+                                        <small class="text-success fw-bold d-block mt-1" style="font-size: 0.75rem;">
+                                            <i class="bi bi-shield-check me-1"></i> 100% spam-free &bull; Zero spam guarantee &bull; You can leave anytime.
+                                        </small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Place Order Button -->
                     <div class="d-grid mb-3">
                         <button type="submit" class="btn btn-afh-primary btn-lg py-3 fw-bold rounded-4 shadow-sm" id="placeOrderBtn" style="font-size: 1.05rem; letter-spacing: 0.02em;">

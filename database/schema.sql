@@ -55,6 +55,7 @@ CREATE TABLE `users` (
   `gender` ENUM('female','male','other','prefer_not_to_say') DEFAULT 'female',
   `wallet_balance` DECIMAL(10,2) DEFAULT 0.00,
   `status` ENUM('active','inactive','suspended') DEFAULT 'active',
+  `whatsapp_opt_in` TINYINT(1) DEFAULT 0,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `idx_users_mobile` (`mobile`)
@@ -330,6 +331,7 @@ CREATE TABLE `orders` (
   `cod_fee` DECIMAL(10,2) DEFAULT 0.00,
   `grand_total` DECIMAL(10,2) NOT NULL,
   `payment_method` ENUM('razorpay','upi','card','netbanking','cod') NOT NULL DEFAULT 'razorpay',
+  `whatsapp_opt_in` TINYINT(1) DEFAULT 0,
   `payment_status` ENUM('pending','authorized','paid','failed','refunded') DEFAULT 'pending',
   `order_status` ENUM('PENDING','CONFIRMED','PROCESSING','PACKED','SHIPPED','OUT_FOR_DELIVERY','DELIVERED','CANCELLED','RETURN_REQUESTED','RETURN_APPROVED','RETURNED','REFUNDED','FAILED') DEFAULT 'CONFIRMED',
   `shipping_address_json` LONGTEXT NOT NULL,

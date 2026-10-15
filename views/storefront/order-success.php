@@ -36,19 +36,33 @@
         </div>
 
         <!-- WhatsApp Community Sisterhood Box -->
-        <div class="p-4 rounded-4 mb-4 text-center" style="background: linear-gradient(135deg, #E8F5EE 0%, #DCF2E4 100%); border: 1px solid #C4E6D0;">
-            <i class="bi bi-whatsapp text-success fs-1 mb-2 d-block"></i>
-            <h4 class="fw-bold text-dark mb-1">Join the AFOREHEALTH WhatsApp Community</h4>
-            <p class="text-muted small mb-3" style="max-width: 500px; margin: 0 auto;">
-                Connect with 25,000+ Indian women. Access period wellness guides, gynecologist live AMA events, and member-only secret offers.
-            </p>
-            <a href="<?= e($whatsappCommunityUrl) ?>" target="_blank" class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm">
-                <i class="bi bi-whatsapp me-1"></i> JOIN AFOREHEALTH WHATSAPP COMMUNITY
-            </a>
-            <div class="mt-2 text-muted" style="font-size: 0.75rem;">
-                (We respect your privacy. You are only added when you click to join.)
+        <?php if (!empty($order['whatsapp_opt_in'])): ?>
+            <div class="p-4 rounded-4 mb-4 text-center" style="background: linear-gradient(135deg, #E8F5EE 0%, #DCF2E4 100%); border: 2px solid #25D366; box-shadow: 0 4px 15px rgba(37,211,102,0.15);">
+                <span class="badge bg-success text-white px-3 py-1 rounded-pill mb-2 fw-bold" style="font-size: 0.75rem;">
+                    <i class="bi bi-check-circle-fill me-1"></i> OPTED-IN DURING CHECKOUT
+                </span>
+                <i class="bi bi-whatsapp text-success fs-1 mb-2 d-block"></i>
+                <h4 class="fw-bold text-dark mb-1">Welcome to the AFOREHEALTH Sisterhood!</h4>
+                <p class="text-muted small mb-3" style="max-width: 500px; margin: 0 auto;">
+                    Thank you for consenting to join! Tap the button below for instant 1-tap entry into our confidential WhatsApp group.
+                </p>
+                <a href="<?= e($whatsappCommunityUrl) ?>" target="_blank" class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm">
+                    <i class="bi bi-whatsapp me-2 fs-5"></i> TAP HERE TO ENTER WHATSAPP GROUP
+                </a>
+                <div class="mt-2 text-muted" style="font-size: 0.75rem;">
+                    (Direct invite link &bull; Connect with 25,000+ Indian women &bull; 100% spam-free)
+                </div>
             </div>
-        </div>
+        <?php else: ?>
+            <div class="p-3 rounded-4 mb-4 text-center bg-light border">
+                <p class="text-muted small mb-2">
+                    <i class="bi bi-whatsapp text-success me-1"></i> Want to join our WhatsApp community later?
+                </p>
+                <a href="<?= e($whatsappCommunityUrl) ?>" target="_blank" class="btn btn-sm btn-outline-success rounded-pill fw-bold px-3">
+                    View WhatsApp Community Group
+                </a>
+            </div>
+        <?php endif; ?>
 
         <!-- Action Buttons -->
         <div class="d-flex flex-wrap justify-content-center gap-3">

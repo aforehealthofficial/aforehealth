@@ -46,6 +46,26 @@ class Order extends BaseModel {
     }
 
     /**
+     * Check if customer is placing their first order
+     */
+    public function isFirstOrder(?int $userId, string $mobile = ''): bool {
+        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        if ($userId && !empty($mobile)) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM orders WHERE user_id = ? OR customer_mobile = ?");
+            $stmt->execute([$userId, $mobile]);
+        } elseif ($userId) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM orders WHERE user_id = ?");
+            $stmt->execute([$userId]);
+        } elseif (!empty($mobile)) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM orders WHERE customer_mobile = ?");
+            $stmt->execute([$mobile]);
+        } else {
+            return true;
+        }
+        return ((int)$stmt->fetchColumn()) === 0;
+    }
+
+    /**
      * Create order from active cart with pessimistic inventory locking & transaction protection
      */
     public function createFromCart(array $checkoutData): array {
@@ -67,6 +87,7 @@ class Order extends BaseModel {
         $shippingFee = (float)$cart['shipping_fee'];
 
         $paymentMethod = $checkoutData['payment_method'] ?? 'razorpay';
+        $whatsappOptIn = !empty($checkoutData['whatsapp_opt_in']) ? 1 : 0;
         $codFee = ($paymentMethod === 'cod') ? (float)get_setting('cod_fee', 40) : 0.00;
         $grandTotal = max(0, $subtotal - $totalDiscount + $shippingFee + $codFee);
 
@@ -82,11 +103,11 @@ class Order extends BaseModel {
                 INSERT INTO orders (
                     order_number, user_id, customer_name, customer_mobile, customer_email,
                     subtotal, discount, coupon_code, coupon_discount, shipping_fee, cod_fee, grand_total,
-                    payment_method, payment_status, order_status, shipping_address_json, notes
+                    payment_method, whatsapp_opt_in, payment_status, order_status, shipping_address_json, notes
                 ) VALUES (
                     ?, ?, ?, ?, ?,
                     ?, ?, ?, ?, ?, ?, ?,
-                    ?, ?, ?, ?, ?
+                    ?, ?, ?, ?, ?, ?
                 )
             ";
             $stmt = $this->db->prepare($sql);
@@ -104,11 +125,20 @@ class Order extends BaseModel {
                 $codFee,
                 $grandTotal,
                 $paymentMethod,
+                $whatsappOptIn,
                 $initialPaymentStatus,
                 $initialOrderStatus,
                 json_encode($checkoutData['address']),
                 $checkoutData['notes'] ?? null
             ]);
+
+            // If customer opted into WhatsApp community, sync to users table as well
+            if ($userId && $whatsappOptIn) {
+                try {
+                    $uStmt = $this->db->prepare("UPDATE users SET whatsapp_opt_in = 1 WHERE id = ?");
+                    $uStmt->execute([$userId]);
+                } catch (\Throwable $e) {}
+            }
 
             $orderId = (int)$this->db->lastInsertId();
 
