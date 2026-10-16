@@ -7,20 +7,64 @@ class BlogController {
     public function index(): void {
         $pdo = getDbConnection();
 
-        $posts = $pdo->query("
+        $selectedCategory = trim($_GET['category'] ?? '');
+        $searchQuery = trim($_GET['q'] ?? '');
+
+        $sql = "
             SELECT bp.*, bc.name as category_name, bc.slug as category_slug
             FROM blog_posts bp
             JOIN blog_categories bc ON bp.category_id = bc.id
             WHERE bp.status = 'published'
-            ORDER BY bp.published_at DESC
+        ";
+        $params = [];
+
+        if (!empty($selectedCategory)) {
+            $sql .= " AND bc.slug = ?";
+            $params[] = $selectedCategory;
+        }
+
+        if (!empty($searchQuery)) {
+            $sql .= " AND (bp.title LIKE ? OR bp.excerpt LIKE ? OR bp.content LIKE ?)";
+            $params[] = "%{$searchQuery}%";
+            $params[] = "%{$searchQuery}%";
+            $params[] = "%{$searchQuery}%";
+        }
+
+        $sql .= " ORDER BY bp.published_at DESC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $posts = $stmt->fetchAll();
+
+        // Categories with live published post counts
+        $categories = $pdo->query("
+            SELECT bc.*, COUNT(bp.id) as post_count
+            FROM blog_categories bc
+            LEFT JOIN blog_posts bp ON bp.category_id = bc.id AND bp.status = 'published'
+            GROUP BY bc.id
+            ORDER BY bc.name ASC
         ")->fetchAll();
 
-        $categories = $pdo->query("SELECT * FROM blog_categories ORDER BY name ASC")->fetchAll();
+        $totalPublishedPosts = (int)$pdo->query("SELECT COUNT(*) FROM blog_posts WHERE status = 'published'")->fetchColumn();
+
+        // Recent posts for sidebar
+        $recentPosts = $pdo->query("
+            SELECT bp.id, bp.title, bp.slug, bp.featured_image, bp.published_at, bc.name as category_name
+            FROM blog_posts bp
+            JOIN blog_categories bc ON bp.category_id = bc.id
+            WHERE bp.status = 'published'
+            ORDER BY bp.published_at DESC
+            LIMIT 4
+        ")->fetchAll();
 
         view('blog.index', [
             'pageTitle' => 'Period Care & Intimate Health Guide - AFOREHEALTH',
             'posts' => $posts,
-            'categories' => $categories
+            'categories' => $categories,
+            'totalPublishedPosts' => $totalPublishedPosts,
+            'selectedCategory' => $selectedCategory,
+            'searchQuery' => $searchQuery,
+            'recentPosts' => $recentPosts
         ]);
     }
 
