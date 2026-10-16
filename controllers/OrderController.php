@@ -23,7 +23,7 @@ class OrderController {
         }
 
         $whatsappCommunityUrl = get_setting('whatsapp_group_url', 'https://chat.whatsapp.com/C7fLq9wAFOREHEALTHcommunity');
-        $whatsappSupportUrl = 'https://wa.me/' . preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) . '?text=' . urlencode("Hi AFOREHEALTH! I have a question regarding order #" . $order['order_number']);
+        $whatsappSupportUrl = 'https://wa.me/' . preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919654504052')) . '?text=' . urlencode("Hi AFOREHEALTH! I have a question regarding order #" . $order['order_number']);
 
         view('storefront.order-success', [
             'pageTitle' => 'Order Placed Successfully! - AFOREHEALTH',

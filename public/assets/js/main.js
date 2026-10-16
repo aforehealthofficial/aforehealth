@@ -43,13 +43,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const formData = new FormData();
             formData.append('product_id', productId);
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (csrfMeta && csrfMeta.content) {
+                formData.append('_csrf_token', csrfMeta.content);
+            }
 
             fetch('/account/wishlist/toggle', {
                 method: 'POST',
                 body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Server returned ' + res.status);
+                }
+                return res.json();
+            })
             .then(data => {
                 if (data.login_required) {
                     window.location.href = '/login';
@@ -77,9 +89,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         badge.textContent = data.wishlist_count;
                         badge.style.display = data.wishlist_count > 0 ? 'inline-flex' : 'none';
                     });
+                } else {
+                    showToast(data.message || 'Could not update wishlist.', 'danger');
                 }
             })
-            .catch(() => showToast('Could not update wishlist. Please try again.', 'danger'));
+            .catch(err => {
+                console.error('Wishlist error:', err);
+                showToast('Could not update wishlist. Please try again.', 'danger');
+            });
         });
     });
 

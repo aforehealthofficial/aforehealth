@@ -197,8 +197,8 @@
 
         <div class="row g-3 g-md-4">
             <?php foreach ($categories as $cat): ?>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="<?= url('category/' . $cat['slug']) ?>" class="cat-card">
+                <div class="col-lg-2 col-md-4 col-6 d-flex align-items-stretch">
+                    <a href="<?= url('category/' . $cat['slug']) ?>" class="cat-card w-100">
                         <div class="cat-img-wrap">
                             <img src="<?= upload_url('products/' . $cat['image']) ?>" alt="<?= e($cat['name']) ?>" loading="lazy">
                         </div>

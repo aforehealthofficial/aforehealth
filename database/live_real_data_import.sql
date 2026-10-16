@@ -1,0 +1,1126 @@
+-- =====================================================================
+-- AFOREHEALTH - Complete Production Real Data Import
+-- Generated: 2026-10-16 19:26:23
+-- Ready for phpMyAdmin / MySQL CLI live server import
+-- =====================================================================
+
+SET FOREIGN_KEY_CHECKS = 0;
+SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+SET NAMES utf8mb4;
+
+-- -----------------------------------------------------------------
+-- Table `roles` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `roles`;
+INSERT INTO `roles` (`id`, `name`, `slug`, `description`, `created_at`) VALUES
+(1, 'Super Admin', 'super-admin', 'Full access to all system modules and settings', '2026-10-17 00:33:24'),
+(2, 'Admin', 'admin', 'Can manage products, orders, reviews and view reports', '2026-10-17 00:33:24'),
+(3, 'Order Manager', 'order-manager', 'Can manage orders, shipments, returns and tracking', '2026-10-17 00:33:24'),
+(4, 'Product Manager', 'product-manager', 'Can manage catalog, categories, variants and inventory', '2026-10-17 00:33:24'),
+(5, 'Customer Support', 'customer-support', 'Can manage tickets, reviews and customer inquiries', '2026-10-17 00:33:24'),
+(6, 'Content Manager', 'content-manager', 'Can manage blog posts, FAQs, banners and CMS pages', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `permissions` (13 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `permissions`;
+INSERT INTO `permissions` (`id`, `name`, `slug`, `module`, `created_at`) VALUES
+(1, 'View Dashboard', 'view-dashboard', 'dashboard', '2026-10-17 00:33:24'),
+(2, 'Manage Products', 'manage-products', 'catalog', '2026-10-17 00:33:24'),
+(3, 'Manage Categories', 'manage-categories', 'catalog', '2026-10-17 00:33:24'),
+(4, 'Manage Inventory', 'manage-inventory', 'catalog', '2026-10-17 00:33:24'),
+(5, 'Manage Reviews', 'manage-reviews', 'catalog', '2026-10-17 00:33:24'),
+(6, 'Manage Orders', 'manage-orders', 'orders', '2026-10-17 00:33:24'),
+(7, 'Manage Returns', 'manage-returns', 'orders', '2026-10-17 00:33:24'),
+(8, 'Manage Customers', 'manage-customers', 'customers', '2026-10-17 00:33:24'),
+(9, 'Manage Coupons', 'manage-coupons', 'marketing', '2026-10-17 00:33:24'),
+(10, 'Manage Content', 'manage-content', 'content', '2026-10-17 00:33:24'),
+(11, 'View Reports', 'view-reports', 'reports', '2026-10-17 00:33:24'),
+(12, 'Manage Settings', 'manage-settings', 'settings', '2026-10-17 00:33:24'),
+(13, 'Manage Admins', 'manage-admins', 'system', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `role_permissions` (13 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `role_permissions`;
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13);
+
+-- -----------------------------------------------------------------
+-- Table `admins` (3 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `admins`;
+INSERT INTO `admins` (`id`, `name`, `email`, `password`, `role_id`, `status`, `last_login_at`, `created_at`, `updated_at`) VALUES
+(1, 'Super Administrator', 'admin@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 1, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24'),
+(2, 'Pooja Nair (Catalog)', 'catalog@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 4, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24'),
+(3, 'Rohit Mehta (Operations)', 'operations@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 3, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `admin_users` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `admin_users`;
+INSERT INTO `admin_users` (`id`, `name`, `email`, `password_hash`, `status`, `last_login_at`, `created_at`, `updated_at`) VALUES
+(1, 'AFOREHEALTH Administrator', 'admin@aforehealth.com', '$2y$12$bR4YJHXzXcHOSwyyhAliLebQTPqCRdp0iR3nizhPQWVt3oGGmbHNa', 'active', NULL, '2026-10-08 09:51:41', '2026-10-08 09:51:41');
+
+-- -----------------------------------------------------------------
+-- Table `users` (5 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `users`;
+INSERT INTO `users` (`id`, `name`, `mobile`, `password`, `email`, `dob`, `gender`, `referral_code`, `wallet_balance`, `status`, `whatsapp_opt_in`, `created_at`, `updated_at`, `two_factor_code`, `two_factor_expires_at`) VALUES
+(1, 'Priya Sharma', 9876543210, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'priya.sharma@example.com', '1995-04-12', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(2, 'Ananya Patel', 9811122233, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'ananya.p@example.com', '1998-09-24', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(3, 'Dr. Radhika Sen', 9822233344, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'radhika.sen@example.com', '1990-11-05', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(4, 'Sneha Roy', 9833344455, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'sneha.roy@example.com', '2001-02-18', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(5, 'Pooja Deshmukh', 9844455566, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'pooja.d@example.com', '1993-07-30', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL);
+
+-- -----------------------------------------------------------------
+-- Table `addresses` (4 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `addresses`;
+INSERT INTO `addresses` (`id`, `user_id`, `full_name`, `mobile`, `house_flat`, `area`, `landmark`, `city`, `state`, `pincode`, `address_type`, `is_default`, `created_at`) VALUES
+(1, 1, 'Priya Sharma', 9876543210, 'Flat 402, Sunshine Heights', 'Linking Road, Bandra West', 'Near National College', 'Mumbai', 'Maharashtra', 400050, 'home', 1, '2026-10-17 00:33:27'),
+(2, 1, 'Priya Sharma (Office)', 9876543210, 'Floor 8, Tower B, Godrej BKC', 'G-Block, BKC', 'Opp. Citi Bank', 'Mumbai', 'Maharashtra', 400051, 'work', '0', '2026-10-17 00:33:27'),
+(3, 2, 'Ananya Patel', 9811122233, 'Villa 12, Palm Meadows', 'Whitefield Main Road', 'Behind Forum Mall', 'Bengaluru', 'Karnataka', 560066, 'home', 1, '2026-10-17 00:33:27'),
+(4, 3, 'Dr. Radhika Sen', 9822233344, 'C-14, Green Park Extension', 'South Delhi', 'Near Metro Station', 'New Delhi', 'Delhi', 110016, 'home', 1, '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `settings` (35 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `settings`;
+INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `setting_group`, `updated_at`) VALUES
+(1, 'store_name', 'AFOREHEALTH', 'general', '2026-10-17 00:33:25'),
+(2, 'store_tagline', 'Everyday Comfort. Period Confidence.', 'general', '2026-10-17 00:33:25'),
+(3, 'store_phone', '+91 96545 04052', 'general', '2026-10-17 00:33:25'),
+(4, 'store_email', 'info@aforehealth.com', 'general', '2026-10-17 00:33:25'),
+(5, 'store_address', 'AFOREHEALTH Wellness Pvt. Ltd.\nLevel 4, Platina Tower, Bandra Kurla Complex\nMumbai, Maharashtra - 400051, India', 'general', '2026-10-17 00:33:25'),
+(6, 'store_gstin', '27AAACA1234A1Z5', 'general', '2026-10-17 00:33:25'),
+(7, 'currency_code', 'INR', 'general', '2026-10-17 00:33:25'),
+(8, 'currency_symbol', '₹', 'general', '2026-10-17 00:33:25'),
+(9, 'free_shipping_threshold', 499, 'general', '2026-10-17 00:33:25'),
+(10, 'flat_shipping_fee', 50, 'general', '2026-10-17 00:33:25'),
+(11, 'cod_enabled', 1, 'general', '2026-10-17 00:33:25'),
+(12, 'cod_fee', 40, 'general', '2026-10-17 00:33:25'),
+(13, 'cod_min_order', 299, 'general', '2026-10-17 00:33:25'),
+(14, 'cod_max_order', 5000, 'general', '2026-10-17 00:33:25'),
+(15, 'razorpay_enabled', 1, 'general', '2026-10-17 00:33:25'),
+(16, 'razorpay_key', 'rzp_test_AFOREHEALTH_KEY', 'general', '2026-10-17 00:33:25'),
+(17, 'razorpay_secret', 'rzp_test_AFOREHEALTH_SECRET', 'general', '2026-10-17 00:33:25'),
+(18, 'whatsapp_number', '+91 96545 04052', 'general', '2026-10-17 00:33:25'),
+(19, 'whatsapp_group_url', 'https://chat.whatsapp.com/C7fLq9wAFOREHEALTHcommunity', 'general', '2026-10-17 00:33:25'),
+(20, 'whatsapp_support_message', 'Hello AFOREHEALTH! I need assistance with my intimate wellness order.', 'general', '2026-10-17 00:33:25'),
+(21, 'sms_enabled', 1, 'general', '2026-10-17 00:33:25'),
+(22, 'sms_provider', 'msg91', 'general', '2026-10-17 00:33:25'),
+(23, 'sms_sender_id', 'AFHLTH', 'general', '2026-10-17 00:33:25'),
+(24, 'smtp_host', 'smtp.hostinger.com', 'general', '2026-10-17 00:33:25'),
+(25, 'smtp_port', 465, 'general', '2026-10-17 00:33:25'),
+(26, 'smtp_encryption', 'ssl', 'general', '2026-10-17 00:33:25'),
+(27, 'smtp_user', 'info@aforehealth.com', 'general', '2026-10-17 00:33:25'),
+(28, 'smtp_pass', '', 'general', '2026-10-17 00:33:25'),
+(29, 'smtp_from', 'info@aforehealth.com', 'general', '2026-10-17 00:33:25'),
+(30, 'smtp_from_name', 'AFOREHEALTH', 'general', '2026-10-17 00:33:25'),
+(31, 'ga4_id', 'G-AFOREHEALTH01', 'general', '2026-10-17 00:33:25'),
+(32, 'gtm_id', 'GTM-AFH9988', 'general', '2026-10-17 00:33:25'),
+(33, 'meta_pixel_id', 123456789012345, 'general', '2026-10-17 00:33:25'),
+(34, 'seo_default_title', 'AFOREHEALTH | Everyday Comfort. Period Confidence.', 'general', '2026-10-17 00:33:25'),
+(35, 'seo_default_description', 'India\'s trusted intimate-care and period-care brand. Shop leakproof period panties, breathable everyday underwear, organic cotton pads, and pH-balanced hygiene essentials.', 'general', '2026-10-17 00:33:25');
+
+-- -----------------------------------------------------------------
+-- Table `banners` (3 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `banners`;
+INSERT INTO `banners` (`id`, `title`, `subtitle`, `image_desktop`, `image_mobile`, `video_url`, `link`, `cta_text`, `position`, `sort_order`, `status`) VALUES
+(1, 'Comfort That Moves With You.', 'Leakproof underwear, buttery-soft everyday panties, and pH-balanced intimate essentials engineered for Indian bodies.', 'hero_banner_1.jpg', 'hero_banner_1.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', '/category/period-panties', 'SHOP PERIOD PANTIES', 'home_hero', 1, 'active'),
+(2, 'CloudSoft MicroModal Panties', '3x softer than cotton with breathable 4-way stretch. Zero wedgies, zero pinch, pure everyday luxury.', 'hero_banner_2.jpg', 'hero_banner_2.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', '/category/everyday-panties', 'EXPLORE EVERYDAY WEAR', 'home_hero', 2, 'active'),
+(3, 'First Period Confidence Kit', 'Empowering teenage girls with leakproof underwear, organic cotton pads, and discreet carry pouches.', 'hero_banner_3.jpg', 'hero_banner_3.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', '/category/period-kits', 'SHOP STARTER KITS', 'home_hero', 3, 'active');
+
+-- -----------------------------------------------------------------
+-- Table `categories` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `categories`;
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `banner`, `sort_order`, `status`, `seo_title`, `seo_description`, `created_at`) VALUES
+(1, 'Period Panties', 'period-panties', 'High absorbency, multi-layer leakproof period underwear engineered for heavy, medium, and light flow days.', 'cat_period_panties.jpg', 'cat_period_panties.jpg', 1, 'active', NULL, NULL, '2026-10-17 00:33:25'),
+(2, 'Everyday Panties', 'everyday-panties', 'Buttery-soft, breathable bamboo and micro-modal panties designed for zero wedgies and daily all-day comfort.', 'cat_everyday_panties.jpg', 'cat_everyday_panties.jpg', 2, 'active', NULL, NULL, '2026-10-17 00:33:25'),
+(3, 'Period Kits', 'period-kits', 'Curated confidence boxes, starter hampers, and travel packs with period underwear, pads, and hygiene essentials.', 'cat_period_kits.jpg', 'cat_period_kits.jpg', 3, 'active', NULL, NULL, '2026-10-17 00:33:25'),
+(4, 'Pads & Liners', 'pads-and-liners', 'Rash-free 100% certified organic cotton pads, extra-long overnight wings, and biodegradable ultra-slim panty liners.', 'cat_pads_liners.jpg', 'cat_pads_liners.jpg', 4, 'active', NULL, NULL, '2026-10-17 00:33:25'),
+(5, 'Intimate Care', 'intimate-care', 'Dermatologically tested pH 3.8 foaming washes, soothing anti-chafing sticks, and natural period panty stain cleansers.', 'cat_intimate_care.jpg', 'cat_intimate_care.jpg', 5, 'active', NULL, NULL, '2026-10-17 00:33:25'),
+(6, 'Combos & Value Packs', 'combos', 'Multi-packs and curated bundles designed to give you maximum value while building your complete period routine.', 'cat_combos.jpg', 'cat_combos.jpg', 6, 'active', NULL, NULL, '2026-10-17 00:33:25');
+
+-- -----------------------------------------------------------------
+-- Table `subcategories` (10 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `subcategories`;
+INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `image`, `sort_order`, `status`, `created_at`) VALUES
+(1, 1, 'Heavy Flow & Overnight', 'heavy-flow-overnight', 'Maximum 40ml absorbency with extended back coverage for zero sleep leaks.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(2, 1, 'Medium & Active Flow', 'medium-active-flow', 'Sleek 25ml absorbency for workdays, gym sessions, and regular period days.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(3, 1, 'Light Flow & Spotting', 'light-flow-spotting', 'Ultra-thin gusset for cycle start/end days, discharge, and gentle bladder leaks.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(4, 2, 'CloudSoft Cotton Hipsters', 'cloudsoft-cotton-hipsters', 'Everyday full-seat coverage with gentle stretch waistband.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(5, 2, 'No-Show Laser Cut', 'no-show-laser-cut', 'Zero panty lines under leggings, churidars, and bodycon dresses.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(6, 3, 'First Period Starters', 'first-period-starters', 'Empowering kits for teens and young girls with guides and pouches.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(7, 3, 'Postpartum Recovery', 'postpartum-recovery', 'High-waist gentle compression and heavy leak protection for new mothers.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(8, 4, 'Organic Day & Night Pads', 'organic-day-night-pads', 'Breathable bamboo and organic cotton with zero chlorine or artificial scents.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(9, 5, 'Foam Washes & Mists', 'foam-washes-mists', 'Maintains optimal vaginal flora and pH balance without harsh sulfates.', NULL, '0', 'active', '2026-10-17 00:33:25'),
+(10, 6, 'Multi-Flow Bundles', 'multi-flow-bundles', 'Trio and quad packs tailored for a complete menstrual cycle.', NULL, '0', 'active', '2026-10-17 00:33:25');
+
+-- -----------------------------------------------------------------
+-- Table `collections` (4 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `collections`;
+INSERT INTO `collections` (`id`, `name`, `slug`, `description`, `badge`, `image`, `status`, `sort_order`, `created_at`) VALUES
+(1, 'Bestsellers', 'bestsellers', 'Our most loved and highest rated intimate care picks by 50,000+ Indian women.', 'HOT SELLER', 'coll_bestsellers.svg', 'active', 1, '2026-10-17 00:33:25'),
+(2, 'New Arrivals', 'new-arrivals', 'Freshly launched fabrics, moisture-wicking weaves, and new seasonal colorways.', 'JUST IN', 'coll_new_arrivals.svg', 'active', 2, '2026-10-17 00:33:25'),
+(3, 'Period Starter Kits', 'starter-kits', 'Everything you need to switch away from single-use plastic pads with total peace of mind.', 'VALUE PACK', 'coll_starters.svg', 'active', 3, '2026-10-17 00:33:25'),
+(4, 'Postpartum & High-Rise Care', 'postpartum-high-rise', 'Doctor-approved soothing recovery underwear engineered for postpartum bleeding.', 'RECOVERY', 'coll_postpartum.svg', 'active', 4, '2026-10-17 00:33:25');
+
+-- -----------------------------------------------------------------
+-- Table `products` (38 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `products`;
+INSERT INTO `products` (`id`, `name`, `slug`, `sku`, `category_id`, `subcategory_id`, `collection_id`, `brand`, `short_description`, `description`, `specifications`, `material`, `care_instructions`, `hygiene_notice`, `size_chart`, `mrp`, `price`, `discount_percent`, `stock`, `low_stock_threshold`, `weight_grams`, `shipping_class`, `gst_percent`, `status`, `is_featured`, `is_bestseller`, `is_new_arrival`, `tags`, `primary_image`, `video_url`, `video_file`, `rating_avg`, `rating_count`, `seo_title`, `seo_description`, `seo_keywords`, `created_at`, `updated_at`) VALUES
+(1, 'AFOREHEALTH UltraDry Heavy Flow Period Panty (4-Layer Gusset)', 'ultradry-heavy-flow-period-panty', 'AFH-PP-001', 1, 1, 1, 'AFOREHEALTH', 'Holds up to 4 regular pads worth of flow (40ml). 4-layer breathable leakproof barrier for 12 hours of dry comfort.', 'Designed specifically for heavy days and overnight peace of mind. Our proprietary 4-layer gusset technology pairs moisture-wicking organic cotton against your skin with an ultra-absorbent core and a waterproof yet breathable TPU barrier. No rustling sounds, no sweaty plastic feel, and zero stains on your bedsheets.', NULL, 'Body: 95% Organic Bamboo Cotton, 5% Spandex. Gusset: Moisture-wicking cotton, microfibre absorbent layer, breathable waterproof TPU membrane.', 'Rinse in cold tap water until water runs clear. Machine wash with mild detergent on gentle cycle. Do NOT use bleach or fabric softeners. Line dry in shade.', 'Hygiene Notice: For personal intimate health, this product is hygienically sealed. Wash thoroughly before first wear. Eligible for 7-day size exchange only if unopened and unwashed.', NULL, 1199.00, 849.00, 29, 180, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_ultradry_heavy_flow_period_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 248, 'AFOREHEALTH UltraDry Heavy Flow Period Panty (4-Layer Gusset) | AFOREHEALTH', 'Holds up to 4 regular pads worth of flow (40ml). 4-layer breathable leakproof barrier for 12 hours of dry comfort.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(2, 'AFOREHEALTH Overnight SleepShield Boxer Period Panty', 'overnight-sleepshield-boxer-period-panty', 'AFH-PP-002', 1, 1, 1, 'AFOREHEALTH', 'Boy-short style with 360-degree front-to-back coverage. Zero side-leaks even if you sleep on your tummy or sides.', 'Sleep in whatever position you love. The SleepShield Boxer features an extra-long gusset that extends all the way from the front waistband to the back rim. Made with ultra-soft modal fabric that stretches with your body without pinching your inner thighs.', NULL, 'Body: 92% MicroModal, 8% Elastane. Gusset: 4-Layer Antibacterial Leakproof Core.', 'Cold rinse -> gentle cycle wash -> air dry. Do not iron or dry clean.', 'Intimate apparel hygiene standards apply. Try on over regular underwear to test fit.', NULL, 1399.00, 999.00, 29, 120, 5, 150, 'standard', 12.00, 'published', 1, 1, 1, NULL, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.80, 134, 'AFOREHEALTH Overnight SleepShield Boxer Period Panty | AFOREHEALTH', 'Boy-short style with 360-degree front-to-back coverage. Zero side-leaks even if you sleep on your tummy or sides.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(3, 'AFOREHEALTH Seamless Mid-Waist Period Hipster', 'seamless-mid-waist-period-hipster', 'AFH-PP-003', 1, 2, 1, 'AFOREHEALTH', 'Bonded laser-cut edges for invisible zero panty lines. Absorbs up to 25ml for medium flow days.', 'Wear your favourite leggings, tight yoga pants, or fitted churidars with zero telltale underwear lines or bulky pad bulges. The AFOREHEALTH Seamless Mid-Waist Period Hipster combines laser-bonded edges with an ultra-thin 3-layer absorbent core.', NULL, 'Body: 80% Polyamide, 20% Elastane. Gusset: 100% Breathable Cotton.', 'Hand wash or gentle machine wash inside a laundry mesh bag. Dry away from direct heating elements.', 'Hygienically packaged. Anti-odour silver-ion weave technology.', NULL, 1099.00, 799.00, 27, 150, 5, 150, 'standard', 12.00, 'published', 1, '0', 1, NULL, 'prod_seamless_mid_waist_period_hipster.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.70, 92, 'AFOREHEALTH Seamless Mid-Waist Period Hipster | AFOREHEALTH', 'Bonded laser-cut edges for invisible zero panty lines. Absorbs up to 25ml for medium flow days.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(4, 'AFOREHEALTH Organic Bamboo Cotton Day-Flow Brief', 'organic-bamboo-cotton-day-flow-brief', 'AFH-PP-004', 1, 2, '0', 'AFOREHEALTH', 'Naturally antibacterial bamboo cotton. Ideal for workday confidence, office hours, and commutes.', 'Crafted from organically grown bamboo fibres that stay 2-3 degrees cooler than synthetic fabrics, making it an absolute lifesaver for humid Indian summers and long days away from home.', NULL, '95% Certified Organic Bamboo, 5% Spandex. 3-layer absorbent gusset.', 'Cold water rinse, mild liquid detergent, line dry.', 'Dermatologist tested. Hypoallergenic and naturally odour-neutralizing.', NULL, 999.00, 699.00, 30, 160, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.80, 180, 'AFOREHEALTH Organic Bamboo Cotton Day-Flow Brief | AFOREHEALTH', 'Naturally antibacterial bamboo cotton. Ideal for workday confidence, office hours, and commutes.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(5, 'AFOREHEALTH High-Rise Tummy Support Period Panty', 'high-rise-tummy-support-period-panty', 'AFH-PP-005', 1, 1, 4, 'AFOREHEALTH', 'Gentle abdominal compression provides comforting warm embrace for menstrual cramps and bloating.', 'Periods often bring bloating and menstrual cramps. Our High-Rise Tummy Support Period Panty features a double-layered compressive front panel that gently supports your lower belly while offering heavy-flow 35ml absorbency.', NULL, 'Body: 88% Cotton, 12% Spandex. Panel: Reinforced micro-compression band.', 'Gentle cold wash, air dry in shade.', 'Supports post-delivery lochia bleeding and high-cramp cycles.', NULL, 1299.00, 899.00, 31, 95, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_high_rise_tummy_support_period_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 110, 'AFOREHEALTH High-Rise Tummy Support Period Panty | AFOREHEALTH', 'Gentle abdominal compression provides comforting warm embrace for menstrual cramps and bloating.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(6, 'AFOREHEALTH Active-Move Sport Period Short', 'active-move-sport-period-short', 'AFH-PP-006', 1, 2, '0', 'AFOREHEALTH', 'Anti-chafing thigh panels and stay-put waistband for running, gym, yoga, and badminton.', 'Never skip a workout because of your period. Designed with a wide ergonomic waistband that will not roll down during squats or runs, plus breathable mesh side vents that prevent sweat buildup.', NULL, '85% Recycled Polyester, 15% Spandex with moisture-wicking quick-dry treatment.', 'Machine wash cold. Do not tumble dry.', 'Treated with antimicrobial zinc pyrithione to control odour during strenuous workouts.', NULL, 1349.00, 949.00, 30, 80, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_active_move_sport_period_short.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.60, 64, 'AFOREHEALTH Active-Move Sport Period Short | AFOREHEALTH', 'Anti-chafing thigh panels and stay-put waistband for running, gym, yoga, and badminton.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(7, 'AFOREHEALTH Teens First-Period Super-Soft Panty', 'teens-first-period-super-soft-panty', 'AFH-PP-007', 1, 2, 3, 'AFOREHEALTH', 'Designed specifically for schoolgirls and young teens. Fits growing hip contours without fear of stains.', 'School uniforms and unpredictable cycles can create intense anxiety for young girls. This ultra-gentle period panty looks and feels like cute regular underwear while offering fail-safe medium-flow absorption that easily lasts through a full school day.', NULL, '95% Pure combed cotton, 5% Lycra. Soft-brushed elastic waistband.', 'Easy cold hand wash, safe for teenage independence.', 'Zero chemical fragrances. Non-toxic organic dyes.', NULL, 899.00, 599.00, 33, 140, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_teens_first_period_super_soft_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 5.00, 178, 'AFOREHEALTH Teens First-Period Super-Soft Panty | AFOREHEALTH', 'Designed specifically for schoolgirls and young teens. Fits growing hip contours without fear of stains.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(8, 'AFOREHEALTH Postpartum Leak-Shield Recovery Panty', 'postpartum-leak-shield-recovery-panty', 'AFH-PP-008', 1, 1, 4, 'AFOREHEALTH', 'Full-rise C-section friendly high waist. Absorbs 50ml of postpartum flow without pressing on incision scars.', 'Created in consultation with maternal health physiotherapists. The soft, non-binding waistband sits well above C-section incision sites, protecting sensitive stitches while safely absorbing lochia bleeding.', NULL, '100% Breathable Organic Cotton body with medical-grade leakproof membrane.', 'Sanitize with cold rinse, warm wash, shade dry.', 'Extra-wide absorbent cradle to protect from sudden gushes when standing up.', NULL, 1499.00, 1099.00, 27, 75, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 88, 'AFOREHEALTH Postpartum Leak-Shield Recovery Panty | AFOREHEALTH', 'Full-rise C-section friendly high waist. Absorbs 50ml of postpartum flow without pressing on incision scars.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(9, 'AFOREHEALTH Ultra-Thin Light Flow Spotting Panty', 'ultra-thin-light-flow-spotting-panty', 'AFH-PP-009', 1, 3, '0', 'AFOREHEALTH', 'Micro-thin 2-layer gusset (10ml). Replaces single-use panty liners for ovulation discharge and cycle tail-ends.', 'Throw away scratchy disposable panty liners forever. This lightweight panty feels like luxurious everyday lingerie while catching unexpected spots, ovulation discharge, and light sneezes/cough leaks.', NULL, '90% Nylon, 10% Elastane with 100% cotton inner gusset.', 'Standard machine wash cold.', 'Eliminates liner irritation, sweat chaffing, and plastic waste.', NULL, 849.00, 549.00, 35, 190, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.70, 71, 'AFOREHEALTH Ultra-Thin Light Flow Spotting Panty | AFOREHEALTH', 'Micro-thin 2-layer gusset (10ml). Replaces single-use panty liners for ovulation discharge and cycle tail-ends.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(10, 'AFOREHEALTH Breathable Lace-Trim Moderate Flow Panty', 'breathable-lace-trim-moderate-flow-panty', 'AFH-PP-010', 1, 2, '0', 'AFOREHEALTH', 'Elegant French lace waist detailing meets 20ml leakproof safety. Look feminine and feel confident.', 'Who says period underwear has to look clinical? Our Lace-Trim Moderate Flow Panty features itch-free scalloped lace along the waistline, paired with full bottom coverage and trustworthy leak defense.', NULL, '92% Bamboo Rayon, 8% Spandex with soft polyamide lace trim.', 'Wash cold inside a wash bag to protect delicate lace.', 'Ultra-gentle against pubic area skin with no itchy tags.', NULL, 1149.00, 799.00, 30, 110, 5, 150, 'standard', 12.00, 'published', 1, '0', 1, NULL, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.80, 53, 'AFOREHEALTH Breathable Lace-Trim Moderate Flow Panty | AFOREHEALTH', 'Elegant French lace waist detailing meets 20ml leakproof safety. Look feminine and feel confident.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(11, 'AFOREHEALTH CloudSoft MicroModal Hipster Underwear (Pack of 2)', 'cloudsoft-micromodal-hipster-pack-of-2', 'AFH-EW-011', 2, 4, 1, 'AFOREHEALTH', '3x softer than cotton. 4-way stretch that stays in place all day without rolling or pinching.', 'Crafted from sustainable beechwood modal that drapes like silk and breathes like linen. Designed for everyday non-period wear to ensure your intimate comfort is never compromised.', NULL, '94% Lenzing MicroModal, 6% Elastane. 100% organic cotton gusset.', 'Machine wash warm, tumble dry low or line dry.', 'Certified OEKO-TEX Standard 100, free from harmful dyes.', NULL, 999.00, 699.00, 30, 240, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.90, 312, 'AFOREHEALTH CloudSoft MicroModal Hipster Underwear (Pack of 2) | AFOREHEALTH', '3x softer than cotton. 4-way stretch that stays in place all day without rolling or pinching.', NULL, '2026-10-17 00:33:25', '2026-10-17 00:33:25'),
+(12, 'AFOREHEALTH Zero-Line Pure Cotton Seamless Bikini Panty', 'zero-line-pure-cotton-seamless-bikini-panty', 'AFH-EW-012', 2, 5, '0', 'AFOREHEALTH', 'Featherlight bonded hems. Absolutely invisible under fitted Indian ethnic churidars and trousers.', 'Engineered for hot days when you want zero bulk. The seamless ultrasonic edges prevent skin redness, pressure marks, and chafing.', NULL, '90% Combed Cotton, 10% Spandex.', 'Cold wash, shade dry.', 'Double-layered cotton crotch lining.', NULL, 599.00, 399.00, 33, 200, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.70, 140, 'AFOREHEALTH Zero-Line Pure Cotton Seamless Bikini Panty | AFOREHEALTH', 'Featherlight bonded hems. Absolutely invisible under fitted Indian ethnic churidars and trousers.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(13, 'AFOREHEALTH Breathable Bamboo Mid-Rise Everyday Brief', 'breathable-bamboo-mid-rise-everyday-brief', 'AFH-EW-013', 2, 4, '0', 'AFOREHEALTH', 'Thermoregulating organic bamboo fabric keeps you fresh and dry in tropical weather.', 'Mid-rise cut that sits naturally at your hip bones. Broad waistband made from self-fabric instead of harsh exposed elastic, eliminating muffin-top pressure.', NULL, '95% Organic Bamboo Viscose, 5% Elastane.', 'Gentle cycle, cold water, line dry.', 'Naturally antibacterial and moisture wicking.', NULL, 649.00, 449.00, 31, 170, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.80, 95, 'AFOREHEALTH Breathable Bamboo Mid-Rise Everyday Brief | AFOREHEALTH', 'Thermoregulating organic bamboo fabric keeps you fresh and dry in tropical weather.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(14, 'AFOREHEALTH Gentle Compression Comfort Shaper Panty', 'gentle-compression-comfort-shaper-panty', 'AFH-EW-014', 2, 4, '0', 'AFOREHEALTH', 'Smoothens tummy and love handles comfortably without suffocating your breath or squeezing.', 'Unlike harsh shapewear that you can barely wait to take off, our Comfort Shaper provides breathable mid-level contouring designed for all-day wear during long office meetings or family functions.', NULL, '78% Polyamide, 22% Elastane with 100% cotton inner crotch.', 'Hand wash in cool water.', 'Cotton gusset prevents yeast buildup from synthetic shapewear.', NULL, 1099.00, 749.00, 32, 130, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.60, 82, 'AFOREHEALTH Gentle Compression Comfort Shaper Panty | AFOREHEALTH', 'Smoothens tummy and love handles comfortably without suffocating your breath or squeezing.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(15, 'AFOREHEALTH Anti-Chafing Ultra-Light Thigh Shield Short', 'anti-chafing-ultra-light-thigh-shield-short', 'AFH-EW-015', 2, 4, 1, 'AFOREHEALTH', '6-inch inseam prevents painful inner thigh rubbing under dresses, kurtas, and skirts.', 'Say goodbye to \'chub rub\' and painful inner thigh friction. Featherweight breathable fabric glides effortlessly under your outfits while keeping thighs completely irritation-free.', NULL, '86% Nylon, 14% Spandex. Flatlock ergonomic friction-free seams.', 'Machine wash cold.', 'Allows skin to breathe without trapped humidity.', NULL, 899.00, 599.00, 33, 190, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.90, 215, 'AFOREHEALTH Anti-Chafing Ultra-Light Thigh Shield Short | AFOREHEALTH', '6-inch inseam prevents painful inner thigh rubbing under dresses, kurtas, and skirts.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(16, 'AFOREHEALTH Pure Organic Cotton Antibacterial Everyday Hipster', 'pure-organic-cotton-antibacterial-everyday-hipster', 'AFH-EW-016', 2, 4, '0', 'AFOREHEALTH', '100% GOTS certified cotton with neem and aloe infused antibacterial bio-wash.', 'Ideal for women prone to recurrent fungal or urinary tract sensitivities. Pure untreated organic cotton allows maximum airflow and zero sweat retention.', NULL, '100% GOTS Certified Organic Cotton.', 'Warm machine wash, sun drying recommended for natural sanitization.', 'Recommended by gynecologists for sensitive intimate skin.', NULL, 549.00, 379.00, 31, 210, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.80, 104, 'AFOREHEALTH Pure Organic Cotton Antibacterial Everyday Hipster | AFOREHEALTH', '100% GOTS certified cotton with neem and aloe infused antibacterial bio-wash.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(17, 'AFOREHEALTH SilkTouch Featherlight Laser-Cut Boyshort', 'silktouch-featherlight-laser-cut-boyshort', 'AFH-EW-017', 2, 5, '0', 'AFOREHEALTH', 'Modest cheek coverage boyshort with featherlight feel. Pure second-skin sensation.', 'For those who prefer fuller bottom coverage without compromising on seamless aesthetics. Stays undetectable even under tight white linen pants.', NULL, '82% Polyamide, 18% Elastane.', 'Gentle hand wash.', 'Breathable cotton gusset insert.', NULL, 749.00, 499.00, 33, 140, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.70, 61, 'AFOREHEALTH SilkTouch Featherlight Laser-Cut Boyshort | AFOREHEALTH', 'Modest cheek coverage boyshort with featherlight feel. Pure second-skin sensation.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(18, 'AFOREHEALTH Second-Skin Maternity & Postpartum Panty', 'second-skin-maternity-postpartum-panty', 'AFH-EW-018', 2, 4, 4, 'AFOREHEALTH', 'Crossover low-V waistband fits comfortably under expanding pregnancy bumps and postpartum bellies.', 'Specially contoured crossover front waistband sits below your belly without pressing or rolling down. Grows with your body throughout all 3 trimesters.', NULL, '95% Ultra-Soft Cotton, 5% Spandex.', 'Machine wash cold.', 'Ultra-gentle against stretch marks and itching pregnancy skin.', NULL, 699.00, 499.00, 29, 125, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_second_skin_maternity_postpartum_panty.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', NULL, 4.90, 89, 'AFOREHEALTH Second-Skin Maternity & Postpartum Panty | AFOREHEALTH', 'Crossover low-V waistband fits comfortably under expanding pregnancy bumps and postpartum bellies.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(19, 'AFOREHEALTH First Period Confidence Gift Box (Panty + Pads + Pouch)', 'first-period-confidence-gift-box', 'AFH-PK-019', 3, 6, 3, 'AFOREHEALTH', 'Complete beginner kit for daughters, nieces, and young girls. Includes 1 Teens Period Panty, 6 Organic Pads, waterproof pouch & booklet.', 'Transform period fear into calm confidence. This beautifully packaged gift box includes everything a young girl needs to welcome her first period without stress: 1 Teens Ultra-Soft Period Panty, 6 Organic Cotton Pads, a discreet zippered emergency carry pouch, and a doctor-vetted Period Care Guide in simple language.', NULL, 'Pure organic cotton and food-grade packaging materials.', 'Includes illustrated wash instructions inside the lid.', 'Individual sterile seal on all absorbent items.', NULL, 1899.00, 1299.00, 32, 90, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_first_period_confidence_gift_box.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 5.00, 165, 'AFOREHEALTH First Period Confidence Gift Box (Panty + Pads + Pouch) | AFOREHEALTH', 'Complete beginner kit for daughters, nieces, and young girls. Includes 1 Teens Period Panty, 6 Organic Pads, waterproof pouch & booklet.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(20, 'AFOREHEALTH College & Travel Emergency Period Pouch', 'college-travel-emergency-period-pouch', 'AFH-PK-020', 3, 6, '0', 'AFOREHEALTH', 'Compact waterproof dual-pocket pouch containing 1 Day Period Brief, 2 Intimate Wipes, and 2 Liners.', 'Fits neatly into any handbag, college tote, or backpack. Has two distinct compartments: one clean dry compartment and one smell-proof waterproof zipper pocket to store used panties when on the go.', NULL, 'Waterproof PU exterior with antimicrobial inner lining.', 'Pouch can be wiped clean with damp cloth.', 'Odor-proof airtight zipper design.', NULL, 1299.00, 899.00, 31, 110, 5, 150, 'standard', 12.00, 'published', '0', 1, 1, NULL, 'prod_college_travel_emergency_period_pouch.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.80, 74, 'AFOREHEALTH College & Travel Emergency Period Pouch | AFOREHEALTH', 'Compact waterproof dual-pocket pouch containing 1 Day Period Brief, 2 Intimate Wipes, and 2 Liners.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(21, 'AFOREHEALTH Postpartum 30-Day Complete Healing & Comfort Casket', 'postpartum-30-day-complete-healing-casket', 'AFH-PK-021', 3, 7, 4, 'AFOREHEALTH', '3 Postpartum High-Rise Leak-Shield Panties, 1 Plant-Based Stain Wash, 1 Soothing Intimate Mist, and 10 Overnight Maxi Pads.', 'Curated by gynecologists for modern Indian mothers. Takes total care of lochia flow, episiotomy/C-section tenderness, and postpartum perineal healing over the first critical month after delivery.', NULL, 'Certified Organic Cotton, Ayurvedic herbal extracts.', 'Full instructions included inside box.', 'Formulated strictly without artificial perfumes, sulfates, or parabens.', NULL, 3999.00, 2699.00, 33, 45, 5, 150, 'standard', 12.00, 'published', 1, '0', 1, NULL, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 52, 'AFOREHEALTH Postpartum 30-Day Complete Healing & Comfort Casket | AFOREHEALTH', '3 Postpartum High-Rise Leak-Shield Panties, 1 Plant-Based Stain Wash, 1 Soothing Intimate Mist, and 10 Overnight Maxi Pads.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(22, 'AFOREHEALTH Sustainable Zero-Waste Period Transition Kit', 'sustainable-zero-waste-period-transition-kit', 'AFH-PK-022', 3, 6, '0', 'AFOREHEALTH', '2 Period Panties (1 Heavy + 1 Medium), 2 Reusable Bamboo Cloth Pads, and 1 Plant-Based Wash Detergent.', 'Ready to make your period 100% plastic-free and zero-waste? This starter bundle replaces over 350 disposable plastic sanitary pads across the next 2-3 years, saving you money while saving our landfills.', NULL, 'Organic Bamboo, Charcoal Fleece, Biodegradable packaging.', 'Wash and reuse 100+ times.', 'Naturally antibacterial and zero toxic microplastics against your skin.', NULL, 2899.00, 1999.00, 31, 60, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 47, 'AFOREHEALTH Sustainable Zero-Waste Period Transition Kit | AFOREHEALTH', '2 Period Panties (1 Heavy + 1 Medium), 2 Reusable Bamboo Cloth Pads, and 1 Plant-Based Wash Detergent.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(23, 'AFOREHEALTH Heavy-Flow Workday Essentials Survival Pouch', 'heavy-flow-workday-essentials-survival-pouch', 'AFH-PK-023', 3, 6, '0', 'AFOREHEALTH', 'Includes 1 Heavy Flow Period Panty, 1 pH-Balancing Intimate Wipe pack, and 1 Emergency Discreet Wet-Bag.', 'Engineered for 10-hour corporate shifts, flights, train journeys, and field trips. Gives you absolute confidence that you will return home without a single drop of staining.', NULL, 'Spandex, organic cotton, waterproof TPU membrane.', 'Machine wash cold.', 'Leakproof guarantees up to 12 hours.', NULL, 1599.00, 1149.00, 28, 85, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.70, 39, 'AFOREHEALTH Heavy-Flow Workday Essentials Survival Pouch | AFOREHEALTH', 'Includes 1 Heavy Flow Period Panty, 1 pH-Balancing Intimate Wipe pack, and 1 Emergency Discreet Wet-Bag.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(24, 'AFOREHEALTH 100% Organic Cotton Ultra-Thin Day Pads with Wings (Pack of 12)', 'organic-cotton-ultra-thin-day-pads-pack-of-12', 'AFH-PL-024', 4, 8, 1, 'AFOREHEALTH', '280mm regular flow pads. Zero bleach, zero plastic top-sheet, zero friction rashes.', 'Conventional plastic pads create heat, friction, and allergic contact dermatitis. AFOREHEALTH pads feature a certified 100% organic cotton top-sheet that feels like soft cloth, paired with a super-absorbent plant-cellulose core.', NULL, '100% Certified Organic Cotton top sheet, FSC certified wood pulp core, biodegradable cornstarch wrapper.', 'Single use. Dispose responsibly in biodegradable paper envelope provided.', 'Chlorine-free, dioxin-free, fragrance-free.', NULL, 299.00, 229.00, 23, 350, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_organic_cotton_ultra_thin_day_pads_pack_of_12.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', NULL, 4.90, 418, 'AFOREHEALTH 100% Organic Cotton Ultra-Thin Day Pads with Wings (Pack of 12) | AFOREHEALTH', '280mm regular flow pads. Zero bleach, zero plastic top-sheet, zero friction rashes.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(25, 'AFOREHEALTH Overnight Maxi Extra-Long Anion Antibacterial Pads (Pack of 10)', 'overnight-maxi-extra-long-pads-pack-of-10', 'AFH-PL-025', 4, 8, 1, 'AFOREHEALTH', '350mm extra-long with wide butterfly back wings. Green negative-ion antibacterial chip inhibits odor.', 'Engineered for peaceful sleep during heavy nights. The expanded back fan catches back-flow leaks while you sleep on your back, while the anion strip neutralizes odor-causing bacteria naturally.', NULL, 'Organic cotton, active oxygen & anion chip, breathable backsheet.', 'Wrap in disposal wrapper and discard in bin.', 'Absorbs up to 180ml without reverse osmosis.', NULL, 349.00, 269.00, 23, 300, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_overnight_maxi_extra_long_pads_pack_of_10.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', NULL, 4.80, 280, 'AFOREHEALTH Overnight Maxi Extra-Long Anion Antibacterial Pads (Pack of 10) | AFOREHEALTH', '350mm extra-long with wide butterfly back wings. Green negative-ion antibacterial chip inhibits odor.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(26, 'AFOREHEALTH Pure Bamboo Ultra-Slim Daily Panty Liners (Pack of 30)', 'pure-bamboo-ultra-slim-daily-panty-liners-pack-of-30', 'AFH-PL-026', 4, 8, '0', 'AFOREHEALTH', '155mm breathable liners for discharge, spotting, and sweat defense. 0.8mm ultra-thin comfort.', 'Feels barely there. Pure bamboo fibers naturally wick daily sweat and vaginal discharge, keeping your expensive everyday underwear stain-free and fresh.', NULL, '100% Bamboo fiber surface, breathable plant-based backing.', 'Change every 4-6 hours for optimal intimate hygiene.', 'Individual sterile pocket wraps.', NULL, 279.00, 199.00, 29, 400, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_pure_bamboo_ultra_slim_daily_panty_liners_pack_of_30.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', NULL, 4.70, 190, 'AFOREHEALTH Pure Bamboo Ultra-Slim Daily Panty Liners (Pack of 30) | AFOREHEALTH', '155mm breathable liners for discharge, spotting, and sweat defense. 0.8mm ultra-thin comfort.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(27, 'AFOREHEALTH Reusable Washable Bamboo-Charcoal Heavy Flow Cloth Pad', 'reusable-washable-bamboo-charcoal-cloth-pad', 'AFH-PL-027', 4, 8, '0', 'AFOREHEALTH', 'Washable for up to 3 years. Dark charcoal fleece hides stains and snaps securely around underwear wings.', 'For women looking for reusable options outside period panties. The dark bamboo charcoal layer neutralizes odors naturally and doesn\'t show unsightly period stains.', NULL, 'Top: Bamboo charcoal fleece. Middle: 2-layer microfibre. Back: Waterproof printed PUL.', 'Soak in cold water, hand wash or machine wash.', 'Hypoallergenic, no chlorine bleaching.', NULL, 399.00, 279.00, 30, 160, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_reusable_washable_bamboo_charcoal_cloth_pad.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', NULL, 4.60, 85, 'AFOREHEALTH Reusable Washable Bamboo-Charcoal Heavy Flow Cloth Pad | AFOREHEALTH', 'Washable for up to 3 years. Dark charcoal fleece hides stains and snaps securely around underwear wings.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(28, 'AFOREHEALTH Biodegradable Corn & Bamboo Fiber Rash-Free Pads (Pack of 15)', 'biodegradable-corn-bamboo-rash-free-pads-pack-of-15', 'AFH-PL-028', 4, 8, '0', 'AFOREHEALTH', '100% compostable within 6 months. Ultra-soft thermal bonded top sheet.', 'Crafted from corn starch PLA and natural bamboo. Decomposes naturally without leaving microplastics behind in the soil.', NULL, 'Corn PLA fiber, organic bamboo pulp.', 'Single use biodegradable.', 'Eco-certified, skin friendly.', NULL, 389.00, 299.00, 23, 220, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_biodegradable_corn_bamboo_rash_free_pads_pack_of_15.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', NULL, 4.80, 99, 'AFOREHEALTH Biodegradable Corn & Bamboo Fiber Rash-Free Pads (Pack of 15) | AFOREHEALTH', '100% compostable within 6 months. Ultra-soft thermal bonded top sheet.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(29, 'AFOREHEALTH Gentle pH 3.8 Daily Intimate Foam Wash (Tea Tree & Chamomile, 150ml)', 'gentle-ph-38-daily-intimate-foam-wash-150ml', 'AFH-IH-029', 5, 9, 1, 'AFOREHEALTH', 'Maintains natural acidic vaginal barrier. Sulfate-free, paraben-free, gyno-tested for daily use & periods.', 'Regular soaps have a high pH of 8-10, stripping the delicate vaginal microbiome and triggering itching and candidiasis. AFOREHEALTH Intimate Foam Wash is precisely formulated at pH 3.8 using mild coconut glucosides, organic tea tree oil, and soothing Roman chamomile.', NULL, 'Purified Aqua, Coco-Glucoside, Lactic Acid, Melaleuca Alternifolia (Tea Tree) Leaf Oil, Chamomilla Recutita Flower Extract, Aloe Barbadensis Leaf Juice.', 'Pump luxurious foam onto wet hands, cleanse external intimate area gently front-to-back, and rinse with lukewarm water. For external use only.', 'Clinically certified hypoallergenic. Free from artificial colourants and parabens.', NULL, 449.00, 349.00, 22, 280, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_gentle_ph_38_daily_intimate_foam_wash_150ml.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', NULL, 4.90, 342, 'AFOREHEALTH Gentle pH 3.8 Daily Intimate Foam Wash (Tea Tree & Chamomile, 150ml) | AFOREHEALTH', 'Maintains natural acidic vaginal barrier. Sulfate-free, paraben-free, gyno-tested for daily use & periods.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(30, 'AFOREHEALTH Ultra-Soft Flushable Intimate Wet Wipes with Aloe Vera (Pack of 25)', 'ultra-soft-flushable-intimate-wet-wipes-pack-of-25', 'AFH-IH-030', 5, 9, '0', 'AFOREHEALTH', '100% plant-derived flushable fabric. Instant freshness during period pad changes, post-workout, and travel.', 'Keep fresh wherever your day takes you. Infused with soothing Aloe Vera and Vitamin E, these wipes gently cleanse without stinging or drying your sensitive skin.', NULL, '100% Viscose biodegradable fabric, Aloe Vera, Vitamin E, purified water.', 'Reseal pack after each pull to retain moisture.', 'Alcohol-free and hypoallergenic.', NULL, 249.00, 179.00, 28, 310, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_ultra_soft_flushable_intimate_wet_wipes_pack_of_25.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', NULL, 4.80, 188, 'AFOREHEALTH Ultra-Soft Flushable Intimate Wet Wipes with Aloe Vera (Pack of 25) | AFOREHEALTH', '100% plant-derived flushable fabric. Instant freshness during period pad changes, post-workout, and travel.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(31, 'AFOREHEALTH Natural Anti-Chafing & Rash Soothing Intimate Balm (50g)', 'natural-anti-chafing-rash-soothing-intimate-balm-50g', 'AFH-IH-031', 5, 9, '0', 'AFOREHEALTH', 'Zinc oxide, shea butter and gotu kola create an invisible barrier against sweat friction and pad rashes.', 'Heals raw inner thighs and bikini line redness within hours. Creates a breathable silky shield that stops skin-on-skin rubbing even during sweltering monsoons and intense humidity.', NULL, 'Shea Butter, Coconut Oil, Zinc Oxide, Centella Asiatica (Gotu Kola), Calendula Extract.', 'Apply a thin layer to clean dry thighs or bikini creases before stepping out.', 'Petroleum-free, talc-free, completely safe for sensitive groin skin.', NULL, 499.00, 379.00, 24, 190, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_natural_anti_chafing_rash_soothing_intimate_balm_50g.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', NULL, 4.90, 124, 'AFOREHEALTH Natural Anti-Chafing & Rash Soothing Intimate Balm (50g) | AFOREHEALTH', 'Zinc oxide, shea butter and gotu kola create an invisible barrier against sweat friction and pad rashes.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(32, 'AFOREHEALTH Plant-Based Period Panty & Cloth Pad Stain Remover Wash (200ml)', 'plant-based-period-panty-stain-remover-wash-200ml', 'AFH-IH-032', 5, 9, '0', 'AFOREHEALTH', 'Active plant enzymes lift stubborn blood and protein stains without destroying delicate waterproof TPU membranes.', 'Harsh laundry detergents, bleach, and fabric softeners ruin the micro-porous leakproof layer of period panties. Our enzymatic formula is specially engineered to melt blood stains in cold water while extending the lifespan of your period underwear.', NULL, 'Plant-based protease enzymes, coconut surfactants, eucalyptus oil.', 'Apply 2-3 drops directly onto stained gusset, let sit for 5 minutes, rub gently under cold tap water, and rinse.', 'Zero residue formula, safe against your most intimate skin.', NULL, 399.00, 299.00, 25, 230, 5, 150, 'standard', 12.00, 'published', '0', 1, '0', NULL, 'prod_plant_based_period_panty_stain_remover_wash_200ml.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', NULL, 4.90, 210, 'AFOREHEALTH Plant-Based Period Panty & Cloth Pad Stain Remover Wash (200ml) | AFOREHEALTH', 'Active plant enzymes lift stubborn blood and protein stains without destroying delicate waterproof TPU membranes.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(33, 'AFOREHEALTH Intimate Calming Mist for Period Freshness (100ml)', 'intimate-calming-mist-period-freshness-100ml', 'AFH-IH-033', 5, 9, '0', 'AFOREHEALTH', 'Refreshing spritz with rose water and lavender. Eliminates musty period odor and calms irritation.', 'A gentle spritz of pure botanical relief. Spray onto your intimate area or directly onto underwear for an instant boost of clean, comforting freshness during long office hours or warm travel days.', NULL, 'Steam-distilled Pure Damask Rose Water, Lavender Hydrosol, Witch Hazel Extract.', 'Hold 6 inches away and spray lightly. No rinsing required.', 'Non-aerosol, zero artificial propellants, zero alcohol.', NULL, 379.00, 269.00, 29, 175, 5, 150, 'standard', 12.00, 'published', '0', '0', 1, NULL, 'prod_intimate_calming_mist_period_freshness_100ml.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', NULL, 4.70, 94, 'AFOREHEALTH Intimate Calming Mist for Period Freshness (100ml) | AFOREHEALTH', 'Refreshing spritz with rose water and lavender. Eliminates musty period odor and calms irritation.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(34, 'AFOREHEALTH 3-Pack Period Panty Value Bundle (Heavy + Medium + Light)', '3-pack-period-panty-value-bundle', 'AFH-CB-034', 6, 10, 1, 'AFOREHEALTH', 'Complete menstrual cycle solution: 1 UltraDry Heavy Panty, 1 Day Bamboo Brief, 1 Light Spotting Hipster. Save ₹800!', 'Cover your entire 5-day period from start to finish. Day 1-2 heavy flow? Wear the 4-layer UltraDry. Day 3-4 normal flow? Slip into the breathable Bamboo Day Brief. Day 5 spotting? Enjoy the featherlight Spotting Hipster. The smartest way to switch to leakproof underwear.', NULL, 'Mix of organic bamboo, micro-modal, and breathable waterproof membranes.', 'Cold wash, shade dry.', 'Hygienically pre-packed in our signature AFOREHEALTH storage box.', NULL, 3047.00, 1999.00, 34, 120, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_3_pack_period_panty_value_bundle.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 365, 'AFOREHEALTH 3-Pack Period Panty Value Bundle (Heavy + Medium + Light) | AFOREHEALTH', 'Complete menstrual cycle solution: 1 UltraDry Heavy Panty, 1 Day Bamboo Brief, 1 Light Spotting Hipster. Save ₹800!', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(35, 'AFOREHEALTH 5-Pack Pure CloudSoft Everyday Cotton Hipster Rainbow Bundle', '5-pack-pure-cloudsoft-everyday-cotton-hipster-bundle', 'AFH-CB-035', 6, 10, '0', 'AFOREHEALTH', '5 delightful everyday shades: Blush Rose, Sage Eucalyptus, Midnight Noir, Nude Beige, and Dusk Mauve.', 'Upgrade your everyday lingerie drawer with supreme buttery softness. Five premium combed cotton hipsters designed to stay comfy through yoga, work, lounging, and sleep.', NULL, '95% Combed Organic Cotton, 5% Lycra.', 'Machine wash warm.', 'Hypoallergenic bio-washed cotton.', NULL, 2499.00, 1499.00, 40, 140, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 280, 'AFOREHEALTH 5-Pack Pure CloudSoft Everyday Cotton Hipster Rainbow Bundle | AFOREHEALTH', '5 delightful everyday shades: Blush Rose, Sage Eucalyptus, Midnight Noir, Nude Beige, and Dusk Mauve.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(36, 'AFOREHEALTH Day & Night Period Defense Duo (1 Heavy Panty + 1 Overnight Boxers)', 'day-night-period-defense-duo', 'AFH-CB-036', 6, 10, '0', 'AFOREHEALTH', 'Confidence around the clock: 1 UltraDry Heavy Panty for office/college + 1 SleepShield Boxer for overnight.', 'Say goodbye to stained pyjamas and ruined mattresses. This powerhouse combo tackles heavy daytime work schedules and guarantees restful 8-hour sleep with zero midnight pad changes.', NULL, 'Organic Bamboo Cotton + Modal SleepShield boxer.', 'Cold water rinse followed by gentle cycle wash.', 'Total 360-degree coverage protection.', NULL, 2598.00, 1699.00, 35, 95, 5, 150, 'standard', 12.00, 'published', '0', 1, 1, NULL, 'prod_day_night_period_defense_duo.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.90, 142, 'AFOREHEALTH Day & Night Period Defense Duo (1 Heavy Panty + 1 Overnight Boxers) | AFOREHEALTH', 'Confidence around the clock: 1 UltraDry Heavy Panty for office/college + 1 SleepShield Boxer for overnight.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(37, 'AFOREHEALTH Complete Intimate Care Duo (Gentle Foam Wash + 25 Intimate Wipes)', 'complete-intimate-care-duo', 'AFH-CB-037', 6, 10, '0', 'AFOREHEALTH', 'Daily pH 3.8 at-home hygiene + on-the-go purse wipes. Save 25% with this essentials combo.', 'Your complete intimate hygiene regimen. Use the gentle pH 3.8 foaming wash every morning in the shower, and keep the flushable aloe wipes in your bag for fresh clean confidence throughout your day.', NULL, '150ml Foam wash + 25 plant-fiber wipes.', 'Keep bottle and wipes in cool dry place away from direct sunlight.', 'Gynecologist endorsed, 100% soap-free.', NULL, 698.00, 479.00, 31, 180, 5, 150, 'standard', 12.00, 'published', '0', '0', '0', NULL, 'prod_complete_intimate_care_duo.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 4.80, 119, 'AFOREHEALTH Complete Intimate Care Duo (Gentle Foam Wash + 25 Intimate Wipes) | AFOREHEALTH', 'Daily pH 3.8 at-home hygiene + on-the-go purse wipes. Save 25% with this essentials combo.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26'),
+(38, 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch)', 'the-ultimate-confidence-box', 'AFH-CB-038', 6, 10, 1, 'AFOREHEALTH', 'The complete leakproof master kit: 2 Heavy Period Panties, 1 Plant-Based Stain Wash (200ml), and 1 Waterproof Travel Pouch.', 'Our signature flagship bundle loved by over 20,000 customers. Everything required to maintain, wear, wash, and travel with your period panties with maximum convenience and longevity.', NULL, 'Premium organic fabrics, enzymatic detergent, waterproof PU pouch.', 'Wash and care manual included.', 'Sealed luxury gift packaging.', NULL, 3197.00, 2199.00, 31, 85, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_the_ultimate_confidence_box.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 5.00, 294, 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) | AFOREHEALTH', 'The complete leakproof master kit: 2 Heavy Period Panties, 1 Plant-Based Stain Wash (200ml), and 1 Waterproof Travel Pouch.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26');
+
+-- -----------------------------------------------------------------
+-- Table `product_variants` (196 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `product_variants`;
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`, `size`, `price`, `mrp`, `stock`, `image`, `status`, `created_at`) VALUES
+(1, 1, 'AFH-PP-001-MID-S', 'Midnight Noir', '#1F1E24', 'S', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(2, 1, 'AFH-PP-001-MID-M', 'Midnight Noir', '#1F1E24', 'M', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(3, 1, 'AFH-PP-001-MID-L', 'Midnight Noir', '#1F1E24', 'L', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(4, 1, 'AFH-PP-001-MID-XL', 'Midnight Noir', '#1F1E24', 'XL', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(5, 1, 'AFH-PP-001-MID-XXL', 'Midnight Noir', '#1F1E24', 'XXL', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(6, 1, 'AFH-PP-001-BER-S', 'Berry Plum', '#7A3E65', 'S', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(7, 1, 'AFH-PP-001-BER-M', 'Berry Plum', '#7A3E65', 'M', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(8, 1, 'AFH-PP-001-BER-L', 'Berry Plum', '#7A3E65', 'L', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(9, 1, 'AFH-PP-001-BER-XL', 'Berry Plum', '#7A3E65', 'XL', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(10, 1, 'AFH-PP-001-BER-XXL', 'Berry Plum', '#7A3E65', 'XXL', 849.00, 1199.00, 12, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(11, 1, 'AFH-PP-001-BLU-S', 'Blush Rose', '#D998AE', 'S', 849.00, 1199.00, 15, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(12, 1, 'AFH-PP-001-BLU-M', 'Blush Rose', '#D998AE', 'M', 849.00, 1199.00, 15, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(13, 1, 'AFH-PP-001-BLU-L', 'Blush Rose', '#D998AE', 'L', 849.00, 1199.00, 15, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(14, 1, 'AFH-PP-001-BLU-XL', 'Blush Rose', '#D998AE', 'XL', 849.00, 1199.00, 15, 'prod_ultradry_heavy_flow_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(15, 2, 'AFH-PP-002-CHA-S', 'Charcoal Grey', '#3D3D42', 'S', 999.00, 1399.00, 12, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(16, 2, 'AFH-PP-002-CHA-M', 'Charcoal Grey', '#3D3D42', 'M', 999.00, 1399.00, 12, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(17, 2, 'AFH-PP-002-CHA-L', 'Charcoal Grey', '#3D3D42', 'L', 999.00, 1399.00, 12, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(18, 2, 'AFH-PP-002-CHA-XL', 'Charcoal Grey', '#3D3D42', 'XL', 999.00, 1399.00, 12, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(19, 2, 'AFH-PP-002-CHA-XXL', 'Charcoal Grey', '#3D3D42', 'XXL', 999.00, 1399.00, 12, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(20, 2, 'AFH-PP-002-DEE-M', 'Deep Mauve', '#8B5E83', 'M', 999.00, 1399.00, 15, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(21, 2, 'AFH-PP-002-DEE-L', 'Deep Mauve', '#8B5E83', 'L', 999.00, 1399.00, 15, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(22, 2, 'AFH-PP-002-DEE-XL', 'Deep Mauve', '#8B5E83', 'XL', 999.00, 1399.00, 15, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(23, 2, 'AFH-PP-002-DEE-XXL', 'Deep Mauve', '#8B5E83', 'XXL', 999.00, 1399.00, 15, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(24, 3, 'AFH-PP-003-NUD-S', 'Nude Beige', '#E5C2B1', 'S', 799.00, 1099.00, 19, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(25, 3, 'AFH-PP-003-NUD-M', 'Nude Beige', '#E5C2B1', 'M', 799.00, 1099.00, 19, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(26, 3, 'AFH-PP-003-NUD-L', 'Nude Beige', '#E5C2B1', 'L', 799.00, 1099.00, 19, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(27, 3, 'AFH-PP-003-NUD-XL', 'Nude Beige', '#E5C2B1', 'XL', 799.00, 1099.00, 19, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(28, 3, 'AFH-PP-003-MID-S', 'Midnight Noir', '#1F1E24', 'S', 799.00, 1099.00, 15, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(29, 3, 'AFH-PP-003-MID-M', 'Midnight Noir', '#1F1E24', 'M', 799.00, 1099.00, 15, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(30, 3, 'AFH-PP-003-MID-L', 'Midnight Noir', '#1F1E24', 'L', 799.00, 1099.00, 15, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(31, 3, 'AFH-PP-003-MID-XL', 'Midnight Noir', '#1F1E24', 'XL', 799.00, 1099.00, 15, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(32, 3, 'AFH-PP-003-MID-XXL', 'Midnight Noir', '#1F1E24', 'XXL', 799.00, 1099.00, 15, 'prod_seamless_mid_waist_period_hipster.jpg', 'active', '2026-10-17 00:33:25'),
+(33, 4, 'AFH-PP-004-SAG-S', 'Sage Eucalyptus', '#4E8B68', 'S', 699.00, 999.00, 20, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(34, 4, 'AFH-PP-004-SAG-M', 'Sage Eucalyptus', '#4E8B68', 'M', 699.00, 999.00, 20, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(35, 4, 'AFH-PP-004-SAG-L', 'Sage Eucalyptus', '#4E8B68', 'L', 699.00, 999.00, 20, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(36, 4, 'AFH-PP-004-SAG-XL', 'Sage Eucalyptus', '#4E8B68', 'XL', 699.00, 999.00, 20, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(37, 4, 'AFH-PP-004-BLU-S', 'Blush Rose', '#E8B7C8', 'S', 699.00, 999.00, 16, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(38, 4, 'AFH-PP-004-BLU-M', 'Blush Rose', '#E8B7C8', 'M', 699.00, 999.00, 16, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(39, 4, 'AFH-PP-004-BLU-L', 'Blush Rose', '#E8B7C8', 'L', 699.00, 999.00, 16, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(40, 4, 'AFH-PP-004-BLU-XL', 'Blush Rose', '#E8B7C8', 'XL', 699.00, 999.00, 16, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(41, 4, 'AFH-PP-004-BLU-XXL', 'Blush Rose', '#E8B7C8', 'XXL', 699.00, 999.00, 16, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'active', '2026-10-17 00:33:25'),
+(42, 5, 'AFH-PP-005-MID-M', 'Midnight Noir', '#1F1E24', 'M', 899.00, 1299.00, 10, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(43, 5, 'AFH-PP-005-MID-L', 'Midnight Noir', '#1F1E24', 'L', 899.00, 1299.00, 10, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(44, 5, 'AFH-PP-005-MID-XL', 'Midnight Noir', '#1F1E24', 'XL', 899.00, 1299.00, 10, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(45, 5, 'AFH-PP-005-MID-XXL', 'Midnight Noir', '#1F1E24', 'XXL', 899.00, 1299.00, 10, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(46, 5, 'AFH-PP-005-MID-3XL', 'Midnight Noir', '#1F1E24', '3XL', 899.00, 1299.00, 10, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(47, 5, 'AFH-PP-005-HEA-M', 'Heather Plum', '#8B5E83', 'M', 899.00, 1299.00, 12, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(48, 5, 'AFH-PP-005-HEA-L', 'Heather Plum', '#8B5E83', 'L', 899.00, 1299.00, 12, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(49, 5, 'AFH-PP-005-HEA-XL', 'Heather Plum', '#8B5E83', 'XL', 899.00, 1299.00, 12, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(50, 5, 'AFH-PP-005-HEA-XXL', 'Heather Plum', '#8B5E83', 'XXL', 899.00, 1299.00, 12, 'prod_high_rise_tummy_support_period_panty.jpg', 'active', '2026-10-17 00:33:25');
+
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`, `size`, `price`, `mrp`, `stock`, `image`, `status`, `created_at`) VALUES
+(51, 6, 'AFH-PP-006-OBS-S', 'Obsidian Black', '#212121', 'S', 949.00, 1349.00, 20, 'prod_active_move_sport_period_short.jpg', 'active', '2026-10-17 00:33:25'),
+(52, 6, 'AFH-PP-006-OBS-M', 'Obsidian Black', '#212121', 'M', 949.00, 1349.00, 20, 'prod_active_move_sport_period_short.jpg', 'active', '2026-10-17 00:33:25'),
+(53, 6, 'AFH-PP-006-OBS-L', 'Obsidian Black', '#212121', 'L', 949.00, 1349.00, 20, 'prod_active_move_sport_period_short.jpg', 'active', '2026-10-17 00:33:25'),
+(54, 6, 'AFH-PP-006-OBS-XL', 'Obsidian Black', '#212121', 'XL', 949.00, 1349.00, 20, 'prod_active_move_sport_period_short.jpg', 'active', '2026-10-17 00:33:25'),
+(55, 7, 'AFH-PP-007-PAS-XS', 'Pastel Peach', '#FAD4C0', 'XS', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(56, 7, 'AFH-PP-007-PAS-S', 'Pastel Peach', '#FAD4C0', 'S', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(57, 7, 'AFH-PP-007-PAS-M', 'Pastel Peach', '#FAD4C0', 'M', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(58, 7, 'AFH-PP-007-LAV-XS', 'Lavender Mist', '#D8BFD8', 'XS', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(59, 7, 'AFH-PP-007-LAV-S', 'Lavender Mist', '#D8BFD8', 'S', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(60, 7, 'AFH-PP-007-LAV-M', 'Lavender Mist', '#D8BFD8', 'M', 599.00, 899.00, 23, 'prod_teens_first_period_super_soft_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(61, 8, 'AFH-PP-008-WAR-L', 'Warm Beige', '#D2B48C', 'L', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(62, 8, 'AFH-PP-008-WAR-XL', 'Warm Beige', '#D2B48C', 'XL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(63, 8, 'AFH-PP-008-WAR-XXL', 'Warm Beige', '#D2B48C', 'XXL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(64, 8, 'AFH-PP-008-WAR-3XL', 'Warm Beige', '#D2B48C', '3XL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(65, 8, 'AFH-PP-008-MID-L', 'Midnight Noir', '#1F1E24', 'L', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(66, 8, 'AFH-PP-008-MID-XL', 'Midnight Noir', '#1F1E24', 'XL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(67, 8, 'AFH-PP-008-MID-XXL', 'Midnight Noir', '#1F1E24', 'XXL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(68, 8, 'AFH-PP-008-MID-3XL', 'Midnight Noir', '#1F1E24', '3XL', 1099.00, 1499.00, 10, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(69, 9, 'AFH-PP-009-DUS-S', 'Dusty Rose', '#C48B9F', 'S', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(70, 9, 'AFH-PP-009-DUS-M', 'Dusty Rose', '#C48B9F', 'M', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(71, 9, 'AFH-PP-009-DUS-L', 'Dusty Rose', '#C48B9F', 'L', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(72, 9, 'AFH-PP-009-DUS-XL', 'Dusty Rose', '#C48B9F', 'XL', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(73, 9, 'AFH-PP-009-SOF-S', 'Soft Nude', '#E8C5B0', 'S', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(74, 9, 'AFH-PP-009-SOF-M', 'Soft Nude', '#E8C5B0', 'M', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(75, 9, 'AFH-PP-009-SOF-L', 'Soft Nude', '#E8C5B0', 'L', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(76, 9, 'AFH-PP-009-SOF-XL', 'Soft Nude', '#E8C5B0', 'XL', 549.00, 849.00, 24, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(77, 10, 'AFH-PP-010-WIN-S', 'Wine Burgundy', '#5C1D2D', 'S', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(78, 10, 'AFH-PP-010-WIN-M', 'Wine Burgundy', '#5C1D2D', 'M', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(79, 10, 'AFH-PP-010-WIN-L', 'Wine Burgundy', '#5C1D2D', 'L', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(80, 10, 'AFH-PP-010-WIN-XL', 'Wine Burgundy', '#5C1D2D', 'XL', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(81, 10, 'AFH-PP-010-CLA-S', 'Classic Black', '#1A1A1A', 'S', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(82, 10, 'AFH-PP-010-CLA-M', 'Classic Black', '#1A1A1A', 'M', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(83, 10, 'AFH-PP-010-CLA-L', 'Classic Black', '#1A1A1A', 'L', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(84, 10, 'AFH-PP-010-CLA-XL', 'Classic Black', '#1A1A1A', 'XL', 799.00, 1149.00, 14, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'active', '2026-10-17 00:33:25'),
+(85, 11, 'AFH-EW-011-BLU-S', 'Blush & Noir', '#D998AE', 'S', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(86, 11, 'AFH-EW-011-BLU-M', 'Blush & Noir', '#D998AE', 'M', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(87, 11, 'AFH-EW-011-BLU-L', 'Blush & Noir', '#D998AE', 'L', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(88, 11, 'AFH-EW-011-BLU-XL', 'Blush & Noir', '#D998AE', 'XL', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(89, 11, 'AFH-EW-011-BLU-XXL', 'Blush & Noir', '#D998AE', 'XXL', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(90, 11, 'AFH-EW-011-NUD-S', 'Nude & Mauve', '#8B5E83', 'S', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(91, 11, 'AFH-EW-011-NUD-M', 'Nude & Mauve', '#8B5E83', 'M', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(92, 11, 'AFH-EW-011-NUD-L', 'Nude & Mauve', '#8B5E83', 'L', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(93, 11, 'AFH-EW-011-NUD-XL', 'Nude & Mauve', '#8B5E83', 'XL', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:25'),
+(94, 11, 'AFH-EW-011-NUD-XXL', 'Nude & Mauve', '#8B5E83', 'XXL', 699.00, 999.00, 24, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'active', '2026-10-17 00:33:26'),
+(95, 12, 'AFH-EW-012-SKI-S', 'Skin Beige', '#E2BA9B', 'S', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(96, 12, 'AFH-EW-012-SKI-M', 'Skin Beige', '#E2BA9B', 'M', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(97, 12, 'AFH-EW-012-SKI-L', 'Skin Beige', '#E2BA9B', 'L', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(98, 12, 'AFH-EW-012-SKI-XL', 'Skin Beige', '#E2BA9B', 'XL', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(99, 12, 'AFH-EW-012-SOF-S', 'Soft Lavender', '#CCA9DD', 'S', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(100, 12, 'AFH-EW-012-SOF-M', 'Soft Lavender', '#CCA9DD', 'M', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26');
+
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`, `size`, `price`, `mrp`, `stock`, `image`, `status`, `created_at`) VALUES
+(101, 12, 'AFH-EW-012-SOF-L', 'Soft Lavender', '#CCA9DD', 'L', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(102, 12, 'AFH-EW-012-SOF-XL', 'Soft Lavender', '#CCA9DD', 'XL', 399.00, 599.00, 25, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(103, 13, 'AFH-EW-013-SAG-S', 'Sage Green', '#4E8B68', 'S', 449.00, 649.00, 34, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'active', '2026-10-17 00:33:26'),
+(104, 13, 'AFH-EW-013-SAG-M', 'Sage Green', '#4E8B68', 'M', 449.00, 649.00, 34, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'active', '2026-10-17 00:33:26'),
+(105, 13, 'AFH-EW-013-SAG-L', 'Sage Green', '#4E8B68', 'L', 449.00, 649.00, 34, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'active', '2026-10-17 00:33:26'),
+(106, 13, 'AFH-EW-013-SAG-XL', 'Sage Green', '#4E8B68', 'XL', 449.00, 649.00, 34, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'active', '2026-10-17 00:33:26'),
+(107, 13, 'AFH-EW-013-SAG-XXL', 'Sage Green', '#4E8B68', 'XXL', 449.00, 649.00, 34, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'active', '2026-10-17 00:33:26'),
+(108, 14, 'AFH-EW-014-BLA-M', 'Black Plum', '#2B2028', 'M', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(109, 14, 'AFH-EW-014-BLA-L', 'Black Plum', '#2B2028', 'L', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(110, 14, 'AFH-EW-014-BLA-XL', 'Black Plum', '#2B2028', 'XL', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(111, 14, 'AFH-EW-014-BLA-XXL', 'Black Plum', '#2B2028', 'XXL', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(112, 14, 'AFH-EW-014-HON-M', 'Honey Nude', '#DEC0A2', 'M', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(113, 14, 'AFH-EW-014-HON-L', 'Honey Nude', '#DEC0A2', 'L', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(114, 14, 'AFH-EW-014-HON-XL', 'Honey Nude', '#DEC0A2', 'XL', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(115, 14, 'AFH-EW-014-HON-XXL', 'Honey Nude', '#DEC0A2', 'XXL', 749.00, 1099.00, 16, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(116, 15, 'AFH-EW-015-MID-S', 'Midnight Noir', '#1F1E24', 'S', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(117, 15, 'AFH-EW-015-MID-M', 'Midnight Noir', '#1F1E24', 'M', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(118, 15, 'AFH-EW-015-MID-L', 'Midnight Noir', '#1F1E24', 'L', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(119, 15, 'AFH-EW-015-MID-XL', 'Midnight Noir', '#1F1E24', 'XL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(120, 15, 'AFH-EW-015-MID-XXL', 'Midnight Noir', '#1F1E24', 'XXL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(121, 15, 'AFH-EW-015-MID-3XL', 'Midnight Noir', '#1F1E24', '3XL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(122, 15, 'AFH-EW-015-WAR-S', 'Warm Sand', '#E0C8B0', 'S', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(123, 15, 'AFH-EW-015-WAR-M', 'Warm Sand', '#E0C8B0', 'M', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(124, 15, 'AFH-EW-015-WAR-L', 'Warm Sand', '#E0C8B0', 'L', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(125, 15, 'AFH-EW-015-WAR-XL', 'Warm Sand', '#E0C8B0', 'XL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(126, 15, 'AFH-EW-015-WAR-XXL', 'Warm Sand', '#E0C8B0', 'XXL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(127, 15, 'AFH-EW-015-WAR-3XL', 'Warm Sand', '#E0C8B0', '3XL', 599.00, 899.00, 16, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'active', '2026-10-17 00:33:26'),
+(128, 16, 'AFH-EW-016-CLO-S', 'Cloud White', '#F8F9FA', 'S', 379.00, 549.00, 26, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(129, 16, 'AFH-EW-016-CLO-M', 'Cloud White', '#F8F9FA', 'M', 379.00, 549.00, 26, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(130, 16, 'AFH-EW-016-CLO-L', 'Cloud White', '#F8F9FA', 'L', 379.00, 549.00, 26, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(131, 16, 'AFH-EW-016-CLO-XL', 'Cloud White', '#F8F9FA', 'XL', 379.00, 549.00, 26, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(132, 16, 'AFH-EW-016-SOF-S', 'Soft Lilac', '#E6D7EA', 'S', 379.00, 549.00, 21, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(133, 16, 'AFH-EW-016-SOF-M', 'Soft Lilac', '#E6D7EA', 'M', 379.00, 549.00, 21, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(134, 16, 'AFH-EW-016-SOF-L', 'Soft Lilac', '#E6D7EA', 'L', 379.00, 549.00, 21, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(135, 16, 'AFH-EW-016-SOF-XL', 'Soft Lilac', '#E6D7EA', 'XL', 379.00, 549.00, 21, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(136, 16, 'AFH-EW-016-SOF-XXL', 'Soft Lilac', '#E6D7EA', 'XXL', 379.00, 549.00, 21, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'active', '2026-10-17 00:33:26'),
+(137, 17, 'AFH-EW-017-DUS-S', 'Dusk Mauve', '#8B5E83', 'S', 499.00, 749.00, 35, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'active', '2026-10-17 00:33:26'),
+(138, 17, 'AFH-EW-017-DUS-M', 'Dusk Mauve', '#8B5E83', 'M', 499.00, 749.00, 35, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'active', '2026-10-17 00:33:26'),
+(139, 17, 'AFH-EW-017-DUS-L', 'Dusk Mauve', '#8B5E83', 'L', 499.00, 749.00, 35, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'active', '2026-10-17 00:33:26'),
+(140, 17, 'AFH-EW-017-DUS-XL', 'Dusk Mauve', '#8B5E83', 'XL', 499.00, 749.00, 35, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'active', '2026-10-17 00:33:26'),
+(141, 18, 'AFH-EW-018-PAS-M', 'Pastel Rose', '#F4C2D7', 'M', 499.00, 699.00, 31, 'prod_second_skin_maternity_postpartum_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(142, 18, 'AFH-EW-018-PAS-L', 'Pastel Rose', '#F4C2D7', 'L', 499.00, 699.00, 31, 'prod_second_skin_maternity_postpartum_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(143, 18, 'AFH-EW-018-PAS-XL', 'Pastel Rose', '#F4C2D7', 'XL', 499.00, 699.00, 31, 'prod_second_skin_maternity_postpartum_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(144, 18, 'AFH-EW-018-PAS-XXL', 'Pastel Rose', '#F4C2D7', 'XXL', 499.00, 699.00, 31, 'prod_second_skin_maternity_postpartum_panty.jpg', 'active', '2026-10-17 00:33:26'),
+(145, 19, 'AFH-PK-019-BLU-XS (Teens)', 'Blush Confetti Box', '#E8B7C8', 'XS (Teens)', 1299.00, 1899.00, 30, 'prod_first_period_confidence_gift_box.jpg', 'active', '2026-10-17 00:33:26'),
+(146, 19, 'AFH-PK-019-BLU-S (12-14 yrs)', 'Blush Confetti Box', '#E8B7C8', 'S (12-14 yrs)', 1299.00, 1899.00, 30, 'prod_first_period_confidence_gift_box.jpg', 'active', '2026-10-17 00:33:26'),
+(147, 19, 'AFH-PK-019-BLU-M (14-16 yrs)', 'Blush Confetti Box', '#E8B7C8', 'M (14-16 yrs)', 1299.00, 1899.00, 30, 'prod_first_period_confidence_gift_box.jpg', 'active', '2026-10-17 00:33:26'),
+(148, 20, 'AFH-PK-020-LIL-S', 'Lilac Mauve Pouch', '#8B5E83', 'S', 899.00, 1299.00, 28, 'prod_college_travel_emergency_period_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(149, 20, 'AFH-PK-020-LIL-M', 'Lilac Mauve Pouch', '#8B5E83', 'M', 899.00, 1299.00, 28, 'prod_college_travel_emergency_period_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(150, 20, 'AFH-PK-020-LIL-L', 'Lilac Mauve Pouch', '#8B5E83', 'L', 899.00, 1299.00, 28, 'prod_college_travel_emergency_period_pouch.jpg', 'active', '2026-10-17 00:33:26');
+
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`, `size`, `price`, `mrp`, `stock`, `image`, `status`, `created_at`) VALUES
+(151, 20, 'AFH-PK-020-LIL-XL', 'Lilac Mauve Pouch', '#8B5E83', 'XL', 899.00, 1299.00, 28, 'prod_college_travel_emergency_period_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(152, 21, 'AFH-PK-021-EAR-M', 'Earth Rose Gift Set', '#C48B9F', 'M', 2699.00, 3999.00, 10, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'active', '2026-10-17 00:33:26'),
+(153, 21, 'AFH-PK-021-EAR-L', 'Earth Rose Gift Set', '#C48B9F', 'L', 2699.00, 3999.00, 10, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'active', '2026-10-17 00:33:26'),
+(154, 21, 'AFH-PK-021-EAR-XL', 'Earth Rose Gift Set', '#C48B9F', 'XL', 2699.00, 3999.00, 10, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'active', '2026-10-17 00:33:26'),
+(155, 21, 'AFH-PK-021-EAR-XXL', 'Earth Rose Gift Set', '#C48B9F', 'XXL', 2699.00, 3999.00, 10, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'active', '2026-10-17 00:33:26'),
+(156, 21, 'AFH-PK-021-EAR-3XL', 'Earth Rose Gift Set', '#C48B9F', '3XL', 2699.00, 3999.00, 10, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'active', '2026-10-17 00:33:26'),
+(157, 22, 'AFH-PK-022-ECO-S', 'Eco Sage & Black', '#4E8B68', 'S', 1999.00, 2899.00, 15, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'active', '2026-10-17 00:33:26'),
+(158, 22, 'AFH-PK-022-ECO-M', 'Eco Sage & Black', '#4E8B68', 'M', 1999.00, 2899.00, 15, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'active', '2026-10-17 00:33:26'),
+(159, 22, 'AFH-PK-022-ECO-L', 'Eco Sage & Black', '#4E8B68', 'L', 1999.00, 2899.00, 15, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'active', '2026-10-17 00:33:26'),
+(160, 22, 'AFH-PK-022-ECO-XL', 'Eco Sage & Black', '#4E8B68', 'XL', 1999.00, 2899.00, 15, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'active', '2026-10-17 00:33:26'),
+(161, 23, 'AFH-PK-023-JET-S', 'Jet Black & Pouch', '#1F1E24', 'S', 1149.00, 1599.00, 17, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(162, 23, 'AFH-PK-023-JET-M', 'Jet Black & Pouch', '#1F1E24', 'M', 1149.00, 1599.00, 17, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(163, 23, 'AFH-PK-023-JET-L', 'Jet Black & Pouch', '#1F1E24', 'L', 1149.00, 1599.00, 17, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(164, 23, 'AFH-PK-023-JET-XL', 'Jet Black & Pouch', '#1F1E24', 'XL', 1149.00, 1599.00, 17, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(165, 23, 'AFH-PK-023-JET-XXL', 'Jet Black & Pouch', '#1F1E24', 'XXL', 1149.00, 1599.00, 17, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'active', '2026-10-17 00:33:26'),
+(166, 24, 'AFH-PL-024-PAC-Regular (280mm)', 'Pack of 12', '#E8B7C8', 'Regular (280mm)', 229.00, 299.00, 350, 'prod_organic_cotton_ultra_thin_day_pads_pack_of_12.jpg', 'active', '2026-10-17 00:33:26'),
+(167, 25, 'AFH-PL-025-PAC-XL Night (350mm)', 'Pack of 10', '#8B5E83', 'XL Night (350mm)', 269.00, 349.00, 300, 'prod_overnight_maxi_extra_long_pads_pack_of_10.jpg', 'active', '2026-10-17 00:33:26'),
+(168, 26, 'AFH-PL-026-PAC-155mm Slim', 'Pack of 30', '#E0C8B0', '155mm Slim', 199.00, 279.00, 400, 'prod_pure_bamboo_ultra_slim_daily_panty_liners_pack_of_30.jpg', 'active', '2026-10-17 00:33:26'),
+(169, 27, 'AFH-PL-027-BOT-Large (30cm)', 'Botanical Floral', '#4E8B68', 'Large (30cm)', 279.00, 399.00, 160, 'prod_reusable_washable_bamboo_charcoal_cloth_pad.jpg', 'active', '2026-10-17 00:33:26'),
+(170, 28, 'AFH-PL-028-PAC-Mixed (Day & Night)', 'Pack of 15', '#E8B7C8', 'Mixed (Day & Night)', 299.00, 389.00, 220, 'prod_biodegradable_corn_bamboo_rash_free_pads_pack_of_15.jpg', 'active', '2026-10-17 00:33:26'),
+(171, 29, 'AFH-IH-029-FOA-150 ml', 'Foam Pump 150ml', '#4E8B68', '150 ml', 349.00, 449.00, 280, 'prod_gentle_ph_38_daily_intimate_foam_wash_150ml.jpg', 'active', '2026-10-17 00:33:26'),
+(172, 30, 'AFH-IH-030-PAC-25 Wipes', 'Pack of 25 Wipes', '#8B5E83', '25 Wipes', 179.00, 249.00, 310, 'prod_ultra_soft_flushable_intimate_wet_wipes_pack_of_25.jpg', 'active', '2026-10-17 00:33:26'),
+(173, 31, 'AFH-IH-031-BAL-50 g', 'Balm Tub 50g', '#E0C8B0', '50 g', 379.00, 499.00, 190, 'prod_natural_anti_chafing_rash_soothing_intimate_balm_50g.jpg', 'active', '2026-10-17 00:33:26'),
+(174, 32, 'AFH-IH-032-BOT-200 ml', 'Bottle 200ml', '#4E8B68', '200 ml', 299.00, 399.00, 230, 'prod_plant_based_period_panty_stain_remover_wash_200ml.jpg', 'active', '2026-10-17 00:33:26'),
+(175, 33, 'AFH-IH-033-SPR-100 ml', 'Spray Bottle 100ml', '#D8BFD8', '100 ml', 269.00, 379.00, 175, 'prod_intimate_calming_mist_period_freshness_100ml.jpg', 'active', '2026-10-17 00:33:26'),
+(176, 34, 'AFH-CB-034-CLA-S', 'Classic Trio (Noir, Plum, Blush)', '#8B5E83', 'S', 1999.00, 3047.00, 24, 'prod_3_pack_period_panty_value_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(177, 34, 'AFH-CB-034-CLA-M', 'Classic Trio (Noir, Plum, Blush)', '#8B5E83', 'M', 1999.00, 3047.00, 24, 'prod_3_pack_period_panty_value_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(178, 34, 'AFH-CB-034-CLA-L', 'Classic Trio (Noir, Plum, Blush)', '#8B5E83', 'L', 1999.00, 3047.00, 24, 'prod_3_pack_period_panty_value_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(179, 34, 'AFH-CB-034-CLA-XL', 'Classic Trio (Noir, Plum, Blush)', '#8B5E83', 'XL', 1999.00, 3047.00, 24, 'prod_3_pack_period_panty_value_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(180, 34, 'AFH-CB-034-CLA-XXL', 'Classic Trio (Noir, Plum, Blush)', '#8B5E83', 'XXL', 1999.00, 3047.00, 24, 'prod_3_pack_period_panty_value_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(181, 35, 'AFH-CB-035-ASS-S', 'Assorted Rainbow 5-Pack', '#E8B7C8', 'S', 1499.00, 2499.00, 28, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(182, 35, 'AFH-CB-035-ASS-M', 'Assorted Rainbow 5-Pack', '#E8B7C8', 'M', 1499.00, 2499.00, 28, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(183, 35, 'AFH-CB-035-ASS-L', 'Assorted Rainbow 5-Pack', '#E8B7C8', 'L', 1499.00, 2499.00, 28, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(184, 35, 'AFH-CB-035-ASS-XL', 'Assorted Rainbow 5-Pack', '#E8B7C8', 'XL', 1499.00, 2499.00, 28, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(185, 35, 'AFH-CB-035-ASS-XXL', 'Assorted Rainbow 5-Pack', '#E8B7C8', 'XXL', 1499.00, 2499.00, 28, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'active', '2026-10-17 00:33:26'),
+(186, 36, 'AFH-CB-036-MID-S', 'Midnight Noir Duo', '#1F1E24', 'S', 1699.00, 2598.00, 19, 'prod_day_night_period_defense_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(187, 36, 'AFH-CB-036-MID-M', 'Midnight Noir Duo', '#1F1E24', 'M', 1699.00, 2598.00, 19, 'prod_day_night_period_defense_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(188, 36, 'AFH-CB-036-MID-L', 'Midnight Noir Duo', '#1F1E24', 'L', 1699.00, 2598.00, 19, 'prod_day_night_period_defense_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(189, 36, 'AFH-CB-036-MID-XL', 'Midnight Noir Duo', '#1F1E24', 'XL', 1699.00, 2598.00, 19, 'prod_day_night_period_defense_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(190, 36, 'AFH-CB-036-MID-XXL', 'Midnight Noir Duo', '#1F1E24', 'XXL', 1699.00, 2598.00, 19, 'prod_day_night_period_defense_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(191, 37, 'AFH-CB-037-DUO-Standard Combo', 'Duo Set', '#4E8B68', 'Standard Combo', 479.00, 698.00, 180, 'prod_complete_intimate_care_duo.jpg', 'active', '2026-10-17 00:33:26'),
+(192, 38, 'AFH-CB-038-SIG-S', 'Signature Plum & Noir', '#8B5E83', 'S', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26'),
+(193, 38, 'AFH-CB-038-SIG-M', 'Signature Plum & Noir', '#8B5E83', 'M', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26'),
+(194, 38, 'AFH-CB-038-SIG-L', 'Signature Plum & Noir', '#8B5E83', 'L', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26'),
+(195, 38, 'AFH-CB-038-SIG-XL', 'Signature Plum & Noir', '#8B5E83', 'XL', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26'),
+(196, 38, 'AFH-CB-038-SIG-XXL', 'Signature Plum & Noir', '#8B5E83', 'XXL', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26');
+
+-- -----------------------------------------------------------------
+-- Table `product_images` (114 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `product_images`;
+INSERT INTO `product_images` (`id`, `product_id`, `image_path`, `alt_text`, `is_primary`, `sort_order`, `created_at`) VALUES
+(1, 1, 'prod_ultradry_heavy_flow_period_panty.jpg', 'AFOREHEALTH UltraDry Heavy Flow Period Panty (4-Layer Gusset) Front View', 1, 1, '2026-10-17 00:33:25'),
+(2, 1, 'prod_detail_ultradry_heavy_flow_period_panty.jpg', 'AFOREHEALTH UltraDry Heavy Flow Period Panty (4-Layer Gusset) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(3, 1, 'prod_lifestyle_ultradry_heavy_flow_period_panty.jpg', 'AFOREHEALTH UltraDry Heavy Flow Period Panty (4-Layer Gusset) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(4, 2, 'prod_overnight_sleepshield_boxer_period_panty.jpg', 'AFOREHEALTH Overnight SleepShield Boxer Period Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(5, 2, 'prod_detail_overnight_sleepshield_boxer_period_panty.jpg', 'AFOREHEALTH Overnight SleepShield Boxer Period Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(6, 2, 'prod_lifestyle_overnight_sleepshield_boxer_period_panty.jpg', 'AFOREHEALTH Overnight SleepShield Boxer Period Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(7, 3, 'prod_seamless_mid_waist_period_hipster.jpg', 'AFOREHEALTH Seamless Mid-Waist Period Hipster Front View', 1, 1, '2026-10-17 00:33:25'),
+(8, 3, 'prod_detail_seamless_mid_waist_period_hipster.jpg', 'AFOREHEALTH Seamless Mid-Waist Period Hipster Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(9, 3, 'prod_lifestyle_seamless_mid_waist_period_hipster.jpg', 'AFOREHEALTH Seamless Mid-Waist Period Hipster Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(10, 4, 'prod_organic_bamboo_cotton_day_flow_brief.jpg', 'AFOREHEALTH Organic Bamboo Cotton Day-Flow Brief Front View', 1, 1, '2026-10-17 00:33:25'),
+(11, 4, 'prod_detail_organic_bamboo_cotton_day_flow_brief.jpg', 'AFOREHEALTH Organic Bamboo Cotton Day-Flow Brief Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(12, 4, 'prod_lifestyle_organic_bamboo_cotton_day_flow_brief.jpg', 'AFOREHEALTH Organic Bamboo Cotton Day-Flow Brief Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(13, 5, 'prod_high_rise_tummy_support_period_panty.jpg', 'AFOREHEALTH High-Rise Tummy Support Period Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(14, 5, 'prod_detail_high_rise_tummy_support_period_panty.jpg', 'AFOREHEALTH High-Rise Tummy Support Period Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(15, 5, 'prod_lifestyle_high_rise_tummy_support_period_panty.jpg', 'AFOREHEALTH High-Rise Tummy Support Period Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(16, 6, 'prod_active_move_sport_period_short.jpg', 'AFOREHEALTH Active-Move Sport Period Short Front View', 1, 1, '2026-10-17 00:33:25'),
+(17, 6, 'prod_detail_active_move_sport_period_short.jpg', 'AFOREHEALTH Active-Move Sport Period Short Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(18, 6, 'prod_lifestyle_active_move_sport_period_short.jpg', 'AFOREHEALTH Active-Move Sport Period Short Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(19, 7, 'prod_teens_first_period_super_soft_panty.jpg', 'AFOREHEALTH Teens First-Period Super-Soft Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(20, 7, 'prod_detail_teens_first_period_super_soft_panty.jpg', 'AFOREHEALTH Teens First-Period Super-Soft Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(21, 7, 'prod_lifestyle_teens_first_period_super_soft_panty.jpg', 'AFOREHEALTH Teens First-Period Super-Soft Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(22, 8, 'prod_postpartum_leak_shield_recovery_panty.jpg', 'AFOREHEALTH Postpartum Leak-Shield Recovery Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(23, 8, 'prod_detail_postpartum_leak_shield_recovery_panty.jpg', 'AFOREHEALTH Postpartum Leak-Shield Recovery Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(24, 8, 'prod_lifestyle_postpartum_leak_shield_recovery_panty.jpg', 'AFOREHEALTH Postpartum Leak-Shield Recovery Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(25, 9, 'prod_ultra_thin_light_flow_spotting_panty.jpg', 'AFOREHEALTH Ultra-Thin Light Flow Spotting Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(26, 9, 'prod_detail_ultra_thin_light_flow_spotting_panty.jpg', 'AFOREHEALTH Ultra-Thin Light Flow Spotting Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(27, 9, 'prod_lifestyle_ultra_thin_light_flow_spotting_panty.jpg', 'AFOREHEALTH Ultra-Thin Light Flow Spotting Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(28, 10, 'prod_breathable_lace_trim_moderate_flow_panty.jpg', 'AFOREHEALTH Breathable Lace-Trim Moderate Flow Panty Front View', 1, 1, '2026-10-17 00:33:25'),
+(29, 10, 'prod_detail_breathable_lace_trim_moderate_flow_panty.jpg', 'AFOREHEALTH Breathable Lace-Trim Moderate Flow Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(30, 10, 'prod_lifestyle_breathable_lace_trim_moderate_flow_panty.jpg', 'AFOREHEALTH Breathable Lace-Trim Moderate Flow Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(31, 11, 'prod_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'AFOREHEALTH CloudSoft MicroModal Hipster Underwear (Pack of 2) Front View', 1, 1, '2026-10-17 00:33:25'),
+(32, 11, 'prod_detail_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'AFOREHEALTH CloudSoft MicroModal Hipster Underwear (Pack of 2) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:25'),
+(33, 11, 'prod_lifestyle_cloudsoft_micromodal_hipster_pack_of_2.jpg', 'AFOREHEALTH CloudSoft MicroModal Hipster Underwear (Pack of 2) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:25'),
+(34, 12, 'prod_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'AFOREHEALTH Zero-Line Pure Cotton Seamless Bikini Panty Front View', 1, 1, '2026-10-17 00:33:26'),
+(35, 12, 'prod_detail_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'AFOREHEALTH Zero-Line Pure Cotton Seamless Bikini Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(36, 12, 'prod_lifestyle_zero_line_pure_cotton_seamless_bikini_panty.jpg', 'AFOREHEALTH Zero-Line Pure Cotton Seamless Bikini Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(37, 13, 'prod_breathable_bamboo_mid_rise_everyday_brief.jpg', 'AFOREHEALTH Breathable Bamboo Mid-Rise Everyday Brief Front View', 1, 1, '2026-10-17 00:33:26'),
+(38, 13, 'prod_detail_breathable_bamboo_mid_rise_everyday_brief.jpg', 'AFOREHEALTH Breathable Bamboo Mid-Rise Everyday Brief Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(39, 13, 'prod_lifestyle_breathable_bamboo_mid_rise_everyday_brief.jpg', 'AFOREHEALTH Breathable Bamboo Mid-Rise Everyday Brief Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(40, 14, 'prod_gentle_compression_comfort_shaper_panty.jpg', 'AFOREHEALTH Gentle Compression Comfort Shaper Panty Front View', 1, 1, '2026-10-17 00:33:26'),
+(41, 14, 'prod_detail_gentle_compression_comfort_shaper_panty.jpg', 'AFOREHEALTH Gentle Compression Comfort Shaper Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(42, 14, 'prod_lifestyle_gentle_compression_comfort_shaper_panty.jpg', 'AFOREHEALTH Gentle Compression Comfort Shaper Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(43, 15, 'prod_anti_chafing_ultra_light_thigh_shield_short.jpg', 'AFOREHEALTH Anti-Chafing Ultra-Light Thigh Shield Short Front View', 1, 1, '2026-10-17 00:33:26'),
+(44, 15, 'prod_detail_anti_chafing_ultra_light_thigh_shield_short.jpg', 'AFOREHEALTH Anti-Chafing Ultra-Light Thigh Shield Short Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(45, 15, 'prod_lifestyle_anti_chafing_ultra_light_thigh_shield_short.jpg', 'AFOREHEALTH Anti-Chafing Ultra-Light Thigh Shield Short Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(46, 16, 'prod_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'AFOREHEALTH Pure Organic Cotton Antibacterial Everyday Hipster Front View', 1, 1, '2026-10-17 00:33:26'),
+(47, 16, 'prod_detail_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'AFOREHEALTH Pure Organic Cotton Antibacterial Everyday Hipster Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(48, 16, 'prod_lifestyle_pure_organic_cotton_antibacterial_everyday_hipster.jpg', 'AFOREHEALTH Pure Organic Cotton Antibacterial Everyday Hipster Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(49, 17, 'prod_silktouch_featherlight_laser_cut_boyshort.jpg', 'AFOREHEALTH SilkTouch Featherlight Laser-Cut Boyshort Front View', 1, 1, '2026-10-17 00:33:26'),
+(50, 17, 'prod_detail_silktouch_featherlight_laser_cut_boyshort.jpg', 'AFOREHEALTH SilkTouch Featherlight Laser-Cut Boyshort Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26');
+
+INSERT INTO `product_images` (`id`, `product_id`, `image_path`, `alt_text`, `is_primary`, `sort_order`, `created_at`) VALUES
+(51, 17, 'prod_lifestyle_silktouch_featherlight_laser_cut_boyshort.jpg', 'AFOREHEALTH SilkTouch Featherlight Laser-Cut Boyshort Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(52, 18, 'prod_second_skin_maternity_postpartum_panty.jpg', 'AFOREHEALTH Second-Skin Maternity & Postpartum Panty Front View', 1, 1, '2026-10-17 00:33:26'),
+(53, 18, 'prod_detail_second_skin_maternity_postpartum_panty.jpg', 'AFOREHEALTH Second-Skin Maternity & Postpartum Panty Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(54, 18, 'prod_lifestyle_second_skin_maternity_postpartum_panty.jpg', 'AFOREHEALTH Second-Skin Maternity & Postpartum Panty Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(55, 19, 'prod_first_period_confidence_gift_box.jpg', 'AFOREHEALTH First Period Confidence Gift Box (Panty + Pads + Pouch) Front View', 1, 1, '2026-10-17 00:33:26'),
+(56, 19, 'prod_detail_first_period_confidence_gift_box.jpg', 'AFOREHEALTH First Period Confidence Gift Box (Panty + Pads + Pouch) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(57, 19, 'prod_lifestyle_first_period_confidence_gift_box.jpg', 'AFOREHEALTH First Period Confidence Gift Box (Panty + Pads + Pouch) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(58, 20, 'prod_college_travel_emergency_period_pouch.jpg', 'AFOREHEALTH College & Travel Emergency Period Pouch Front View', 1, 1, '2026-10-17 00:33:26'),
+(59, 20, 'prod_detail_college_travel_emergency_period_pouch.jpg', 'AFOREHEALTH College & Travel Emergency Period Pouch Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(60, 20, 'prod_lifestyle_college_travel_emergency_period_pouch.jpg', 'AFOREHEALTH College & Travel Emergency Period Pouch Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(61, 21, 'prod_postpartum_30_day_complete_healing_casket.jpg', 'AFOREHEALTH Postpartum 30-Day Complete Healing & Comfort Casket Front View', 1, 1, '2026-10-17 00:33:26'),
+(62, 21, 'prod_detail_postpartum_30_day_complete_healing_casket.jpg', 'AFOREHEALTH Postpartum 30-Day Complete Healing & Comfort Casket Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(63, 21, 'prod_lifestyle_postpartum_30_day_complete_healing_casket.jpg', 'AFOREHEALTH Postpartum 30-Day Complete Healing & Comfort Casket Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(64, 22, 'prod_sustainable_zero_waste_period_transition_kit.jpg', 'AFOREHEALTH Sustainable Zero-Waste Period Transition Kit Front View', 1, 1, '2026-10-17 00:33:26'),
+(65, 22, 'prod_detail_sustainable_zero_waste_period_transition_kit.jpg', 'AFOREHEALTH Sustainable Zero-Waste Period Transition Kit Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(66, 22, 'prod_lifestyle_sustainable_zero_waste_period_transition_kit.jpg', 'AFOREHEALTH Sustainable Zero-Waste Period Transition Kit Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(67, 23, 'prod_heavy_flow_workday_essentials_survival_pouch.jpg', 'AFOREHEALTH Heavy-Flow Workday Essentials Survival Pouch Front View', 1, 1, '2026-10-17 00:33:26'),
+(68, 23, 'prod_detail_heavy_flow_workday_essentials_survival_pouch.jpg', 'AFOREHEALTH Heavy-Flow Workday Essentials Survival Pouch Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(69, 23, 'prod_lifestyle_heavy_flow_workday_essentials_survival_pouch.jpg', 'AFOREHEALTH Heavy-Flow Workday Essentials Survival Pouch Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(70, 24, 'prod_organic_cotton_ultra_thin_day_pads_pack_of_12.jpg', 'AFOREHEALTH 100% Organic Cotton Ultra-Thin Day Pads with Wings (Pack of 12) Front View', 1, 1, '2026-10-17 00:33:26'),
+(71, 24, 'prod_detail_organic_cotton_ultra_thin_day_pads_pack_of_12.jpg', 'AFOREHEALTH 100% Organic Cotton Ultra-Thin Day Pads with Wings (Pack of 12) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(72, 24, 'prod_lifestyle_organic_cotton_ultra_thin_day_pads_pack_of_12.jpg', 'AFOREHEALTH 100% Organic Cotton Ultra-Thin Day Pads with Wings (Pack of 12) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(73, 25, 'prod_overnight_maxi_extra_long_pads_pack_of_10.jpg', 'AFOREHEALTH Overnight Maxi Extra-Long Anion Antibacterial Pads (Pack of 10) Front View', 1, 1, '2026-10-17 00:33:26'),
+(74, 25, 'prod_detail_overnight_maxi_extra_long_pads_pack_of_10.jpg', 'AFOREHEALTH Overnight Maxi Extra-Long Anion Antibacterial Pads (Pack of 10) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(75, 25, 'prod_lifestyle_overnight_maxi_extra_long_pads_pack_of_10.jpg', 'AFOREHEALTH Overnight Maxi Extra-Long Anion Antibacterial Pads (Pack of 10) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(76, 26, 'prod_pure_bamboo_ultra_slim_daily_panty_liners_pack_of_30.jpg', 'AFOREHEALTH Pure Bamboo Ultra-Slim Daily Panty Liners (Pack of 30) Front View', 1, 1, '2026-10-17 00:33:26'),
+(77, 26, 'prod_detail_pure_bamboo_ultra_slim_daily_panty_liners_pack_of_30.jpg', 'AFOREHEALTH Pure Bamboo Ultra-Slim Daily Panty Liners (Pack of 30) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(78, 26, 'prod_lifestyle_pure_bamboo_ultra_slim_daily_panty_liners_pack_of_30.jpg', 'AFOREHEALTH Pure Bamboo Ultra-Slim Daily Panty Liners (Pack of 30) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(79, 27, 'prod_reusable_washable_bamboo_charcoal_cloth_pad.jpg', 'AFOREHEALTH Reusable Washable Bamboo-Charcoal Heavy Flow Cloth Pad Front View', 1, 1, '2026-10-17 00:33:26'),
+(80, 27, 'prod_detail_reusable_washable_bamboo_charcoal_cloth_pad.jpg', 'AFOREHEALTH Reusable Washable Bamboo-Charcoal Heavy Flow Cloth Pad Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(81, 27, 'prod_lifestyle_reusable_washable_bamboo_charcoal_cloth_pad.jpg', 'AFOREHEALTH Reusable Washable Bamboo-Charcoal Heavy Flow Cloth Pad Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(82, 28, 'prod_biodegradable_corn_bamboo_rash_free_pads_pack_of_15.jpg', 'AFOREHEALTH Biodegradable Corn & Bamboo Fiber Rash-Free Pads (Pack of 15) Front View', 1, 1, '2026-10-17 00:33:26'),
+(83, 28, 'prod_detail_biodegradable_corn_bamboo_rash_free_pads_pack_of_15.jpg', 'AFOREHEALTH Biodegradable Corn & Bamboo Fiber Rash-Free Pads (Pack of 15) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(84, 28, 'prod_lifestyle_biodegradable_corn_bamboo_rash_free_pads_pack_of_15.jpg', 'AFOREHEALTH Biodegradable Corn & Bamboo Fiber Rash-Free Pads (Pack of 15) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(85, 29, 'prod_gentle_ph_38_daily_intimate_foam_wash_150ml.jpg', 'AFOREHEALTH Gentle pH 3.8 Daily Intimate Foam Wash (Tea Tree & Chamomile, 150ml) Front View', 1, 1, '2026-10-17 00:33:26'),
+(86, 29, 'prod_detail_gentle_ph_38_daily_intimate_foam_wash_150ml.jpg', 'AFOREHEALTH Gentle pH 3.8 Daily Intimate Foam Wash (Tea Tree & Chamomile, 150ml) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(87, 29, 'prod_lifestyle_gentle_ph_38_daily_intimate_foam_wash_150ml.jpg', 'AFOREHEALTH Gentle pH 3.8 Daily Intimate Foam Wash (Tea Tree & Chamomile, 150ml) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(88, 30, 'prod_ultra_soft_flushable_intimate_wet_wipes_pack_of_25.jpg', 'AFOREHEALTH Ultra-Soft Flushable Intimate Wet Wipes with Aloe Vera (Pack of 25) Front View', 1, 1, '2026-10-17 00:33:26'),
+(89, 30, 'prod_detail_ultra_soft_flushable_intimate_wet_wipes_pack_of_25.jpg', 'AFOREHEALTH Ultra-Soft Flushable Intimate Wet Wipes with Aloe Vera (Pack of 25) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(90, 30, 'prod_lifestyle_ultra_soft_flushable_intimate_wet_wipes_pack_of_25.jpg', 'AFOREHEALTH Ultra-Soft Flushable Intimate Wet Wipes with Aloe Vera (Pack of 25) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(91, 31, 'prod_natural_anti_chafing_rash_soothing_intimate_balm_50g.jpg', 'AFOREHEALTH Natural Anti-Chafing & Rash Soothing Intimate Balm (50g) Front View', 1, 1, '2026-10-17 00:33:26'),
+(92, 31, 'prod_detail_natural_anti_chafing_rash_soothing_intimate_balm_50g.jpg', 'AFOREHEALTH Natural Anti-Chafing & Rash Soothing Intimate Balm (50g) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(93, 31, 'prod_lifestyle_natural_anti_chafing_rash_soothing_intimate_balm_50g.jpg', 'AFOREHEALTH Natural Anti-Chafing & Rash Soothing Intimate Balm (50g) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(94, 32, 'prod_plant_based_period_panty_stain_remover_wash_200ml.jpg', 'AFOREHEALTH Plant-Based Period Panty & Cloth Pad Stain Remover Wash (200ml) Front View', 1, 1, '2026-10-17 00:33:26'),
+(95, 32, 'prod_detail_plant_based_period_panty_stain_remover_wash_200ml.jpg', 'AFOREHEALTH Plant-Based Period Panty & Cloth Pad Stain Remover Wash (200ml) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(96, 32, 'prod_lifestyle_plant_based_period_panty_stain_remover_wash_200ml.jpg', 'AFOREHEALTH Plant-Based Period Panty & Cloth Pad Stain Remover Wash (200ml) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(97, 33, 'prod_intimate_calming_mist_period_freshness_100ml.jpg', 'AFOREHEALTH Intimate Calming Mist for Period Freshness (100ml) Front View', 1, 1, '2026-10-17 00:33:26'),
+(98, 33, 'prod_detail_intimate_calming_mist_period_freshness_100ml.jpg', 'AFOREHEALTH Intimate Calming Mist for Period Freshness (100ml) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(99, 33, 'prod_lifestyle_intimate_calming_mist_period_freshness_100ml.jpg', 'AFOREHEALTH Intimate Calming Mist for Period Freshness (100ml) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(100, 34, 'prod_3_pack_period_panty_value_bundle.jpg', 'AFOREHEALTH 3-Pack Period Panty Value Bundle (Heavy + Medium + Light) Front View', 1, 1, '2026-10-17 00:33:26');
+
+INSERT INTO `product_images` (`id`, `product_id`, `image_path`, `alt_text`, `is_primary`, `sort_order`, `created_at`) VALUES
+(101, 34, 'prod_detail_3_pack_period_panty_value_bundle.jpg', 'AFOREHEALTH 3-Pack Period Panty Value Bundle (Heavy + Medium + Light) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(102, 34, 'prod_lifestyle_3_pack_period_panty_value_bundle.jpg', 'AFOREHEALTH 3-Pack Period Panty Value Bundle (Heavy + Medium + Light) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(103, 35, 'prod_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'AFOREHEALTH 5-Pack Pure CloudSoft Everyday Cotton Hipster Rainbow Bundle Front View', 1, 1, '2026-10-17 00:33:26'),
+(104, 35, 'prod_detail_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'AFOREHEALTH 5-Pack Pure CloudSoft Everyday Cotton Hipster Rainbow Bundle Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(105, 35, 'prod_lifestyle_5_pack_pure_cloudsoft_everyday_cotton_hipster_bundle.jpg', 'AFOREHEALTH 5-Pack Pure CloudSoft Everyday Cotton Hipster Rainbow Bundle Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(106, 36, 'prod_day_night_period_defense_duo.jpg', 'AFOREHEALTH Day & Night Period Defense Duo (1 Heavy Panty + 1 Overnight Boxers) Front View', 1, 1, '2026-10-17 00:33:26'),
+(107, 36, 'prod_detail_day_night_period_defense_duo.jpg', 'AFOREHEALTH Day & Night Period Defense Duo (1 Heavy Panty + 1 Overnight Boxers) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(108, 36, 'prod_lifestyle_day_night_period_defense_duo.jpg', 'AFOREHEALTH Day & Night Period Defense Duo (1 Heavy Panty + 1 Overnight Boxers) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(109, 37, 'prod_complete_intimate_care_duo.jpg', 'AFOREHEALTH Complete Intimate Care Duo (Gentle Foam Wash + 25 Intimate Wipes) Front View', 1, 1, '2026-10-17 00:33:26'),
+(110, 37, 'prod_detail_complete_intimate_care_duo.jpg', 'AFOREHEALTH Complete Intimate Care Duo (Gentle Foam Wash + 25 Intimate Wipes) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(111, 37, 'prod_lifestyle_complete_intimate_care_duo.jpg', 'AFOREHEALTH Complete Intimate Care Duo (Gentle Foam Wash + 25 Intimate Wipes) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26'),
+(112, 38, 'prod_the_ultimate_confidence_box.jpg', 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) Front View', 1, 1, '2026-10-17 00:33:26'),
+(113, 38, 'prod_detail_the_ultimate_confidence_box.jpg', 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) Fabric & Gusset Detail', '0', 2, '2026-10-17 00:33:26'),
+(114, 38, 'prod_lifestyle_the_ultimate_confidence_box.jpg', 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26');
+
+-- -----------------------------------------------------------------
+-- Table `inventory` (196 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `inventory`;
+INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `reserved_stock`, `available_stock`, `low_stock_threshold`, `updated_at`) VALUES
+(1, 1, 1, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(2, 1, 2, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(3, 1, 3, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(4, 1, 4, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(5, 1, 5, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(6, 1, 6, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(7, 1, 7, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(8, 1, 8, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(9, 1, 9, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(10, 1, 10, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(11, 1, 11, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(12, 1, 12, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(13, 1, 13, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(14, 1, 14, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(15, 2, 15, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(16, 2, 16, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(17, 2, 17, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(18, 2, 18, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(19, 2, 19, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(20, 2, 20, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(21, 2, 21, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(22, 2, 22, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(23, 2, 23, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(24, 3, 24, 19, '0', 19, 5, '2026-10-17 00:33:25'),
+(25, 3, 25, 19, '0', 19, 5, '2026-10-17 00:33:25'),
+(26, 3, 26, 19, '0', 19, 5, '2026-10-17 00:33:25'),
+(27, 3, 27, 19, '0', 19, 5, '2026-10-17 00:33:25'),
+(28, 3, 28, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(29, 3, 29, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(30, 3, 30, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(31, 3, 31, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(32, 3, 32, 15, '0', 15, 5, '2026-10-17 00:33:25'),
+(33, 4, 33, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(34, 4, 34, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(35, 4, 35, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(36, 4, 36, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(37, 4, 37, 16, '0', 16, 5, '2026-10-17 00:33:25'),
+(38, 4, 38, 16, '0', 16, 5, '2026-10-17 00:33:25'),
+(39, 4, 39, 16, '0', 16, 5, '2026-10-17 00:33:25'),
+(40, 4, 40, 16, '0', 16, 5, '2026-10-17 00:33:25'),
+(41, 4, 41, 16, '0', 16, 5, '2026-10-17 00:33:25'),
+(42, 5, 42, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(43, 5, 43, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(44, 5, 44, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(45, 5, 45, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(46, 5, 46, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(47, 5, 47, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(48, 5, 48, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(49, 5, 49, 12, '0', 12, 5, '2026-10-17 00:33:25'),
+(50, 5, 50, 12, '0', 12, 5, '2026-10-17 00:33:25');
+
+INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `reserved_stock`, `available_stock`, `low_stock_threshold`, `updated_at`) VALUES
+(51, 6, 51, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(52, 6, 52, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(53, 6, 53, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(54, 6, 54, 20, '0', 20, 5, '2026-10-17 00:33:25'),
+(55, 7, 55, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(56, 7, 56, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(57, 7, 57, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(58, 7, 58, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(59, 7, 59, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(60, 7, 60, 23, '0', 23, 5, '2026-10-17 00:33:25'),
+(61, 8, 61, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(62, 8, 62, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(63, 8, 63, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(64, 8, 64, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(65, 8, 65, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(66, 8, 66, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(67, 8, 67, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(68, 8, 68, 10, '0', 10, 5, '2026-10-17 00:33:25'),
+(69, 9, 69, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(70, 9, 70, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(71, 9, 71, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(72, 9, 72, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(73, 9, 73, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(74, 9, 74, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(75, 9, 75, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(76, 9, 76, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(77, 10, 77, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(78, 10, 78, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(79, 10, 79, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(80, 10, 80, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(81, 10, 81, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(82, 10, 82, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(83, 10, 83, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(84, 10, 84, 14, '0', 14, 5, '2026-10-17 00:33:25'),
+(85, 11, 85, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(86, 11, 86, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(87, 11, 87, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(88, 11, 88, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(89, 11, 89, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(90, 11, 90, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(91, 11, 91, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(92, 11, 92, 24, '0', 24, 5, '2026-10-17 00:33:25'),
+(93, 11, 93, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(94, 11, 94, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(95, 12, 95, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(96, 12, 96, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(97, 12, 97, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(98, 12, 98, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(99, 12, 99, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(100, 12, 100, 25, '0', 25, 5, '2026-10-17 00:33:26');
+
+INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `reserved_stock`, `available_stock`, `low_stock_threshold`, `updated_at`) VALUES
+(101, 12, 101, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(102, 12, 102, 25, '0', 25, 5, '2026-10-17 00:33:26'),
+(103, 13, 103, 34, '0', 34, 5, '2026-10-17 00:33:26'),
+(104, 13, 104, 34, '0', 34, 5, '2026-10-17 00:33:26'),
+(105, 13, 105, 34, '0', 34, 5, '2026-10-17 00:33:26'),
+(106, 13, 106, 34, '0', 34, 5, '2026-10-17 00:33:26'),
+(107, 13, 107, 34, '0', 34, 5, '2026-10-17 00:33:26'),
+(108, 14, 108, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(109, 14, 109, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(110, 14, 110, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(111, 14, 111, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(112, 14, 112, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(113, 14, 113, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(114, 14, 114, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(115, 14, 115, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(116, 15, 116, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(117, 15, 117, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(118, 15, 118, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(119, 15, 119, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(120, 15, 120, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(121, 15, 121, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(122, 15, 122, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(123, 15, 123, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(124, 15, 124, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(125, 15, 125, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(126, 15, 126, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(127, 15, 127, 16, '0', 16, 5, '2026-10-17 00:33:26'),
+(128, 16, 128, 26, '0', 26, 5, '2026-10-17 00:33:26'),
+(129, 16, 129, 26, '0', 26, 5, '2026-10-17 00:33:26'),
+(130, 16, 130, 26, '0', 26, 5, '2026-10-17 00:33:26'),
+(131, 16, 131, 26, '0', 26, 5, '2026-10-17 00:33:26'),
+(132, 16, 132, 21, '0', 21, 5, '2026-10-17 00:33:26'),
+(133, 16, 133, 21, '0', 21, 5, '2026-10-17 00:33:26'),
+(134, 16, 134, 21, '0', 21, 5, '2026-10-17 00:33:26'),
+(135, 16, 135, 21, '0', 21, 5, '2026-10-17 00:33:26'),
+(136, 16, 136, 21, '0', 21, 5, '2026-10-17 00:33:26'),
+(137, 17, 137, 35, '0', 35, 5, '2026-10-17 00:33:26'),
+(138, 17, 138, 35, '0', 35, 5, '2026-10-17 00:33:26'),
+(139, 17, 139, 35, '0', 35, 5, '2026-10-17 00:33:26'),
+(140, 17, 140, 35, '0', 35, 5, '2026-10-17 00:33:26'),
+(141, 18, 141, 31, '0', 31, 5, '2026-10-17 00:33:26'),
+(142, 18, 142, 31, '0', 31, 5, '2026-10-17 00:33:26'),
+(143, 18, 143, 31, '0', 31, 5, '2026-10-17 00:33:26'),
+(144, 18, 144, 31, '0', 31, 5, '2026-10-17 00:33:26'),
+(145, 19, 145, 30, '0', 30, 5, '2026-10-17 00:33:26'),
+(146, 19, 146, 30, '0', 30, 5, '2026-10-17 00:33:26'),
+(147, 19, 147, 30, '0', 30, 5, '2026-10-17 00:33:26'),
+(148, 20, 148, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(149, 20, 149, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(150, 20, 150, 28, '0', 28, 5, '2026-10-17 00:33:26');
+
+INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `reserved_stock`, `available_stock`, `low_stock_threshold`, `updated_at`) VALUES
+(151, 20, 151, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(152, 21, 152, 10, '0', 10, 5, '2026-10-17 00:33:26'),
+(153, 21, 153, 10, '0', 10, 5, '2026-10-17 00:33:26'),
+(154, 21, 154, 10, '0', 10, 5, '2026-10-17 00:33:26'),
+(155, 21, 155, 10, '0', 10, 5, '2026-10-17 00:33:26'),
+(156, 21, 156, 10, '0', 10, 5, '2026-10-17 00:33:26'),
+(157, 22, 157, 15, '0', 15, 5, '2026-10-17 00:33:26'),
+(158, 22, 158, 15, '0', 15, 5, '2026-10-17 00:33:26'),
+(159, 22, 159, 15, '0', 15, 5, '2026-10-17 00:33:26'),
+(160, 22, 160, 15, '0', 15, 5, '2026-10-17 00:33:26'),
+(161, 23, 161, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(162, 23, 162, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(163, 23, 163, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(164, 23, 164, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(165, 23, 165, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(166, 24, 166, 350, '0', 350, 5, '2026-10-17 00:33:26'),
+(167, 25, 167, 300, '0', 300, 5, '2026-10-17 00:33:26'),
+(168, 26, 168, 400, '0', 400, 5, '2026-10-17 00:33:26'),
+(169, 27, 169, 160, '0', 160, 5, '2026-10-17 00:33:26'),
+(170, 28, 170, 220, '0', 220, 5, '2026-10-17 00:33:26'),
+(171, 29, 171, 280, '0', 280, 5, '2026-10-17 00:33:26'),
+(172, 30, 172, 310, '0', 310, 5, '2026-10-17 00:33:26'),
+(173, 31, 173, 190, '0', 190, 5, '2026-10-17 00:33:26'),
+(174, 32, 174, 230, '0', 230, 5, '2026-10-17 00:33:26'),
+(175, 33, 175, 175, '0', 175, 5, '2026-10-17 00:33:26'),
+(176, 34, 176, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(177, 34, 177, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(178, 34, 178, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(179, 34, 179, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(180, 34, 180, 24, '0', 24, 5, '2026-10-17 00:33:26'),
+(181, 35, 181, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(182, 35, 182, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(183, 35, 183, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(184, 35, 184, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(185, 35, 185, 28, '0', 28, 5, '2026-10-17 00:33:26'),
+(186, 36, 186, 19, '0', 19, 5, '2026-10-17 00:33:26'),
+(187, 36, 187, 19, '0', 19, 5, '2026-10-17 00:33:26'),
+(188, 36, 188, 19, '0', 19, 5, '2026-10-17 00:33:26'),
+(189, 36, 189, 19, '0', 19, 5, '2026-10-17 00:33:26'),
+(190, 36, 190, 19, '0', 19, 5, '2026-10-17 00:33:26'),
+(191, 37, 191, 180, '0', 180, 5, '2026-10-17 00:33:26'),
+(192, 38, 192, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(193, 38, 193, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(194, 38, 194, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(195, 38, 195, 17, '0', 17, 5, '2026-10-17 00:33:26'),
+(196, 38, 196, 17, '0', 17, 5, '2026-10-17 00:33:26');
+
+-- -----------------------------------------------------------------
+-- Table `inventory_logs` (196 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `inventory_logs`;
+INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `previous_stock`, `change_amount`, `new_stock`, `reason`, `admin_id`, `created_at`) VALUES
+(1, 1, 1, 'AFH-PP-001-MID-S', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(2, 1, 2, 'AFH-PP-001-MID-M', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(3, 1, 3, 'AFH-PP-001-MID-L', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(4, 1, 4, 'AFH-PP-001-MID-XL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(5, 1, 5, 'AFH-PP-001-MID-XXL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(6, 1, 6, 'AFH-PP-001-BER-S', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(7, 1, 7, 'AFH-PP-001-BER-M', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(8, 1, 8, 'AFH-PP-001-BER-L', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(9, 1, 9, 'AFH-PP-001-BER-XL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(10, 1, 10, 'AFH-PP-001-BER-XXL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(11, 1, 11, 'AFH-PP-001-BLU-S', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(12, 1, 12, 'AFH-PP-001-BLU-M', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(13, 1, 13, 'AFH-PP-001-BLU-L', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(14, 1, 14, 'AFH-PP-001-BLU-XL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(15, 2, 15, 'AFH-PP-002-CHA-S', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(16, 2, 16, 'AFH-PP-002-CHA-M', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(17, 2, 17, 'AFH-PP-002-CHA-L', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(18, 2, 18, 'AFH-PP-002-CHA-XL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(19, 2, 19, 'AFH-PP-002-CHA-XXL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(20, 2, 20, 'AFH-PP-002-DEE-M', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(21, 2, 21, 'AFH-PP-002-DEE-L', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(22, 2, 22, 'AFH-PP-002-DEE-XL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(23, 2, 23, 'AFH-PP-002-DEE-XXL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(24, 3, 24, 'AFH-PP-003-NUD-S', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(25, 3, 25, 'AFH-PP-003-NUD-M', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(26, 3, 26, 'AFH-PP-003-NUD-L', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(27, 3, 27, 'AFH-PP-003-NUD-XL', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(28, 3, 28, 'AFH-PP-003-MID-S', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(29, 3, 29, 'AFH-PP-003-MID-M', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(30, 3, 30, 'AFH-PP-003-MID-L', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(31, 3, 31, 'AFH-PP-003-MID-XL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(32, 3, 32, 'AFH-PP-003-MID-XXL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(33, 4, 33, 'AFH-PP-004-SAG-S', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(34, 4, 34, 'AFH-PP-004-SAG-M', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(35, 4, 35, 'AFH-PP-004-SAG-L', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(36, 4, 36, 'AFH-PP-004-SAG-XL', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(37, 4, 37, 'AFH-PP-004-BLU-S', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(38, 4, 38, 'AFH-PP-004-BLU-M', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(39, 4, 39, 'AFH-PP-004-BLU-L', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(40, 4, 40, 'AFH-PP-004-BLU-XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(41, 4, 41, 'AFH-PP-004-BLU-XXL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(42, 5, 42, 'AFH-PP-005-MID-M', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(43, 5, 43, 'AFH-PP-005-MID-L', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(44, 5, 44, 'AFH-PP-005-MID-XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(45, 5, 45, 'AFH-PP-005-MID-XXL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(46, 5, 46, 'AFH-PP-005-MID-3XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(47, 5, 47, 'AFH-PP-005-HEA-M', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(48, 5, 48, 'AFH-PP-005-HEA-L', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(49, 5, 49, 'AFH-PP-005-HEA-XL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(50, 5, 50, 'AFH-PP-005-HEA-XXL', '0', 12, 12, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25');
+
+INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `previous_stock`, `change_amount`, `new_stock`, `reason`, `admin_id`, `created_at`) VALUES
+(51, 6, 51, 'AFH-PP-006-OBS-S', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(52, 6, 52, 'AFH-PP-006-OBS-M', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(53, 6, 53, 'AFH-PP-006-OBS-L', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(54, 6, 54, 'AFH-PP-006-OBS-XL', '0', 20, 20, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(55, 7, 55, 'AFH-PP-007-PAS-XS', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(56, 7, 56, 'AFH-PP-007-PAS-S', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(57, 7, 57, 'AFH-PP-007-PAS-M', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(58, 7, 58, 'AFH-PP-007-LAV-XS', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(59, 7, 59, 'AFH-PP-007-LAV-S', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(60, 7, 60, 'AFH-PP-007-LAV-M', '0', 23, 23, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(61, 8, 61, 'AFH-PP-008-WAR-L', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(62, 8, 62, 'AFH-PP-008-WAR-XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(63, 8, 63, 'AFH-PP-008-WAR-XXL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(64, 8, 64, 'AFH-PP-008-WAR-3XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(65, 8, 65, 'AFH-PP-008-MID-L', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(66, 8, 66, 'AFH-PP-008-MID-XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(67, 8, 67, 'AFH-PP-008-MID-XXL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(68, 8, 68, 'AFH-PP-008-MID-3XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(69, 9, 69, 'AFH-PP-009-DUS-S', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(70, 9, 70, 'AFH-PP-009-DUS-M', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(71, 9, 71, 'AFH-PP-009-DUS-L', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(72, 9, 72, 'AFH-PP-009-DUS-XL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(73, 9, 73, 'AFH-PP-009-SOF-S', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(74, 9, 74, 'AFH-PP-009-SOF-M', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(75, 9, 75, 'AFH-PP-009-SOF-L', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(76, 9, 76, 'AFH-PP-009-SOF-XL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(77, 10, 77, 'AFH-PP-010-WIN-S', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(78, 10, 78, 'AFH-PP-010-WIN-M', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(79, 10, 79, 'AFH-PP-010-WIN-L', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(80, 10, 80, 'AFH-PP-010-WIN-XL', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(81, 10, 81, 'AFH-PP-010-CLA-S', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(82, 10, 82, 'AFH-PP-010-CLA-M', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(83, 10, 83, 'AFH-PP-010-CLA-L', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(84, 10, 84, 'AFH-PP-010-CLA-XL', '0', 14, 14, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(85, 11, 85, 'AFH-EW-011-BLU-S', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(86, 11, 86, 'AFH-EW-011-BLU-M', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(87, 11, 87, 'AFH-EW-011-BLU-L', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(88, 11, 88, 'AFH-EW-011-BLU-XL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(89, 11, 89, 'AFH-EW-011-BLU-XXL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(90, 11, 90, 'AFH-EW-011-NUD-S', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(91, 11, 91, 'AFH-EW-011-NUD-M', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(92, 11, 92, 'AFH-EW-011-NUD-L', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:25'),
+(93, 11, 93, 'AFH-EW-011-NUD-XL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(94, 11, 94, 'AFH-EW-011-NUD-XXL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(95, 12, 95, 'AFH-EW-012-SKI-S', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(96, 12, 96, 'AFH-EW-012-SKI-M', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(97, 12, 97, 'AFH-EW-012-SKI-L', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(98, 12, 98, 'AFH-EW-012-SKI-XL', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(99, 12, 99, 'AFH-EW-012-SOF-S', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(100, 12, 100, 'AFH-EW-012-SOF-M', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26');
+
+INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `previous_stock`, `change_amount`, `new_stock`, `reason`, `admin_id`, `created_at`) VALUES
+(101, 12, 101, 'AFH-EW-012-SOF-L', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(102, 12, 102, 'AFH-EW-012-SOF-XL', '0', 25, 25, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(103, 13, 103, 'AFH-EW-013-SAG-S', '0', 34, 34, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(104, 13, 104, 'AFH-EW-013-SAG-M', '0', 34, 34, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(105, 13, 105, 'AFH-EW-013-SAG-L', '0', 34, 34, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(106, 13, 106, 'AFH-EW-013-SAG-XL', '0', 34, 34, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(107, 13, 107, 'AFH-EW-013-SAG-XXL', '0', 34, 34, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(108, 14, 108, 'AFH-EW-014-BLA-M', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(109, 14, 109, 'AFH-EW-014-BLA-L', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(110, 14, 110, 'AFH-EW-014-BLA-XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(111, 14, 111, 'AFH-EW-014-BLA-XXL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(112, 14, 112, 'AFH-EW-014-HON-M', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(113, 14, 113, 'AFH-EW-014-HON-L', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(114, 14, 114, 'AFH-EW-014-HON-XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(115, 14, 115, 'AFH-EW-014-HON-XXL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(116, 15, 116, 'AFH-EW-015-MID-S', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(117, 15, 117, 'AFH-EW-015-MID-M', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(118, 15, 118, 'AFH-EW-015-MID-L', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(119, 15, 119, 'AFH-EW-015-MID-XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(120, 15, 120, 'AFH-EW-015-MID-XXL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(121, 15, 121, 'AFH-EW-015-MID-3XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(122, 15, 122, 'AFH-EW-015-WAR-S', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(123, 15, 123, 'AFH-EW-015-WAR-M', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(124, 15, 124, 'AFH-EW-015-WAR-L', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(125, 15, 125, 'AFH-EW-015-WAR-XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(126, 15, 126, 'AFH-EW-015-WAR-XXL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(127, 15, 127, 'AFH-EW-015-WAR-3XL', '0', 16, 16, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(128, 16, 128, 'AFH-EW-016-CLO-S', '0', 26, 26, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(129, 16, 129, 'AFH-EW-016-CLO-M', '0', 26, 26, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(130, 16, 130, 'AFH-EW-016-CLO-L', '0', 26, 26, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(131, 16, 131, 'AFH-EW-016-CLO-XL', '0', 26, 26, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(132, 16, 132, 'AFH-EW-016-SOF-S', '0', 21, 21, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(133, 16, 133, 'AFH-EW-016-SOF-M', '0', 21, 21, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(134, 16, 134, 'AFH-EW-016-SOF-L', '0', 21, 21, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(135, 16, 135, 'AFH-EW-016-SOF-XL', '0', 21, 21, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(136, 16, 136, 'AFH-EW-016-SOF-XXL', '0', 21, 21, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(137, 17, 137, 'AFH-EW-017-DUS-S', '0', 35, 35, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(138, 17, 138, 'AFH-EW-017-DUS-M', '0', 35, 35, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(139, 17, 139, 'AFH-EW-017-DUS-L', '0', 35, 35, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(140, 17, 140, 'AFH-EW-017-DUS-XL', '0', 35, 35, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(141, 18, 141, 'AFH-EW-018-PAS-M', '0', 31, 31, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(142, 18, 142, 'AFH-EW-018-PAS-L', '0', 31, 31, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(143, 18, 143, 'AFH-EW-018-PAS-XL', '0', 31, 31, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(144, 18, 144, 'AFH-EW-018-PAS-XXL', '0', 31, 31, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(145, 19, 145, 'AFH-PK-019-BLU-XS (Teens)', '0', 30, 30, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(146, 19, 146, 'AFH-PK-019-BLU-S (12-14 yrs)', '0', 30, 30, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(147, 19, 147, 'AFH-PK-019-BLU-M (14-16 yrs)', '0', 30, 30, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(148, 20, 148, 'AFH-PK-020-LIL-S', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(149, 20, 149, 'AFH-PK-020-LIL-M', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(150, 20, 150, 'AFH-PK-020-LIL-L', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26');
+
+INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `previous_stock`, `change_amount`, `new_stock`, `reason`, `admin_id`, `created_at`) VALUES
+(151, 20, 151, 'AFH-PK-020-LIL-XL', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(152, 21, 152, 'AFH-PK-021-EAR-M', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(153, 21, 153, 'AFH-PK-021-EAR-L', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(154, 21, 154, 'AFH-PK-021-EAR-XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(155, 21, 155, 'AFH-PK-021-EAR-XXL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(156, 21, 156, 'AFH-PK-021-EAR-3XL', '0', 10, 10, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(157, 22, 157, 'AFH-PK-022-ECO-S', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(158, 22, 158, 'AFH-PK-022-ECO-M', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(159, 22, 159, 'AFH-PK-022-ECO-L', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(160, 22, 160, 'AFH-PK-022-ECO-XL', '0', 15, 15, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(161, 23, 161, 'AFH-PK-023-JET-S', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(162, 23, 162, 'AFH-PK-023-JET-M', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(163, 23, 163, 'AFH-PK-023-JET-L', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(164, 23, 164, 'AFH-PK-023-JET-XL', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(165, 23, 165, 'AFH-PK-023-JET-XXL', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(166, 24, 166, 'AFH-PL-024-PAC-Regular (280mm)', '0', 350, 350, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(167, 25, 167, 'AFH-PL-025-PAC-XL Night (350mm)', '0', 300, 300, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(168, 26, 168, 'AFH-PL-026-PAC-155mm Slim', '0', 400, 400, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(169, 27, 169, 'AFH-PL-027-BOT-Large (30cm)', '0', 160, 160, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(170, 28, 170, 'AFH-PL-028-PAC-Mixed (Day & Night)', '0', 220, 220, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(171, 29, 171, 'AFH-IH-029-FOA-150 ml', '0', 280, 280, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(172, 30, 172, 'AFH-IH-030-PAC-25 Wipes', '0', 310, 310, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(173, 31, 173, 'AFH-IH-031-BAL-50 g', '0', 190, 190, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(174, 32, 174, 'AFH-IH-032-BOT-200 ml', '0', 230, 230, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(175, 33, 175, 'AFH-IH-033-SPR-100 ml', '0', 175, 175, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(176, 34, 176, 'AFH-CB-034-CLA-S', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(177, 34, 177, 'AFH-CB-034-CLA-M', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(178, 34, 178, 'AFH-CB-034-CLA-L', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(179, 34, 179, 'AFH-CB-034-CLA-XL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(180, 34, 180, 'AFH-CB-034-CLA-XXL', '0', 24, 24, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(181, 35, 181, 'AFH-CB-035-ASS-S', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(182, 35, 182, 'AFH-CB-035-ASS-M', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(183, 35, 183, 'AFH-CB-035-ASS-L', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(184, 35, 184, 'AFH-CB-035-ASS-XL', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(185, 35, 185, 'AFH-CB-035-ASS-XXL', '0', 28, 28, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(186, 36, 186, 'AFH-CB-036-MID-S', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(187, 36, 187, 'AFH-CB-036-MID-M', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(188, 36, 188, 'AFH-CB-036-MID-L', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(189, 36, 189, 'AFH-CB-036-MID-XL', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(190, 36, 190, 'AFH-CB-036-MID-XXL', '0', 19, 19, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(191, 37, 191, 'AFH-CB-037-DUO-Standard Combo', '0', 180, 180, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(192, 38, 192, 'AFH-CB-038-SIG-S', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(193, 38, 193, 'AFH-CB-038-SIG-M', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(194, 38, 194, 'AFH-CB-038-SIG-L', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(195, 38, 195, 'AFH-CB-038-SIG-XL', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26'),
+(196, 38, 196, 'AFH-CB-038-SIG-XXL', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26');
+
+-- -----------------------------------------------------------------
+-- Table `bundles` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `bundles`;
+INSERT INTO `bundles` (`id`, `name`, `slug`, `description`, `discount_type`, `discount_value`, `min_items`, `featured_image`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Custom Period Care Starter Kit', 'custom-period-care-starter-kit', 'Build your ultimate customized period routine: Pick 1 Period Panty, 1 Pad Pack, and 1 Intimate Wash & enjoy an instant 20% bundle discount.', 'percentage', 20.00, 3, 'bundle_period_starter.svg', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `bundle_items` (3 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `bundle_items`;
+INSERT INTO `bundle_items` (`id`, `bundle_id`, `category_id`, `product_id`, `is_required`, `created_at`) VALUES
+(1, 1, 1, NULL, 1, '2026-10-08 11:25:05'),
+(2, 1, 4, NULL, 1, '2026-10-08 11:25:05'),
+(3, 1, 5, NULL, 1, '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `flash_sales` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `flash_sales`;
+INSERT INTO `flash_sales` (`id`, `title`, `slug`, `discount_percent`, `banner_text`, `start_at`, `end_at`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Weekend Comfort Flash Sale', 'weekend-comfort-sale', 25.00, '🔥 Weekend Comfort Sale: Extra 25% OFF on Select Period Essentials!', '2026-10-08 10:25:05', '2026-10-11 11:25:05', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `flash_sale_products` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `flash_sale_products`;
+INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `discount_price`, `max_quantity`, `created_at`) VALUES
+(1, 1, 1, NULL, 50, '2026-10-08 11:25:05'),
+(2, 1, 2, NULL, 50, '2026-10-08 11:25:05'),
+(3, 1, 3, NULL, 50, '2026-10-08 11:25:05'),
+(4, 1, 4, NULL, 50, '2026-10-08 11:25:05'),
+(5, 1, 5, NULL, 50, '2026-10-08 11:25:05'),
+(6, 1, 6, NULL, 50, '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `blog_categories` (4 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `blog_categories`;
+INSERT INTO `blog_categories` (`id`, `name`, `slug`, `created_at`) VALUES
+(1, 'Period Health & Science', 'period-health-science', '2026-10-17 00:33:27'),
+(2, 'Product & Sizing Guides', 'product-sizing-guides', '2026-10-17 00:33:27'),
+(3, 'Intimate Hygiene & Wellness', 'intimate-hygiene-wellness', '2026-10-17 00:33:27'),
+(4, 'Sustainable Living', 'sustainable-living', '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `blog_posts` (4 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `blog_posts`;
+INSERT INTO `blog_posts` (`id`, `category_id`, `title`, `slug`, `author`, `excerpt`, `content`, `featured_image`, `video_url`, `status`, `published_at`, `seo_title`, `seo_description`, `created_at`, `updated_at`) VALUES
+(1, 1, 'How Do Period Panties Actually Work? The 4-Layer Leakproof Science Explained', 'how-do-period-panties-work-leakproof-science', 'AFOREHEALTH Wellness Team', 'Curious how a pair of underwear can replace bulky plastic sanitary pads without leaking or feeling wet? Here is the complete breakdown of AFOREHEALTH gusset engineering.', '<p>For decades, women in India have relied on single-use plastic sanitary pads, enduring chafing, rustling sounds, rashes, and the constant fear of sudden leaks. The arrival of reusable leakproof period underwear represents the biggest innovation in menstrual hygiene in half a century.</p><h3>The 4-Layer Gusset Architecture</h3><p>At AFOREHEALTH, our period panties utilize an advanced 4-layer micro-textile composite that works harmoniously:</p><ol><li><strong>Layer 1 (Skin Contact): Moisture-Wicking Cotton:</strong> Draws moisture away from your body in under 3 seconds, keeping your surface completely dry and fresh.</li><li><strong>Layer 2 (Absorption Core): High-Density Microfiber:</strong> Locks up to 40ml of menstrual fluid, preventing backward seepage under pressure.</li><li><strong>Layer 3 (The Shield): Breathable Waterproof TPU Membrane:</strong> A microscopic barrier that blocks liquid molecules while allowing heat and water vapor to escape, eliminating sweat and odor.</li><li><strong>Layer 4 (Outer Shell): Luxurious Bamboo / Modal Fabric:</strong> Drapes softly against your outer clothing with zero telltale bulk or rustle.</li></ol><h3>Washing Is Surprisingly Easy</h3><p>Simply rinse under cold tap water until the runoff is clear, then pop it in your gentle cycle wash. Hang to air-dry in shade, and it is ready to protect you again for 3+ years.</p>', 'blog_science_period_panties.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', 'published', '2026-10-17 00:33:27', NULL, NULL, '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(2, 2, 'Finding Your Perfect Fit: The Ultimate Period Panty Size Guide for Indian Bodies', 'how-to-choose-period-panty-size-guide-indian-women', 'AFOREHEALTH Wellness Team', 'Why Indian hip-to-waist ratios differ from Western size charts, and how to measure yourself for zero gaps and all-day comfort.', '<p>Choosing the correct size in period underwear is critical. Unlike regular stretchy panties that you can wear loose, period panties need to sit snug against your groin creases to create an airtight seal against gravity leaks, yet never pinch your thighs.</p><h3>How to Measure Your Hips</h3><p>Take a soft measuring tape and wrap it around the fullest part of your buttocks/hips (usually 8 inches below your natural waistline). Match your measurements:</p><ul><li><strong>Small (S):</strong> Hips 34 - 36 inches (Waist 26 - 28)</li><li><strong>Medium (M):</strong> Hips 37 - 39 inches (Waist 29 - 31)</li><li><strong>Large (L):</strong> Hips 40 - 42 inches (Waist 32 - 34)</li><li><strong>Extra Large (XL):</strong> Hips 43 - 45 inches (Waist 35 - 37)</li><li><strong>Double XL (XXL):</strong> Hips 46 - 48 inches (Waist 38 - 40)</li><li><strong>3XL:</strong> Hips 49 - 52 inches (Waist 41 - 44)</li></ul><p>If you fall between two sizes and have curvier thighs, we recommend sizing up for effortless comfort.</p>', 'blog_size_guide.jpg', 'https://www.youtube.com/watch?v=vXrQ_FhZmos', 'published', '2026-10-17 00:33:27', NULL, NULL, '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(3, 3, 'The pH 3.8 Rule: Why Regular Body Soaps Harm Your Vaginal Health', 'why-regular-soaps-harm-vaginal-ph-intimate-hygiene', 'AFOREHEALTH Wellness Team', 'Understand why soaps cause itching, yeast infections, and odor, and how a gentle pH-balanced lactic acid wash protects your natural microflora.', '<p>The intimate area is one of the most delicate biological ecosystems in the human body. Unlike the rest of your skin, which has a neutral pH of 5.5, a healthy vagina maintains an acidic pH between 3.8 and 4.5. This acidity is created by beneficial <em>Lactobacillus</em> bacteria, which act as natural defenders against harmful yeast and bacterial vaginosis.</p><h3>Why Bathing Soap Is Dangerous</h3><p>Commercial body soaps and shower gels have an alkaline pH between 9.0 and 10.5. Washing your intimate region with these destroys the acidic barrier within seconds, creating an ideal breeding ground for irritation, itchiness, and foul odors.</p><p>Always use a soap-free, dermatologically tested intimate wash formulated specifically at pH 3.8, with natural soothing ingredients like chamomile and tea tree.</p>', 'blog_intimate_ph.jpg', 'https://www.youtube.com/watch?v=RFDatCchpus', 'published', '2026-10-17 00:33:27', NULL, NULL, '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(4, 4, 'Breaking Down the 350-Pad Waste Problem: The Environmental Impact of Periods', 'environmental-impact-single-use-pads-sustainable-period', 'AFOREHEALTH Wellness Team', 'Each plastic sanitary pad takes up to 800 years to decompose. Here is how switching to reusable period wear can save both money and the planet.', '<p>Did you know that an average woman uses approximately 11,000 to 15,000 disposable sanitary pads in her lifetime? In India alone, over 12 billion plastic pads are thrown into municipal landfills or discarded in water bodies every year.</p><p>A single commercial pad contains the plastic equivalent of four shopping carrier bags. By switching to AFOREHEALTH reusable period panties and cloth pads, you can prevent thousands of plastic items from reaching our water systems while enjoying unmatched daily comfort.</p>', 'blog_eco_periods.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', 'published', '2026-10-17 00:33:27', NULL, NULL, '2026-10-17 00:33:27', '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `faqs` (10 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `faqs`;
+INSERT INTO `faqs` (`id`, `category`, `question`, `answer`, `sort_order`, `status`) VALUES
+(1, 'Period Panties', 'How long can I wear an AFOREHEALTH Period Panty before changing?', 'On normal to heavy flow days, our UltraDry 4-layer period panty can be worn safely for 8 to 12 hours. For extraordinarily heavy flows, you can wear it as a backup alongside a menstrual cup or pad, or carry a fresh pair in our waterproof travel pouch.', '0', 'active'),
+(2, 'Period Panties', 'Will it smell or feel wet like a sanitary pad?', 'No! Unlike plastic disposable pads that trap moisture and encourage bacteria growth (which causes period odor), our breathable organic cotton top layer wicks fluid into the absorbent core in under 3 seconds, keeping you dry and completely odor-free.', '0', 'active'),
+(3, 'Care & Washing', 'How do I wash AFOREHEALTH period panties properly?', 'Step 1: Rinse under cold tap water until the water runs clear. Step 2: Wash in cold water by hand or on a gentle machine cycle with mild detergent. Step 3: Hang to dry in the shade. Never use hot water, bleach, or fabric softener as they can damage the leakproof membrane.', '0', 'active'),
+(4, 'Sizing & Fit', 'How do I know what size to order?', 'Refer to our interactive Size Chart on each product page. Measure the widest part of your hips using a measuring tape. If you are between two sizes or have wider hips/thighs, we recommend picking the larger size.', '0', 'active'),
+(5, 'Shipping & Discretion', 'Is the packaging discreet? Will delivery personnel know what is inside?', '100% Yes! All AFOREHEALTH orders are shipped in plain, tamper-evident courier polybags or unmarked brown boxes. There is zero mention of intimate apparel, period wear, or internal product names on the outer delivery label.', '0', 'active'),
+(6, 'Shipping & Discretion', 'What are the delivery timelines and shipping charges across India?', 'We offer FREE Shipping on all prepaid and COD orders above ₹499. For orders below ₹499, a nominal flat shipping fee of ₹50 is applied. Metro deliveries take 2-3 business days, while other cities receive orders in 3-5 business days.', '0', 'active'),
+(7, 'Returns & Hygiene', 'Can I return or exchange intimate wear products?', 'Due to strict intimate hygiene guidelines for women health, products that have been unsealed, worn, or washed cannot be returned. However, if you receive a damaged item or an unopened product with a sizing issue, we offer a hassle-free 7-day exchange window.', '0', 'active'),
+(8, 'Payments & COD', 'Is Cash on Delivery (COD) available?', 'Yes! We support Cash on Delivery for orders between ₹299 and ₹5000 across 25,000+ Indian PIN codes. We also accept Razorpay, UPI (Google Pay, PhonePe, Paytm), credit/debit cards, and Net Banking.', '0', 'active'),
+(9, 'Intimate Care', 'Can I use the Intimate Foam Wash during my period?', 'Yes, absolutely! The pH 3.8 gentle foam wash is ideal during menstruation to cleanse dried blood and soothe vaginal irritation. Always wash the external vulva only (never douche internally).', '0', 'active'),
+(10, 'Wholesale & Combos', 'Do you offer bulk discounts or gift sets?', 'Yes! Our Combos & Value Packs offer up to 35% savings over purchasing individual items, and we provide curated gift hampers like the First Period Box for teens.', '0', 'active');
+
+-- -----------------------------------------------------------------
+-- Table `pages` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `pages`;
+INSERT INTO `pages` (`id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `updated_at`) VALUES
+(1, 'about-us', 'About AFOREHEALTH', '<h2>Everyday Comfort. Period Confidence.</h2><p>AFOREHEALTH was born out of a simple, undeniable truth: modern Indian women deserve intimate care products that truly understand their bodies, climate, and everyday challenges.</p><p>For generations, menstruation has been shrouded in silence and accompanied by scratchy plastic pads, painful rashes, stained clothes, and awkward whispers. We are on a mission to change that narrative completely.</p><h3>Designed for Indian Women, by Women</h3><p>From humid summer commutes in Mumbai to long college lectures in Delhi, our products are thoughtfully engineered with breathable organic bamboo, skin-friendly micro-modal, and medical-grade leakproof barriers tailored specifically to Indian hip-to-waist ratios.</p><p>We believe that when you feel comfortable in your skin and confident in your cycle, nothing can hold you back.</p>', NULL, NULL, '2026-10-17 00:33:27'),
+(2, 'shipping-policy', 'Shipping & Delivery Policy', '<h2>Reliable & Discreet Delivery Across India</h2><p>At AFOREHEALTH, we understand the importance of timely and discreet delivery when it comes to intimate wellness essentials.</p><h3>1. Shipping Charges</h3><ul><li><strong>Orders above ₹499:</strong> FREE Shipping across India.</li><li><strong>Orders below ₹499:</strong> Standard flat rate of ₹50.</li><li><strong>Cash on Delivery (COD):</strong> Nominal handling fee of ₹40 applicable on COD orders.</li></ul><h3>2. Delivery Timelines</h3><ul><li>Metro Cities (Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune): <strong>2 to 4 Business Days</strong></li><li>Tier 2 & Tier 3 Cities: <strong>4 to 6 Business Days</strong></li><li>North-East & Remote Locations: <strong>5 to 7 Business Days</strong></li></ul><h3>3. 100% Discreet Packaging Guaranteed</h3><p>Your privacy is sacred to us. All packages are shipped in tamper-evident, unmarked boxes or opaque security bags with zero mention of \'period panties\' or \'intimate wear\' on the external label.</p>', NULL, NULL, '2026-10-17 00:33:27'),
+(3, 'return-refund-policy', 'Return, Exchange & Refund Policy', '<h2>Hygiene First Policy</h2><p>Because intimate wear, period panties, and menstrual care products touch your most sensitive personal areas, strict health and hygiene regulations govern our return process.</p><h3>Eligibility for Returns & Exchanges</h3><ul><li>Products must be completely <strong>unworn, unwashed, and in their original sealed hygienic packaging</strong> with tags intact.</li><li>Requests must be initiated within <strong>7 days</strong> of delivery through your AFOREHEALTH account or by emailing info@aforehealth.com.</li><li>Items with broken hygiene liners or opened seals cannot be returned due to hygiene reasons.</li><li>In the rare event of a manufacturing defect or wrong product dispatched, we will provide a 100% free replacement or full refund immediately.</li></ul><h3>Refund Timelines</h3><p>Once your returned item arrives at our fulfillment facility and clears our hygiene inspection, your refund will be processed within 48 hours to your original payment mode or store wallet.</p>', NULL, NULL, '2026-10-17 00:33:27'),
+(4, 'privacy-policy', 'Privacy & Data Protection Policy', '<h2>Your Privacy Matters</h2><p>AFOREHEALTH is committed to safeguarding your personal data with enterprise-grade encryption. We do not sell, rent, or trade your personal information to third parties.</p><h3>Information We Collect</h3><ul><li>Mobile Number & Name (for OTP authentication and order fulfillment)</li><li>Shipping address and contact details</li><li>Anonymous analytics data (browser type, session duration) to enhance your shopping experience</li></ul><h3>Payment Security</h3><p>We do not store your credit card numbers, debit card details, or UPI pins. All online transactions are encrypted via 256-bit SSL and processed directly through PCI-DSS certified gateway Razorpay.</p>', NULL, NULL, '2026-10-17 00:33:27'),
+(5, 'terms-conditions', 'Terms & Conditions', '<h2>Terms of Use</h2><p>Welcome to AFOREHEALTH (aforehealth.com). By browsing or purchasing from our platform, you agree to comply with our standard terms of service.</p><h3>Product Usage & Medical Disclaimer</h3><p>Our period care and intimate hygiene products are designed for everyday menstrual management and personal comfort. They are not intended to diagnose, treat, cure, or prevent any medical disease or infection. If you experience abnormal menstrual symptoms or chronic pelvic pain, please consult a registered medical practitioner.</p>', NULL, NULL, '2026-10-17 00:33:27'),
+(6, 'cancellation-policy', 'Cancellation Policy', '<h2>Easy Order Cancellation</h2><p>You can cancel your order at any time before it has been dispatched from our fulfillment warehouse.</p><ul><li>To cancel, visit <strong>My Account > My Orders</strong> and click \'Cancel Order\', or message our WhatsApp support team at +91 98765 43210.</li><li>If the order has already been shipped, you can refuse acceptance at the time of delivery. Once the parcel returns to us, your refund will be initiated automatically.</li></ul>', NULL, NULL, '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `cms_pages` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `cms_pages`;
+INSERT INTO `cms_pages` (`id`, `title`, `slug`, `content`, `seo_title`, `seo_description`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'About AFOREHEALTH', 'about-us', '<h2>Our Purpose: Comfort. Care. Confidence.</h2><p>AFOREHEALTH was created to bridge a vital gap in Indian women\'s wellness: everyday intimate care that is comfortable, body-positive, scientifically formulated, and deeply respectful of personal privacy.</p><p>For too long, women in India have had to compromise between scratchy, synthetic innerwear, plastic-laden pads that cause painful rashes, and the unnecessary stigma around purchasing intimate hygiene products.</p><p>We believe every woman deserves pure comfort, skin-friendly fabrics, sustainable period alternatives, and seamless delivery without anxiety. That is why every AFOREHEALTH product is tested for skin friendliness, manufactured using premium modal and organic cotton, and shipped in 100% discreet packaging.</p>', 'About AFOREHEALTH | Women\'s Intimate & Period Care India', 'Learn how AFOREHEALTH is revolutionizing women\'s intimate health and period care in India with comfort, privacy, and body-friendly materials.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(2, 'Privacy & Discreet Shipping Policy', 'privacy-policy', '<h2>Your Privacy Matters Most</h2><p>At AFOREHEALTH, privacy is not an afterthought—it is foundational to everything we do.</p><h3>Discreet Packaging Guarantee</h3><p>Every single parcel is shipped in plain, unmarked, tamper-evident external packaging. The shipping label only lists the delivery address and courier tracking barcode; it contains zero descriptions of intimate products or period care items.</p><h3>Data Protection</h3><p>We only use your mobile number for fast OTP authentication and essential order delivery notifications. We will never sell, rent, or spam your contact information.</p>', 'Discreet Packaging & Privacy Policy | AFOREHEALTH', 'Our 100% discreet packaging guarantee and transparent privacy policy for Indian women.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(3, 'Shipping & Delivery Policy', 'shipping-policy', '<h2>Fast & Reliable Nationwide Delivery</h2><p>We partner with premier Indian logistics carriers including Delhivery, Blue Dart, DTDC, and Shiprocket to ensure your orders reach you swiftly and safely.</p><ul><li><strong>Free Express Shipping:</strong> Available on all prepaid and COD orders above ₹599.</li><li><strong>Standard Shipping:</strong> A flat ₹50 shipping fee applies on orders below ₹599.</li><li><strong>Dispatch Time:</strong> Orders placed before 2:00 PM are dispatched the same day.</li><li><strong>Delivery Timelines:</strong> 2-4 business days for major cities, 3-6 business days for rest of India.</li></ul>', 'Shipping Policy | AFOREHEALTH India', 'Shipping timelines, free delivery threshold, and courier details across India.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(4, 'Return, Exchange & Refund Policy', 'return-policy', '<h2>Intimate Hygiene & Return Guidelines</h2><p>To uphold the highest personal hygiene and safety benchmarks for all customers, innerwear, panties, menstrual cups, and opened personal washes cannot be returned once delivered.</p><h3>Eligibility for Replacement or Refund:</h3><ul><li>Product received was damaged or broken in transit.</li><li>Wrong size or incorrect item delivered due to fulfilling error.</li><li>Manufacturing defect reported within 48 hours of delivery.</li></ul><p>To initiate a claim, navigate to your My Orders dashboard or connect with our WhatsApp support with an unboxing photo.</p>', 'Return & Refund Policy | AFOREHEALTH', 'Understand our hygiene-compliant return, replacement, and refund policy.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(5, 'Terms & Conditions', 'terms-conditions', '<h2>Terms of Service</h2><p>Welcome to AFOREHEALTH. By accessing our platform, placing orders, or joining our wellness community, you agree to comply with our commercial terms and conditions governed under Indian consumer and cyber laws.</p><p>All prices are quoted in Indian Rupees (₹ INR) inclusive of applicable GST taxes. Orders are subject to stock availability and address serviceability.</p>', 'Terms & Conditions | AFOREHEALTH', 'Legal terms and conditions for using AFOREHEALTH website and services.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(6, 'Complete Size & Fit Guide', 'size-guide', '<h2>Find Your Perfect AFOREHEALTH Fit</h2><p>Comfortable intimate wear begins with the right fit. Use a soft measuring tape and keep it snug but not tight against your body.</p><h3>Period Panties & Briefs Size Chart (Inches)</h3><table class=\"table table-bordered\"><thead><tr><th>Size</th><th>Waist (Inches)</th><th>Hip (Inches)</th><th>Indian Dress Size</th></tr></thead><tbody><tr><td>XS</td><td>24 - 26</td><td>32 - 34</td><td>UK/IND 6</td></tr><tr><td>S</td><td>26 - 28</td><td>34 - 36</td><td>UK/IND 8</td></tr><tr><td>M</td><td>28 - 30</td><td>36 - 38</td><td>UK/IND 10</td></tr><tr><td>L</td><td>30 - 32</td><td>38 - 40</td><td>UK/IND 12</td></tr><tr><td>XL</td><td>32 - 35</td><td>40 - 43</td><td>UK/IND 14</td></tr><tr><td>XXL</td><td>35 - 38</td><td>43 - 46</td><td>UK/IND 16</td></tr></tbody></table>', 'Innerwear & Period Panty Size Guide | AFOREHEALTH', 'Comprehensive size guide and measurement chart for Indian women.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41');
+
+-- -----------------------------------------------------------------
+-- Table `coupons` (5 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `coupons`;
+INSERT INTO `coupons` (`id`, `code`, `title`, `discount_type`, `discount_value`, `min_order_amount`, `max_discount_amount`, `start_date`, `expiry_date`, `usage_limit`, `usage_count`, `per_customer_limit`, `applicable_categories`, `first_order_only`, `cod_allowed`, `status`, `created_at`) VALUES
+(1, 'WELCOME10', 'Welcome 10% Off on First Order', 'percentage', 10.00, 499.00, 200.00, '2026-01-01', '2026-12-31', 5000, '0', 1, NULL, 1, 1, 'active', '2026-10-17 00:33:27'),
+(2, 'WELCOME100', 'Welcome Flat ₹100 Off on First Order', 'fixed', 100.00, 799.00, 100.00, '2026-01-01', '2026-12-31', 5000, '0', 1, NULL, 1, 1, 'active', '2026-10-17 00:33:27'),
+(3, 'FLAT100', 'Flat ₹100 Off on Orders above ₹799', 'fixed', 100.00, 799.00, 100.00, '2026-01-01', '2026-12-31', 2000, '0', 2, NULL, '0', 1, 'active', '2026-10-17 00:33:27'),
+(4, 'PERIOD20', '20% Off on Period Care Essentials', 'percentage', 20.00, 999.00, 300.00, '2026-01-01', '2026-12-31', 1000, '0', 1, '1,3,4', '0', 1, 'active', '2026-10-17 00:33:27'),
+(5, 'FREESHIP', 'Free Shipping on Any Order', 'fixed', 50.00, '0.00', 50.00, '2026-01-01', '2026-12-31', 5000, '0', 5, NULL, '0', 1, 'active', '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `pincodes` (20 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `pincodes`;
+INSERT INTO `pincodes` (`id`, `pincode`, `city`, `state`, `delivery_days`, `cod_available`, `prepaid_available`, `shipping_charge`, `status`, `created_at`, `updated_at`) VALUES
+(1, 110001, 'New Delhi', 'Delhi', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(2, 110016, 'South Delhi', 'Delhi', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(3, 400001, 'Mumbai', 'Maharashtra', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(4, 400050, 'Bandra, Mumbai', 'Maharashtra', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(5, 411001, 'Pune', 'Maharashtra', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(6, 560001, 'Bengaluru', 'Karnataka', 2, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(7, 560038, 'Indiranagar, Bengaluru', 'Karnataka', 2, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(8, 560102, 'HSR Layout, Bengaluru', 'Karnataka', 2, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(9, 500001, 'Hyderabad', 'Telangana', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(10, 600001, 'Chennai', 'Tamil Nadu', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(11, 700001, 'Kolkata', 'West Bengal', 4, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(12, 160001, 'Chandigarh', 'Chandigarh', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(13, 380001, 'Ahmedabad', 'Gujarat', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(14, 302001, 'Jaipur', 'Rajasthan', 4, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(15, 226001, 'Lucknow', 'Uttar Pradesh', 4, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(16, 201301, 'Noida', 'Uttar Pradesh', 3, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(17, 122001, 'Gurugram', 'Haryana', 2, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(18, 682001, 'Kochi', 'Kerala', 4, 1, 1, '0.00', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(19, 781001, 'Guwahati', 'Assam', 5, '0', 1, 40.00, 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05'),
+(20, 190001, 'Srinagar', 'Jammu and Kashmir', 6, '0', 1, 50.00, 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `reviews` (7 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `reviews`;
+INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `order_id`, `rating`, `title`, `comment`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, NULL, 5, 'Absolute life saver! Zero stains on white sheets', 'I was very skeptical about period panties for my heavy Day 2 flow. I wore this overnight and woke up with dry sheets and no weird pad odor. Washing was super simple under cold water. Totally hooked and ordered two more pairs!', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(2, 1, 2, NULL, 5, 'Best investment for Indian women', 'The fabric feels so luxurious against the skin compared to synthetic pads that gave me horrible chafing rashes every month. Truly leakproof and comfortable!', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(3, 1, 3, NULL, 5, 'Gynecologist approved comfort', 'As a healthcare worker doing 14 hour shifts, frequent pad changes were a nightmare. This panty gave me total peace of mind throughout my hospital rounds.', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(4, 2, 4, NULL, 5, 'Sleep in any posture with zero fear', 'The back coverage goes all the way up. No side leaks even when tossing and turning. Super soft modal waist band that does not pinch.', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(5, 11, 1, NULL, 5, 'Unbelievable buttery softness', 'These are softer than anything I have bought from international brands. Pure comfort, zero wedgies and no panty lines.', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(6, 29, 2, NULL, 5, 'Gentle and soothing, no burning sensation', 'Most washes have harsh artificial perfume. This tea tree & chamomile foam has a very subtle natural clean scent and soothes itching immediately.', 'approved', '2026-10-17 00:33:27', '2026-10-17 00:33:27'),
+(7, 1, 5, NULL, 4, 'Great absorbency, wish there were more color options', 'Worked wonderfully during heavy cycle. Would love to see pastel blue and lavender colors launched soon!', 'pending', '2026-10-17 00:33:27', '2026-10-17 00:33:27');
+
+SET FOREIGN_KEY_CHECKS = 1;
+-- =====================================================================
+-- SUCCESS: Total 916 records across 29 tables imported!
+-- =====================================================================
