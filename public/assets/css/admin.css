@@ -87,47 +87,61 @@ body,
 
 /* Collapsed Sidebar on Desktop */
 .admin-sidebar.collapsed {
-  width: 76px;
+  width: 76px !important;
 }
 .admin-sidebar.collapsed .sidebar-heading,
-.admin-sidebar.collapsed .sidebar-item a span,
+.admin-sidebar.collapsed .sidebar-label,
+.admin-sidebar.collapsed .sidebar-badge,
 .admin-sidebar.collapsed .sidebar-signout-card .text-truncate,
 .admin-sidebar.collapsed .sidebar-signout-card a span,
 .admin-sidebar.collapsed .sidebar-brand a img {
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 .admin-sidebar.collapsed .sidebar-brand {
   justify-content: center !important;
-  padding: 20px 4px;
+  padding: 18px 4px !important;
 }
 .admin-sidebar.collapsed .sidebar-brand a::after {
-  content: 'AFH';
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
+  content: 'AFH' !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+}
+.admin-sidebar.collapsed .sidebar-menu {
+  padding: 12px 6px !important;
+  overflow-x: hidden !important;
 }
 .admin-sidebar.collapsed .sidebar-item a {
-  justify-content: center;
-  padding: 12px 0;
-  font-size: 0;
+  justify-content: center !important;
+  padding: 12px 0 !important;
+  gap: 0 !important;
 }
 .admin-sidebar.collapsed .sidebar-item a i {
-  font-size: 1.25rem !important;
+  font-size: 1.35rem !important;
   margin: 0 !important;
 }
 .admin-sidebar.collapsed .sidebar-signout-card {
-  padding: 12px 4px;
+  padding: 10px 6px !important;
 }
 .admin-sidebar.collapsed .sidebar-signout-card .d-flex {
-  justify-content: center;
+  justify-content: center !important;
 }
-.admin-sidebar.collapsed .sidebar-signout-card .btn {
-  padding: 6px 0;
-  font-size: 0;
+.admin-sidebar.collapsed .sidebar-signout-card a.btn {
+  padding: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0 !important;
 }
-.admin-sidebar.collapsed .sidebar-signout-card .btn i {
-  font-size: 1rem;
+.admin-sidebar.collapsed .sidebar-signout-card a.btn i {
+  font-size: 1.15rem !important;
   margin: 0 !important;
 }
 

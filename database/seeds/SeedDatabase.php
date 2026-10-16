@@ -1004,6 +1004,49 @@ try {
     }
     echo "Seeded CMS policy pages.\n";
 
+    // 15.5 Banners (Home Hero & Promo)
+    $pdo->exec("TRUNCATE TABLE `banners`;");
+    $banners = [
+        [
+            'title' => 'Comfort That Moves With You.',
+            'subtitle' => 'Leakproof underwear, buttery-soft everyday panties, and pH-balanced intimate essentials engineered for Indian bodies.',
+            'image_desktop' => 'hero_banner_1.svg',
+            'image_mobile' => 'hero_banner_1.svg',
+            'video_url' => NULL,
+            'link' => '/category/period-panties',
+            'cta_text' => 'SHOP PERIOD PANTIES',
+            'position' => 'home_hero',
+            'sort_order' => 1
+        ],
+        [
+            'title' => 'CloudSoft MicroModal Panties',
+            'subtitle' => '3x softer than cotton with breathable 4-way stretch. Zero wedgies, zero pinch, pure everyday luxury.',
+            'image_desktop' => 'hero_banner_2.svg',
+            'image_mobile' => 'hero_banner_2.svg',
+            'video_url' => NULL,
+            'link' => '/category/everyday-panties',
+            'cta_text' => 'EXPLORE EVERYDAY WEAR',
+            'position' => 'home_hero',
+            'sort_order' => 2
+        ],
+        [
+            'title' => 'First Period Confidence Kit',
+            'subtitle' => 'Empowering teenage girls with leakproof underwear, organic cotton pads, and discreet carry pouches.',
+            'image_desktop' => 'hero_banner_3.svg',
+            'image_mobile' => 'hero_banner_3.svg',
+            'video_url' => NULL,
+            'link' => '/category/period-kits',
+            'cta_text' => 'SHOP STARTER KITS',
+            'position' => 'home_hero',
+            'sort_order' => 3
+        ]
+    ];
+    $stmtBanner = $pdo->prepare("INSERT INTO `banners` (`title`, `subtitle`, `image_desktop`, `image_mobile`, `video_url`, `link`, `cta_text`, `position`, `sort_order`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
+    foreach ($banners as $b) {
+        $stmtBanner->execute([$b['title'], $b['subtitle'], $b['image_desktop'], $b['image_mobile'], $b['video_url'], $b['link'], $b['cta_text'], $b['position'], $b['sort_order']]);
+    }
+    echo "Seeded home hero banners.\n";
+
     // 16. Sample Orders (Delivered, Shipped, Processing, Pending)
     $pdo->exec("TRUNCATE TABLE `orders`;");
     $pdo->exec("TRUNCATE TABLE `order_items`;");
