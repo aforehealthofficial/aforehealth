@@ -117,12 +117,12 @@ try {
     // 5. Categories
     $pdo->exec("TRUNCATE TABLE `categories`;");
     $categories = [
-        [1, 'Period Panties', 'period-panties', 'High absorbency, multi-layer leakproof period underwear engineered for heavy, medium, and light flow days.', 'cat_period_panties.svg', 'banner_period_panties.svg', 1],
-        [2, 'Everyday Panties', 'everyday-panties', 'Buttery-soft, breathable bamboo and micro-modal panties designed for zero wedgies and daily all-day comfort.', 'cat_everyday_panties.svg', 'banner_everyday_panties.svg', 2],
-        [3, 'Period Kits', 'period-kits', 'Curated confidence boxes, starter hampers, and travel packs with period underwear, pads, and hygiene essentials.', 'cat_period_kits.svg', 'banner_period_kits.svg', 3],
-        [4, 'Pads & Liners', 'pads-and-liners', 'Rash-free 100% certified organic cotton pads, extra-long overnight wings, and biodegradable ultra-slim panty liners.', 'cat_pads_liners.svg', 'banner_pads_liners.svg', 4],
-        [5, 'Intimate Care', 'intimate-care', 'Dermatologically tested pH 3.8 foaming washes, soothing anti-chafing sticks, and natural period panty stain cleansers.', 'cat_intimate_care.svg', 'banner_intimate_care.svg', 5],
-        [6, 'Combos & Value Packs', 'combos', 'Multi-packs and curated bundles designed to give you maximum value while building your complete period routine.', 'cat_combos.svg', 'banner_combos.svg', 6]
+        [1, 'Period Panties', 'period-panties', 'High absorbency, multi-layer leakproof period underwear engineered for heavy, medium, and light flow days.', 'cat_period_panties.jpg', 'cat_period_panties.jpg', 1],
+        [2, 'Everyday Panties', 'everyday-panties', 'Buttery-soft, breathable bamboo and micro-modal panties designed for zero wedgies and daily all-day comfort.', 'cat_everyday_panties.jpg', 'cat_everyday_panties.jpg', 2],
+        [3, 'Period Kits', 'period-kits', 'Curated confidence boxes, starter hampers, and travel packs with period underwear, pads, and hygiene essentials.', 'cat_period_kits.jpg', 'cat_period_kits.jpg', 3],
+        [4, 'Pads & Liners', 'pads-and-liners', 'Rash-free 100% certified organic cotton pads, extra-long overnight wings, and biodegradable ultra-slim panty liners.', 'cat_pads_liners.jpg', 'cat_pads_liners.jpg', 4],
+        [5, 'Intimate Care', 'intimate-care', 'Dermatologically tested pH 3.8 foaming washes, soothing anti-chafing sticks, and natural period panty stain cleansers.', 'cat_intimate_care.jpg', 'cat_intimate_care.jpg', 5],
+        [6, 'Combos & Value Packs', 'combos', 'Multi-packs and curated bundles designed to give you maximum value while building your complete period routine.', 'cat_combos.jpg', 'cat_combos.jpg', 6]
     ];
     $stmtCat = $pdo->prepare("INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `banner`, `sort_order`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, 'active')");
     foreach ($categories as $c) {
@@ -808,7 +808,10 @@ try {
 
     foreach ($products as $p) {
         $discountPct = round((($p['mrp'] - $p['price']) / $p['mrp']) * 100);
-        $primaryImg = "prod_" . str_replace('-', '_', $p['slug']) . ".svg";
+        $primaryImgBase = "prod_" . str_replace('-', '_', $p['slug']);
+        $primaryImg = file_exists(dirname(__DIR__, 2) . '/public/uploads/products/' . $primaryImgBase . '.jpg')
+            ? $primaryImgBase . '.jpg'
+            : $primaryImgBase . '.svg';
         $seoTitle = $p['name'] . " | AFOREHEALTH";
         $seoDesc = substr(strip_tags($p['short']), 0, 155);
 
@@ -1010,8 +1013,8 @@ try {
         [
             'title' => 'Comfort That Moves With You.',
             'subtitle' => 'Leakproof underwear, buttery-soft everyday panties, and pH-balanced intimate essentials engineered for Indian bodies.',
-            'image_desktop' => 'hero_banner_1.svg',
-            'image_mobile' => 'hero_banner_1.svg',
+            'image_desktop' => 'hero_banner_1.jpg',
+            'image_mobile' => 'hero_banner_1.jpg',
             'video_url' => NULL,
             'link' => '/category/period-panties',
             'cta_text' => 'SHOP PERIOD PANTIES',
@@ -1021,8 +1024,8 @@ try {
         [
             'title' => 'CloudSoft MicroModal Panties',
             'subtitle' => '3x softer than cotton with breathable 4-way stretch. Zero wedgies, zero pinch, pure everyday luxury.',
-            'image_desktop' => 'hero_banner_2.svg',
-            'image_mobile' => 'hero_banner_2.svg',
+            'image_desktop' => 'hero_banner_2.jpg',
+            'image_mobile' => 'hero_banner_2.jpg',
             'video_url' => NULL,
             'link' => '/category/everyday-panties',
             'cta_text' => 'EXPLORE EVERYDAY WEAR',
@@ -1032,8 +1035,8 @@ try {
         [
             'title' => 'First Period Confidence Kit',
             'subtitle' => 'Empowering teenage girls with leakproof underwear, organic cotton pads, and discreet carry pouches.',
-            'image_desktop' => 'hero_banner_3.svg',
-            'image_mobile' => 'hero_banner_3.svg',
+            'image_desktop' => 'hero_banner_3.jpg',
+            'image_mobile' => 'hero_banner_3.jpg',
             'video_url' => NULL,
             'link' => '/category/period-kits',
             'cta_text' => 'SHOP STARTER KITS',
