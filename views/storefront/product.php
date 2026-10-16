@@ -72,6 +72,7 @@
                     </div>
 
                     <?php foreach ($product['images'] as $img): ?>
+                        <?php if ($img['image_path'] === $product['primary_image']) continue; ?>
                         <div class="gallery-thumb rounded-3 overflow-hidden border cursor-pointer" style="width: 80px; height: 80px; flex-shrink: 0;" onclick="showGalleryImage('<?= upload_url('products/' . $img['image_path']) ?>', this)">
                             <img src="<?= upload_url('products/' . $img['image_path']) ?>" alt="<?= e($img['alt_text'] ?: $product['name']) ?>" class="w-100 h-100 object-fit-cover">
                         </div>

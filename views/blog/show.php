@@ -55,26 +55,34 @@
             </div>
         </div>
 
-        <!-- Educational Video or Featured Banner Art -->
+        <!-- Featured Banner Art -->
+        <?php if (!empty($post['featured_image'])): ?>
+            <div class="mb-4 rounded-4 overflow-hidden border shadow-sm">
+                <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 440px; object-fit: cover;">
+            </div>
+        <?php endif; ?>
+
+        <!-- Educational Video Guide -->
         <?php if (!empty($post['video_url'])): 
             $blogVideo = parse_video_source($post['video_url']);
         ?>
             <?php if (!empty($blogVideo)): ?>
-                <div class="mb-4 rounded-4 overflow-hidden shadow-sm border bg-black ratio ratio-16x9">
-                    <?php if ($blogVideo['is_embed']): ?>
-                        <iframe src="<?= e($blogVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                    <?php else: ?>
-                        <video controls class="w-100 h-100 object-fit-contain">
-                            <source src="<?= e($blogVideo['src']) ?>" type="video/mp4">
-                        </video>
-                    <?php endif; ?>
+                <div class="mb-4 p-3 rounded-4 bg-light border">
+                    <div class="d-flex align-items-center gap-2 mb-2 text-dark fw-bold">
+                        <i class="bi bi-play-circle-fill text-danger fs-5"></i>
+                        <span>Educational Video Guide</span>
+                    </div>
+                    <div class="rounded-3 overflow-hidden shadow-sm bg-black ratio ratio-16x9">
+                        <?php if ($blogVideo['is_embed']): ?>
+                            <iframe src="<?= e($blogVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        <?php else: ?>
+                            <video controls class="w-100 h-100 object-fit-contain">
+                                <source src="<?= e($blogVideo['src']) ?>" type="video/mp4">
+                            </video>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endif; ?>
-        <?php else: ?>
-            <!-- Featured Banner Art -->
-            <div class="mb-4 rounded-4 overflow-hidden border">
-                <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 400px; object-fit: cover;">
-            </div>
         <?php endif; ?>
 
         <!-- Lead Excerpt -->
