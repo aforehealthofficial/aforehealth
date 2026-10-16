@@ -117,18 +117,46 @@ class BlogController {
             return;
         }
 
-        // Recent posts
+        // Recent / Related posts
         $recentStmt = $pdo->prepare("
-            SELECT * FROM blog_posts WHERE id != ? AND status = 'published' ORDER BY published_at DESC LIMIT 3
+            SELECT bp.*, bc.name as category_name
+            FROM blog_posts bp
+            LEFT JOIN blog_categories bc ON bp.category_id = bc.id
+            WHERE bp.id != ? AND bp.status = 'published'
+            ORDER BY bp.published_at DESC
+            LIMIT 3
         ");
         $recentStmt->execute([$post['id']]);
         $recentPosts = $recentStmt->fetchAll();
+
+        // Doctor-recommended products for sidebar
+        $recStmt = $pdo->query("
+            SELECT p.*, c.name as category_name
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            WHERE p.status = 'published' AND p.is_bestseller = 1
+            ORDER BY p.rating_count DESC
+            LIMIT 3
+        ");
+        $recommendedProducts = $recStmt->fetchAll();
+
+        // Blog categories for sidebar
+        $catStmt = $pdo->query("
+            SELECT bc.*, COUNT(bp.id) as post_count
+            FROM blog_categories bc
+            LEFT JOIN blog_posts bp ON bc.id = bp.category_id AND bp.status = 'published'
+            GROUP BY bc.id
+            ORDER BY bc.name ASC
+        ");
+        $categories = $catStmt->fetchAll();
 
         view('blog.show', [
             'pageTitle' => (!empty($post['seo_title']) ? $post['seo_title'] : $post['title']) . ' - AFOREHEALTH',
             'metaDescription' => !empty($post['seo_description']) ? $post['seo_description'] : $post['excerpt'],
             'post' => $post,
-            'recentPosts' => $recentPosts
+            'recentPosts' => $recentPosts,
+            'recommendedProducts' => $recommendedProducts,
+            'categories' => $categories
         ]);
     }
 }

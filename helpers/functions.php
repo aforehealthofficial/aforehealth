@@ -240,22 +240,34 @@ function auth_user(): ?array {
     if (empty($_SESSION['user']['id'])) {
         return null;
     }
-    if (empty($_SESSION['user']['name']) || empty($_SESSION['user']['mobile'])) {
-        try {
-            $pdo = getDbConnection();
-            $stmt = $pdo->prepare("SELECT id, name, mobile, email, role FROM users WHERE id = ?");
-            $stmt->execute([$_SESSION['user']['id']]);
-            $u = $stmt->fetch();
-            if ($u) {
-                $_SESSION['user'] = array_merge($_SESSION['user'], $u);
-            }
-        } catch (\Throwable $e) {}
+    static $cachedAuthUser = null;
+    if ($cachedAuthUser !== null && $cachedAuthUser['id'] === $_SESSION['user']['id']) {
+        return $cachedAuthUser;
     }
-    return $_SESSION['user'];
+
+    try {
+        $pdo = getDbConnection();
+        $stmt = $pdo->prepare("SELECT id, name, mobile, email FROM users WHERE id = ?");
+        $stmt->execute([(int)$_SESSION['user']['id']]);
+        $u = $stmt->fetch();
+        if ($u) {
+            $_SESSION['user'] = array_merge($_SESSION['user'], $u);
+            $cachedAuthUser = $_SESSION['user'];
+            return $cachedAuthUser;
+        } else {
+            // User no longer exists in DB (e.g. after database reseed/clean)
+            unset($_SESSION['user']);
+            $cachedAuthUser = null;
+            return null;
+        }
+    } catch (\Throwable $e) {
+        $cachedAuthUser = null;
+        return null;
+    }
 }
 
 function is_authenticated(): bool {
-    return !empty($_SESSION['user']['id']);
+    return auth_user() !== null;
 }
 
 function auth_admin(): ?array {
