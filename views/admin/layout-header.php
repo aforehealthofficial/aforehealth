@@ -13,6 +13,36 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom Admin Styles -->
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
+    <style>
+    /* Guaranteed Fixed Sidebar on Desktop - Immune to any page scrolling */
+    @media (min-width: 992px) {
+        .admin-sidebar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            width: 270px !important;
+            z-index: 1040 !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        .admin-sidebar.collapsed {
+            width: 76px !important;
+        }
+        .admin-main-wrap {
+            margin-left: 270px !important;
+            width: calc(100% - 270px) !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+        }
+        .admin-sidebar.collapsed + .admin-main-wrap {
+            margin-left: 76px !important;
+            width: calc(100% - 76px) !important;
+        }
+    }
+    </style>
 </head>
 <body class="admin-body">
 
