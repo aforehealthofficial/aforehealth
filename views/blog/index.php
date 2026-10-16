@@ -286,11 +286,12 @@
                                         <?= e($post['excerpt']) ?>
                                     </p>
 
-                                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto blog-card-footer">
-                                        <small class="text-muted d-flex align-items-center gap-1" style="font-size: 0.8rem;">
-                                            <i class="bi bi-person-circle text-primary"></i> <?= e($post['author']) ?>
+                                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto blog-card-footer gap-2">
+                                        <small class="text-muted text-truncate d-flex align-items-center gap-1.5" style="font-size: 0.78rem; min-width: 0;" title="<?= e($post['author']) ?>">
+                                            <i class="bi bi-person-circle text-primary flex-shrink-0"></i> 
+                                            <span class="text-truncate"><?= e($post['author']) ?></span>
                                         </small>
-                                        <a href="<?= url('blog/' . $post['slug']) ?>" class="small text-primary fw-bold text-decoration-none d-inline-flex align-items-center gap-1">
+                                        <a href="<?= url('blog/' . $post['slug']) ?>" class="small text-primary fw-bold text-decoration-none d-inline-flex align-items-center gap-1 text-nowrap flex-shrink-0">
                                             Read Guide <i class="bi bi-arrow-right"></i>
                                         </a>
                                     </div>
@@ -300,6 +301,44 @@
                         </div>
                     <?php endforeach; ?>
                 </div>
+
+                <!-- Pagination (Displays when more than 20 articles exist across pages) -->
+                <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                    <nav class="mt-5 pt-3" aria-label="Blog pagination">
+                        <ul class="pagination justify-content-center gap-1 flex-wrap">
+                            <?php 
+                                $queryParams = $_GET;
+                                unset($queryParams['page']);
+                                $buildPageUrl = function($p) use ($queryParams) {
+                                    $qp = array_merge($queryParams, ['page' => $p]);
+                                    return url('blog') . '?' . http_build_query($qp);
+                                };
+                            ?>
+                            <!-- Previous -->
+                            <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3 shadow-none border" href="<?= $currentPage > 1 ? $buildPageUrl($currentPage - 1) : '#' ?>">
+                                    <i class="bi bi-chevron-left me-1"></i> Prev
+                                </a>
+                            </li>
+
+                            <!-- Pages -->
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= $i === $currentPage ? 'active' : '' ?>">
+                                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center shadow-none border <?= $i === $currentPage ? 'bg-primary text-white border-primary fw-bold' : '' ?>" style="width: 38px; height: 38px;" href="<?= $buildPageUrl($i) ?>">
+                                        <?= $i ?>
+                                    </a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Next -->
+                            <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
+                                <a class="page-link rounded-pill px-3 shadow-none border" href="<?= $currentPage < $totalPages ? $buildPageUrl($currentPage + 1) : '#' ?>">
+                                    Next <i class="bi bi-chevron-right ms-1"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
             <?php endif; ?>
 
         </main>

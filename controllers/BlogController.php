@@ -30,7 +30,33 @@ class BlogController {
             $params[] = "%{$searchQuery}%";
         }
 
-        $sql .= " ORDER BY bp.published_at DESC";
+        // Total matching count for pagination
+        $countSql = "
+            SELECT COUNT(bp.id)
+            FROM blog_posts bp
+            JOIN blog_categories bc ON bp.category_id = bc.id
+            WHERE bp.status = 'published'
+        ";
+        if (!empty($selectedCategory)) {
+            $countSql .= " AND bc.slug = ?";
+        }
+        if (!empty($searchQuery)) {
+            $countSql .= " AND (bp.title LIKE ? OR bp.excerpt LIKE ? OR bp.content LIKE ?)";
+        }
+        $countStmt = $pdo->prepare($countSql);
+        $countStmt->execute($params);
+        $totalMatchingPosts = (int)$countStmt->fetchColumn();
+
+        // 20 per page pagination
+        $perPage = 20;
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $totalPages = max(1, (int)ceil($totalMatchingPosts / $perPage));
+        if ($page > $totalPages && $totalMatchingPosts > 0) {
+            $page = $totalPages;
+        }
+        $offset = ($page - 1) * $perPage;
+
+        $sql .= " LIMIT {$perPage} OFFSET {$offset}";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -62,6 +88,10 @@ class BlogController {
             'posts' => $posts,
             'categories' => $categories,
             'totalPublishedPosts' => $totalPublishedPosts,
+            'totalMatchingPosts' => $totalMatchingPosts,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'perPage' => $perPage,
             'selectedCategory' => $selectedCategory,
             'searchQuery' => $searchQuery,
             'recentPosts' => $recentPosts

@@ -151,7 +151,7 @@ function parse_video_source(?string $videoUrl, ?string $videoFile = null): ?arra
         return [
             'type' => 'youtube',
             'id' => $ytId,
-            'src' => "https://www.youtube-nocookie.com/embed/{$ytId}?autoplay=1&rel=0&modestbranding=1",
+            'src' => "https://www.youtube.com/embed/{$ytId}?rel=0&modestbranding=1&enablejsapi=1",
             'thumbnail' => "https://img.youtube.com/vi/{$ytId}/hqdefault.jpg",
             'is_embed' => true
         ];

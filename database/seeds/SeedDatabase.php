@@ -808,12 +808,12 @@ try {
 
     // Video demo URLs per category
     $demoVideos = [
-        1 => 'https://www.youtube.com/watch?v=k3Y0488fIqA', // Period panties leakproof 40ml absorbency demo
-        2 => 'https://www.youtube.com/watch?v=QxX9bAeoW1E', // Everyday micro-modal comfort & sizing fit demo
-        3 => 'https://www.youtube.com/watch?v=k3Y0488fIqA', // Period starter box unboxing & demo
-        4 => 'https://www.youtube.com/watch?v=6J_G4hX_0vQ', // Organic bamboo pads & liners water absorption demo
-        5 => 'https://www.youtube.com/watch?v=jK7vR93bH3Q', // Intimate wash pH 3.8 routine & foam wash demo
-        6 => 'https://www.youtube.com/watch?v=k3Y0488fIqA'  // Complete care master bundle review & demo
+        1 => 'https://www.youtube.com/watch?v=ayzN5f3qN8g', // Period panties leakproof 40ml absorbency demo
+        2 => 'https://www.youtube.com/watch?v=vXrQ_FhZmos', // Everyday micro-modal comfort & sizing fit demo
+        3 => 'https://www.youtube.com/watch?v=ayzN5f3qN8g', // Period starter box unboxing & demo
+        4 => 'https://www.youtube.com/watch?v=_6xkfIoHmdI', // Organic bamboo pads & liners water absorption demo
+        5 => 'https://www.youtube.com/watch?v=RFDatCchpus', // Intimate wash pH 3.8 routine & foam wash demo
+        6 => 'https://www.youtube.com/watch?v=ayzN5f3qN8g'  // Complete care master bundle review & demo
     ];
 
     foreach ($products as $p) {
@@ -822,7 +822,7 @@ try {
         $primaryImg = "prod_" . $baseSlug . ".jpg";
         $seoTitle = $p['name'] . " | AFOREHEALTH";
         $seoDesc = substr(strip_tags($p['short']), 0, 155);
-        $videoUrl = $demoVideos[$p['cat']] ?? 'https://www.youtube.com/watch?v=k3Y0488fIqA';
+        $videoUrl = $demoVideos[$p['cat']] ?? 'https://www.youtube.com/watch?v=ayzN5f3qN8g';
 
         $stmtInsertProd->execute([
             $p['name'], $p['slug'], $p['sku'], $p['cat'], $p['subcat'], $p['coll'],
@@ -952,7 +952,7 @@ try {
             'Curious how a pair of underwear can replace bulky plastic sanitary pads without leaking or feeling wet? Here is the complete breakdown of AFOREHEALTH gusset engineering.',
             "<p>For decades, women in India have relied on single-use plastic sanitary pads, enduring chafing, rustling sounds, rashes, and the constant fear of sudden leaks. The arrival of reusable leakproof period underwear represents the biggest innovation in menstrual hygiene in half a century.</p><h3>The 4-Layer Gusset Architecture</h3><p>At AFOREHEALTH, our period panties utilize an advanced 4-layer micro-textile composite that works harmoniously:</p><ol><li><strong>Layer 1 (Skin Contact): Moisture-Wicking Cotton:</strong> Draws moisture away from your body in under 3 seconds, keeping your surface completely dry and fresh.</li><li><strong>Layer 2 (Absorption Core): High-Density Microfiber:</strong> Locks up to 40ml of menstrual fluid, preventing backward seepage under pressure.</li><li><strong>Layer 3 (The Shield): Breathable Waterproof TPU Membrane:</strong> A microscopic barrier that blocks liquid molecules while allowing heat and water vapor to escape, eliminating sweat and odor.</li><li><strong>Layer 4 (Outer Shell): Luxurious Bamboo / Modal Fabric:</strong> Drapes softly against your outer clothing with zero telltale bulk or rustle.</li></ol><h3>Washing Is Surprisingly Easy</h3><p>Simply rinse under cold tap water until the runoff is clear, then pop it in your gentle cycle wash. Hang to air-dry in shade, and it is ready to protect you again for 3+ years.</p>",
             'blog_science_period_panties.jpg',
-            'https://www.youtube.com/watch?v=k3Y0488fIqA'
+            'https://www.youtube.com/watch?v=ayzN5f3qN8g'
         ],
         [
             2, 'Finding Your Perfect Fit: The Ultimate Period Panty Size Guide for Indian Bodies',
@@ -960,7 +960,7 @@ try {
             'Why Indian hip-to-waist ratios differ from Western size charts, and how to measure yourself for zero gaps and all-day comfort.',
             "<p>Choosing the correct size in period underwear is critical. Unlike regular stretchy panties that you can wear loose, period panties need to sit snug against your groin creases to create an airtight seal against gravity leaks, yet never pinch your thighs.</p><h3>How to Measure Your Hips</h3><p>Take a soft measuring tape and wrap it around the fullest part of your buttocks/hips (usually 8 inches below your natural waistline). Match your measurements:</p><ul><li><strong>Small (S):</strong> Hips 34 - 36 inches (Waist 26 - 28)</li><li><strong>Medium (M):</strong> Hips 37 - 39 inches (Waist 29 - 31)</li><li><strong>Large (L):</strong> Hips 40 - 42 inches (Waist 32 - 34)</li><li><strong>Extra Large (XL):</strong> Hips 43 - 45 inches (Waist 35 - 37)</li><li><strong>Double XL (XXL):</strong> Hips 46 - 48 inches (Waist 38 - 40)</li><li><strong>3XL:</strong> Hips 49 - 52 inches (Waist 41 - 44)</li></ul><p>If you fall between two sizes and have curvier thighs, we recommend sizing up for effortless comfort.</p>",
             'blog_size_guide.jpg',
-            'https://www.youtube.com/watch?v=QxX9bAeoW1E'
+            'https://www.youtube.com/watch?v=vXrQ_FhZmos'
         ],
         [
             3, 'The pH 3.8 Rule: Why Regular Body Soaps Harm Your Vaginal Health',
@@ -968,7 +968,7 @@ try {
             'Understand why soaps cause itching, yeast infections, and odor, and how a gentle pH-balanced lactic acid wash protects your natural microflora.',
             "<p>The intimate area is one of the most delicate biological ecosystems in the human body. Unlike the rest of your skin, which has a neutral pH of 5.5, a healthy vagina maintains an acidic pH between 3.8 and 4.5. This acidity is created by beneficial <em>Lactobacillus</em> bacteria, which act as natural defenders against harmful yeast and bacterial vaginosis.</p><h3>Why Bathing Soap Is Dangerous</h3><p>Commercial body soaps and shower gels have an alkaline pH between 9.0 and 10.5. Washing your intimate region with these destroys the acidic barrier within seconds, creating an ideal breeding ground for irritation, itchiness, and foul odors.</p><p>Always use a soap-free, dermatologically tested intimate wash formulated specifically at pH 3.8, with natural soothing ingredients like chamomile and tea tree.</p>",
             'blog_intimate_ph.jpg',
-            'https://www.youtube.com/watch?v=jK7vR93bH3Q'
+            'https://www.youtube.com/watch?v=RFDatCchpus'
         ],
         [
             4, 'Breaking Down the 350-Pad Waste Problem: The Environmental Impact of Periods',
@@ -976,7 +976,7 @@ try {
             'Each plastic sanitary pad takes up to 800 years to decompose. Here is how switching to reusable period wear can save both money and the planet.',
             "<p>Did you know that an average woman uses approximately 11,000 to 15,000 disposable sanitary pads in her lifetime? In India alone, over 12 billion plastic pads are thrown into municipal landfills or discarded in water bodies every year.</p><p>A single commercial pad contains the plastic equivalent of four shopping carrier bags. By switching to AFOREHEALTH reusable period panties and cloth pads, you can prevent thousands of plastic items from reaching our water systems while enjoying unmatched daily comfort.</p>",
             'blog_eco_periods.jpg',
-            'https://www.youtube.com/watch?v=6J_G4hX_0vQ'
+            'https://www.youtube.com/watch?v=_6xkfIoHmdI'
         ]
     ];
     $stmtBP = $pdo->prepare("INSERT INTO `blog_posts` (`category_id`, `title`, `slug`, `excerpt`, `content`, `featured_image`, `video_url`, `status`, `published_at`) VALUES (?, ?, ?, ?, ?, ?, ?, 'published', NOW())");
@@ -1029,7 +1029,7 @@ try {
             'subtitle' => 'Leakproof underwear, buttery-soft everyday panties, and pH-balanced intimate essentials engineered for Indian bodies.',
             'image_desktop' => 'hero_banner_1.jpg',
             'image_mobile' => 'hero_banner_1.jpg',
-            'video_url' => 'https://www.youtube.com/watch?v=k3Y0488fIqA',
+            'video_url' => 'https://www.youtube.com/watch?v=ayzN5f3qN8g',
             'link' => '/category/period-panties',
             'cta_text' => 'SHOP PERIOD PANTIES',
             'position' => 'home_hero',
@@ -1040,7 +1040,7 @@ try {
             'subtitle' => '3x softer than cotton with breathable 4-way stretch. Zero wedgies, zero pinch, pure everyday luxury.',
             'image_desktop' => 'hero_banner_2.jpg',
             'image_mobile' => 'hero_banner_2.jpg',
-            'video_url' => 'https://www.youtube.com/watch?v=QxX9bAeoW1E',
+            'video_url' => 'https://www.youtube.com/watch?v=vXrQ_FhZmos',
             'link' => '/category/everyday-panties',
             'cta_text' => 'EXPLORE EVERYDAY WEAR',
             'position' => 'home_hero',
@@ -1051,7 +1051,7 @@ try {
             'subtitle' => 'Empowering teenage girls with leakproof underwear, organic cotton pads, and discreet carry pouches.',
             'image_desktop' => 'hero_banner_3.jpg',
             'image_mobile' => 'hero_banner_3.jpg',
-            'video_url' => 'https://www.youtube.com/watch?v=k3Y0488fIqA',
+            'video_url' => 'https://www.youtube.com/watch?v=ayzN5f3qN8g',
             'link' => '/category/period-kits',
             'cta_text' => 'SHOP STARTER KITS',
             'position' => 'home_hero',
