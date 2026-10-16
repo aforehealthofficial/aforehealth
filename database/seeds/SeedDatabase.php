@@ -74,7 +74,7 @@ try {
     $settings = [
         'store_name' => 'AFOREHEALTH',
         'store_tagline' => 'Everyday Comfort. Period Confidence.',
-        'store_phone' => '+91 98765 43210',
+        'store_phone' => '+91 96545 04052',
         'store_email' => 'info@aforehealth.com',
         'store_address' => "AFOREHEALTH Wellness Pvt. Ltd.\nLevel 4, Platina Tower, Bandra Kurla Complex\nMumbai, Maharashtra - 400051, India",
         'store_gstin' => '27AAACA1234A1Z5',
@@ -89,7 +89,7 @@ try {
         'razorpay_enabled' => '1',
         'razorpay_key' => 'rzp_test_AFOREHEALTH_KEY',
         'razorpay_secret' => 'rzp_test_AFOREHEALTH_SECRET',
-        'whatsapp_number' => '+919876543210',
+        'whatsapp_number' => '+91 96545 04052',
         'whatsapp_group_url' => 'https://chat.whatsapp.com/C7fLq9wAFOREHEALTHcommunity',
         'whatsapp_support_message' => 'Hello AFOREHEALTH! I need assistance with my intimate wellness order.',
         'sms_enabled' => '1',

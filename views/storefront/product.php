@@ -266,7 +266,7 @@
                         <span class="wishlist-btn-text"><?= $inWishProd ? 'In Wishlist' : 'Wishlist' ?></span>
                     </button>
                     
-                    <a href="https://api.whatsapp.com/send?phone=<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) ?>&text=<?= urlencode('Hi AFOREHEALTH Care, I have a question about ' . $product['name'] . ' regarding sizing/absorbency.') ?>" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold flex-grow-1">
+                    <a href="https://api.whatsapp.com/send?phone=<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919654504052')) ?>&text=<?= urlencode('Hi AFOREHEALTH Care, I have a question about ' . $product['name'] . ' regarding sizing/absorbency.') ?>" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold flex-grow-1">
                         <i class="bi bi-whatsapp me-1"></i> Ask Us on WhatsApp
                     </a>
                     <form action="<?= url('compare/add') ?>" method="POST" class="d-inline">

@@ -81,7 +81,7 @@
         <div class="mt-4 pt-3 border-top">
             <p class="text-muted small mb-1">Need help or want to modify your order address?</p>
             <a href="<?= e($whatsappSupportUrl) ?>" target="_blank" class="fw-bold text-success text-decoration-none">
-                <i class="bi bi-chat-dots-fill me-1"></i> Chat with us on WhatsApp Support (+91 98765 43210)
+                <i class="bi bi-chat-dots-fill me-1"></i> Chat with us on WhatsApp Support (<?= e(get_setting('whatsapp_number', '+91 96545 04052')) ?>)
             </a>
         </div>
 

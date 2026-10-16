@@ -121,7 +121,7 @@
 
     <!-- Floating WhatsApp Quick Support Widget -->
     <div class="afh-floating-whatsapp-wrap" id="afhFloatingWhatsapp">
-        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) ?>?text=<?= urlencode('Hi AFOREHEALTH Care, I would like guidance on period underwear and sizing.') ?>"
+        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919654504052')) ?>?text=<?= urlencode('Hi AFOREHEALTH Care, I would like guidance on period underwear and sizing.') ?>"
            target="_blank"
            rel="noopener noreferrer"
            class="afh-whatsapp-btn shadow-lg"

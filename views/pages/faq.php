@@ -39,7 +39,7 @@
         <p class="text-muted small mb-3">Our customer care and intimacy wellness specialists are always here for you.</p>
         <div class="d-flex justify-content-center gap-3">
             <a href="<?= url('contact-us') ?>" class="btn btn-outline-dark fw-bold">Contact Support</a>
-            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) ?>" target="_blank" class="btn btn-success fw-bold">
+            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919654504052')) ?>" target="_blank" class="btn btn-success fw-bold">
                 <i class="bi bi-whatsapp me-1"></i> WhatsApp Us
             </a>
         </div>

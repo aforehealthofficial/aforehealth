@@ -102,6 +102,44 @@
             margin: 0 !important;
         }
     }
+
+    /* Perfect Geometrical Circles for Topbar Buttons */
+    .admin-topbar-circle-btn {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        color: #374151 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        line-height: 1 !important;
+        flex-shrink: 0 !important;
+    }
+    .admin-topbar-circle-btn:hover {
+        background: #F8FAFC !important;
+        border-color: rgba(0, 0, 0, 0.18) !important;
+        color: var(--admin-primary) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    .admin-topbar-circle-btn i {
+        font-size: 1.15rem !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+    }
     </style>
 </head>
 <body class="admin-body">
@@ -328,15 +366,15 @@
         <!-- Topbar -->
         <header class="admin-topbar">
             <div class="d-flex align-items-center gap-2 gap-sm-3">
-                <button class="btn btn-light d-lg-none p-1" id="admin-sidebar-toggle-top" aria-label="Toggle Navigation"><i class="bi bi-list fs-4"></i></button>
-                <button class="btn btn-light d-none d-lg-flex p-2 rounded-circle border shadow-xs" id="admin-sidebar-collapse-btn" title="Collapse / Expand Sidebar"><i class="bi bi-layout-sidebar-inset fs-5"></i></button>
+                <button class="btn admin-topbar-circle-btn d-lg-none" id="admin-sidebar-toggle-top" aria-label="Toggle Navigation"><i class="bi bi-list"></i></button>
+                <button class="btn admin-topbar-circle-btn d-none d-lg-inline-flex" id="admin-sidebar-collapse-btn" title="Collapse / Expand Sidebar"><i class="bi bi-layout-sidebar-inset"></i></button>
                 <h5 class="m-0 fw-bold text-dark d-none d-sm-block"><?= e($pageTitle ?? 'AFOREHEALTH Admin') ?></h5>
             </div>
             <div class="d-flex align-items-center gap-2 gap-sm-3">
-                <a href="<?= url('admin/notifications') ?>" class="btn btn-light position-relative p-2 rounded-circle border shadow-xs" title="Notifications">
-                    <i class="bi bi-bell fs-5 text-dark"></i>
+                <a href="<?= url('admin/notifications') ?>" class="btn admin-topbar-circle-btn position-relative" title="Notifications">
+                    <i class="bi bi-bell"></i>
                     <?php if (($sbCounts['notifications'] ?? 0) > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; padding: 2px 6px;">
                             <?= $sbCounts['notifications'] ?>
                         </span>
                     <?php endif; ?>
