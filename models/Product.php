@@ -24,6 +24,7 @@ class Product extends BaseModel {
         $prod['variants'] = $this->getVariants($prod['id']);
         $prod['colors'] = $this->getDistinctColors($prod['id']);
         $prod['sizes'] = $this->getDistinctSizes($prod['id']);
+        $prod['video'] = parse_video_source($prod['video_url'] ?? null, $prod['video_file'] ?? null);
         return $prod;
     }
 

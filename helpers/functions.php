@@ -107,6 +107,79 @@ function upload_multiple_files(array $files, string $subfolder = 'products', arr
 }
 
 /**
+ * Handle video file upload safely (MP4, WebM, MOV, OGG, M4V)
+ */
+function upload_video(array $file, string $subfolder = 'products', array $allowedExts = ['mp4', 'webm', 'mov', 'ogg', 'm4v']): ?string {
+    return upload_file($file, $subfolder, $allowedExts);
+}
+
+/**
+ * Parse and normalize video sources (Uploaded file, YouTube, Vimeo, direct MP4)
+ */
+function parse_video_source(?string $videoUrl, ?string $videoFile = null): ?array {
+    $videoUrl = trim((string)$videoUrl);
+    $videoFile = trim((string)$videoFile);
+
+    // 1. If an uploaded video file exists
+    if (!empty($videoFile)) {
+        return [
+            'type' => 'file',
+            'src' => upload_url('products/' . $videoFile),
+            'filename' => $videoFile,
+            'is_embed' => false,
+            'thumbnail' => null
+        ];
+    }
+
+    if (empty($videoUrl)) {
+        return null;
+    }
+
+    // 2. Direct video file URL (e.g. https://domain.com/video.mp4)
+    if (preg_match('/\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i', $videoUrl)) {
+        return [
+            'type' => 'direct',
+            'src' => $videoUrl,
+            'is_embed' => false,
+            'thumbnail' => null
+        ];
+    }
+
+    // 3. YouTube: watch?v=, embed/, shorts/, youtu.be/
+    if (preg_match('~(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})~i', $videoUrl, $matches)) {
+        $ytId = $matches[1];
+        return [
+            'type' => 'youtube',
+            'id' => $ytId,
+            'src' => "https://www.youtube-nocookie.com/embed/{$ytId}?autoplay=1&rel=0&modestbranding=1",
+            'thumbnail' => "https://img.youtube.com/vi/{$ytId}/hqdefault.jpg",
+            'is_embed' => true
+        ];
+    }
+
+    // 4. Vimeo
+    if (preg_match('~vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)~i', $videoUrl, $matches)) {
+        $vimeoId = end($matches);
+        return [
+            'type' => 'vimeo',
+            'id' => $vimeoId,
+            'src' => "https://player.vimeo.com/video/{$vimeoId}?autoplay=1",
+            'thumbnail' => null,
+            'is_embed' => true
+        ];
+    }
+
+    // 5. Fallback URL
+    return [
+        'type' => 'external',
+        'src' => $videoUrl,
+        'is_embed' => str_starts_with($videoUrl, 'http'),
+        'thumbnail' => null
+    ];
+}
+
+
+/**
  * HTML Escaping
  */
 function e(?string $string): string {
@@ -358,4 +431,19 @@ function generate_order_number(): string {
     $date = date('Ymd');
     $random = str_pad((string)mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
     return "AFH-{$date}-{$random}";
+}
+
+/**
+ * Human-readable time ago
+ */
+function time_ago(int|string $timestamp): string {
+    if (!is_numeric($timestamp)) {
+        $timestamp = strtotime($timestamp);
+    }
+    $diff = time() - $timestamp;
+    if ($diff < 60) return 'Just now';
+    if ($diff < 3600) return round($diff / 60) . ' mins ago';
+    if ($diff < 86400) return round($diff / 3600) . ' hours ago';
+    if ($diff < 604800) return round($diff / 86400) . ' days ago';
+    return date('d M Y', $timestamp);
 }

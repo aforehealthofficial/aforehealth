@@ -27,24 +27,101 @@ class User extends BaseModel {
         ]);
     }
 
-    public function createOtp(string $mobile, string $purpose = 'login'): string {
+    /**
+     * Rate limiting: Max 3 sends per phone number in 10 minutes, and max 15 per IP
+     */
+    public function checkSendRateLimit(string $mobile, ?string $ip = null): void {
         $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
 
-        // Rate limiting: relaxed for testing mode (up to 50 in 10 mins)
-        $stmtThrott = $this->db->prepare("
+        // Phone-based limit: max 3 sends in 10 minutes
+        $stmt = $this->db->prepare("
             SELECT COUNT(*) FROM otp_verifications 
             WHERE mobile = ? AND created_at > (NOW() - INTERVAL 10 MINUTE)
         ");
-        $stmtThrott->execute([$cleanMobile]);
-        if ((int)$stmtThrott->fetchColumn() >= 50) {
-            throw new \Exception("Too many OTP requests. Please wait 10 minutes before requesting another code.");
+        $stmt->execute([$cleanMobile]);
+        $phoneCount = (int)$stmt->fetchColumn();
+
+        if ($phoneCount >= 3) {
+            throw new \Exception("Too many OTP requests for this mobile number. Maximum 3 sends allowed per 10 minutes. Please wait before trying again.");
         }
 
-        // Generate 6 digit OTP
-        $otp = (string)random_int(100000, 999999);
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+        // IP-based limit: max 15 sends per IP in 10 minutes
+        if (!empty($ip)) {
+            $ipStmt = $this->db->prepare("
+                SELECT COUNT(*) FROM otp_verifications 
+                WHERE ip_address = ? AND created_at > (NOW() - INTERVAL 10 MINUTE)
+            ");
+            $ipStmt->execute([$ip]);
+            if ((int)$ipStmt->fetchColumn() >= 15) {
+                throw new \Exception("Too many requests from your network. Please wait a few minutes before trying again.");
+            }
+        }
+    }
 
-        // Invalidate older active OTPs for same mobile and purpose without erasing rate limit history
+    /**
+     * Record 2Factor.in provider session ID for subsequent server-side verification
+     */
+    public function recordTwoFactorSession(string $mobile, string $purpose, string $sessionId, ?string $ip = null): int {
+        $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
+        $this->checkSendRateLimit($cleanMobile, $ip);
+
+        // Invalidate older pending OTP sessions for same mobile and purpose
+        $this->db->prepare("
+            UPDATE otp_verifications 
+            SET expires_at = NOW() 
+            WHERE mobile = ? AND purpose = ? AND verified_at IS NULL
+        ")->execute([$cleanMobile, $purpose]);
+
+        $stmt = $this->db->prepare("
+            INSERT INTO otp_verifications (mobile, twofactor_session_id, purpose, attempts, ip_address, expires_at)
+            VALUES (?, ?, ?, 0, ?, DATE_ADD(NOW(), INTERVAL 15 MINUTE))
+        ");
+        $stmt->execute([$cleanMobile, $sessionId, $purpose, $ip]);
+        return (int)$this->db->lastInsertId();
+    }
+
+    /**
+     * Retrieve the active 2Factor session for verification
+     */
+    public function getActiveTwoFactorSession(string $mobile, string $purpose = 'login'): ?array {
+        $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
+        $stmt = $this->db->prepare("
+            SELECT id, mobile, twofactor_session_id, attempts, expires_at, created_at
+            FROM otp_verifications
+            WHERE mobile = ? AND purpose = ? AND expires_at > NOW() AND verified_at IS NULL
+            ORDER BY id DESC LIMIT 1
+        ");
+        $stmt->execute([$cleanMobile, $purpose]);
+        $res = $stmt->fetch();
+        return $res ?: null;
+    }
+
+    /**
+     * Record a failed verification attempt atomically and lock if 5 attempts reached
+     */
+    public function recordFailedAttempt(int $otpId): int {
+        $this->db->prepare("UPDATE otp_verifications SET attempts = attempts + 1 WHERE id = ?")->execute([$otpId]);
+        $stmt = $this->db->prepare("SELECT attempts FROM otp_verifications WHERE id = ?");
+        $stmt->execute([$otpId]);
+        return (int)$stmt->fetchColumn();
+    }
+
+    /**
+     * Mark OTP session verified
+     */
+    public function markOtpSessionVerified(int $otpId): bool {
+        $stmt = $this->db->prepare("UPDATE otp_verifications SET verified_at = NOW() WHERE id = ?");
+        return $stmt->execute([$otpId]);
+    }
+
+    public function createOtp(string $mobile, string $purpose = 'login'): string {
+        $cleanMobile = preg_replace('/[^0-9]/', '', $mobile);
+        $this->checkSendRateLimit($cleanMobile);
+
+        // Generate 6 digit OTP for fallback / testing
+        $otp = (string)random_int(100000, 999999);
+
+        // Invalidate older active OTPs for same mobile and purpose
         $this->db->prepare("UPDATE otp_verifications SET expires_at = NOW() WHERE mobile = ? AND purpose = ? AND verified_at IS NULL")->execute([$cleanMobile, $purpose]);
 
         $stmt = $this->db->prepare("
@@ -87,11 +164,11 @@ class User extends BaseModel {
             throw new \Exception("Too many incorrect attempts. This OTP has been locked for security.");
         }
 
-        if (hash_equals((string)$rec['otp_code'], (string)$otp)) {
+        if (hash_equals((string)($rec['otp_code'] ?? ''), (string)$otp)) {
             $this->db->prepare("UPDATE otp_verifications SET verified_at = NOW() WHERE id = ?")->execute([$rec['id']]);
             return true;
         } else {
-            $this->db->prepare("UPDATE otp_verifications SET attempts = attempts + 1 WHERE id = ?")->execute([$rec['id']]);
+            $this->recordFailedAttempt((int)$rec['id']);
             return false;
         }
     }

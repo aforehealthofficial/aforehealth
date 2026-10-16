@@ -120,21 +120,28 @@ class AdminProductController {
             redirect('/admin/products/create');
         }
 
+        // Video upload or URL
+        $videoUrl = trim($_POST['video_url'] ?? '');
+        $videoFile = null;
+        if (!empty($_FILES['video_file']['tmp_name'])) {
+            $videoFile = upload_video($_FILES['video_file'], 'products');
+        }
+
         $stmt = $pdo->prepare("
             INSERT INTO products (
                 name, slug, sku, category_id, price, mrp, discount_percent, stock,
                 short_description, description, material, care_instructions, hygiene_notice,
-                primary_image, status, is_featured, is_bestseller, is_new_arrival
+                primary_image, video_url, video_file, status, is_featured, is_bestseller, is_new_arrival
             ) VALUES (
                 ?, ?, ?, ?, ?, ?, ?, ?,
                 ?, ?, ?, ?, ?,
-                ?, 'published', ?, ?, ?
+                ?, ?, ?, 'published', ?, ?, ?
             )
         ");
         $stmt->execute([
             $name, $slug, $sku, $categoryId, $price, $mrp, $discountPct, $stock,
             $shortDesc, $desc, $material, $care, $hygiene,
-            $primaryImage,
+            $primaryImage, $videoUrl ?: null, $videoFile,
             !empty($_POST['is_featured']) ? 1 : 0,
             !empty($_POST['is_bestseller']) ? 1 : 0,
             !empty($_POST['is_new_arrival']) ? 1 : 0
@@ -275,6 +282,21 @@ class AdminProductController {
             }
         }
 
+        // Video update
+        $videoUrl = trim($_POST['video_url'] ?? '');
+        $videoSql = ", video_url = ?";
+        $videoParams = [$videoUrl ?: null];
+
+        if (!empty($_FILES['video_file']['tmp_name'])) {
+            $uploadedVideo = upload_video($_FILES['video_file'], 'products');
+            if ($uploadedVideo) {
+                $videoSql .= ", video_file = ?";
+                $videoParams[] = $uploadedVideo;
+            }
+        } elseif (!empty($_POST['remove_video_file'])) {
+            $videoSql .= ", video_file = NULL";
+        }
+
         // 2. Update basic product information
         $updateSql = "
             UPDATE products SET
@@ -282,6 +304,7 @@ class AdminProductController {
                 short_description = ?, description = ?, material = ?, care_instructions = ?, hygiene_notice = ?,
                 status = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?
                 {$primaryImgSql}
+                {$videoSql}
             WHERE id = ?
         ";
         $updateParams = array_merge([
@@ -300,7 +323,7 @@ class AdminProductController {
             !empty($_POST['is_featured']) ? 1 : 0,
             !empty($_POST['is_bestseller']) ? 1 : 0,
             !empty($_POST['is_new_arrival']) ? 1 : 0,
-        ], $primaryImgParams, [$id]);
+        ], $primaryImgParams, $videoParams, [$id]);
 
         $stmt = $pdo->prepare($updateSql);
         $stmt->execute($updateParams);

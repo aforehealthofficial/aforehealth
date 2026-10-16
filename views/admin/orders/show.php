@@ -6,6 +6,9 @@
         <h4 class="fw-bold m-0 text-dark">Order #<?= e($order['order_number']) ?></h4>
     </div>
     <div class="d-flex gap-2">
+        <a href="<?= url('admin/orders/' . $order['order_number'] . '/shipping-label') ?>" target="_blank" class="btn btn-outline-primary fw-bold">
+            <i class="bi bi-tag me-1"></i> Print 4×6 Shipping Label
+        </a>
         <a href="<?= url('order/invoice/' . $order['order_number']) ?>" target="_blank" class="btn btn-outline-dark fw-bold">
             <i class="bi bi-printer me-1"></i> Print Tax Invoice
         </a>

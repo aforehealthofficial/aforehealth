@@ -47,9 +47,9 @@
                         <?php foreach ($items as $idx => $it): ?>
                             <tr>
                                 <td class="text-center text-muted fw-bold small"><?= $idx + 1 ?></td>
-                                <td><strong class="small text-dark"><?= e($it['product_name']) ?></strong></td>
-                                <td><code class="text-primary-emphasis bg-light px-2 py-1 rounded"><?= e($it['sku']) ?></code></td>
-                                <td><span class="badge bg-light text-dark border"><?= e($it['category_name']) ?></span></td>
+                                <td style="max-width: 220px;"><strong class="small text-dark d-inline-block text-truncate" style="max-width: 100%;" title="<?= e($it['product_name']) ?>"><?= e($it['product_name']) ?></strong></td>
+                                <td style="white-space: nowrap;"><code class="text-primary-emphasis bg-light px-2 py-1 rounded"><?= e($it['sku']) ?></code></td>
+                                <td style="white-space: nowrap;"><span class="badge bg-light text-dark border"><?= e($it['category_name']) ?></span></td>
                                 <td>
                                     <?php if ($it['stock'] <= 0): ?>
                                         <span class="stock-badge stock-badge-out">

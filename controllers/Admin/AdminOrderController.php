@@ -116,4 +116,19 @@ class AdminOrderController {
         set_flash('success', "Order #{$orderNumber} status updated to {$newStatus}.");
         redirect('/admin/orders/' . $orderNumber);
     }
+
+    public function shippingLabel(string $orderNumber): void {
+        $orderModel = new Order();
+        $order = $orderModel->findByOrderNumber($orderNumber);
+
+        if (!$order) {
+            set_flash('danger', 'Order not found.');
+            redirect('/admin/orders');
+        }
+
+        view('admin.orders.shipping-label', [
+            'pageTitle' => 'Shipping Label - ' . $order['order_number'],
+            'order' => $order
+        ]);
+    }
 }

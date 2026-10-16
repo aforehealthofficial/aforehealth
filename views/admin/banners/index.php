@@ -62,7 +62,12 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <strong class="d-block text-dark"><?= e($b['title']) ?></strong>
+                                <strong class="d-block text-dark">
+                                    <?= e($b['title']) ?>
+                                    <?php if (!empty($b['video_url'])): ?>
+                                        <span class="badge bg-danger ms-1" style="font-size: 0.65rem;"><i class="bi bi-play-fill"></i> Video</span>
+                                    <?php endif; ?>
+                                </strong>
                                 <?php if (!empty($b['subtitle'])): ?>
                                     <small class="text-muted d-block text-truncate" style="max-width: 250px;"><?= e($b['subtitle']) ?></small>
                                 <?php endif; ?>
@@ -154,6 +159,13 @@
                             </div>
                         </div>
 
+                        <!-- Video Link (Optional) -->
+                        <div class="col-12">
+                            <label class="form-label small fw-bold"><i class="bi bi-camera-video text-danger me-1"></i> Promotional Video URL / Reel (Optional)</label>
+                            <input type="url" name="video_url" class="form-control form-control-sm" placeholder="https://www.youtube.com/watch?v=... or shorts / direct mp4">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.725rem;">Optional video embed / reel link</small>
+                        </div>
+
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Position</label>
                             <select name="position" class="form-select">
@@ -235,6 +247,13 @@
                             </div>
                         </div>
 
+                        <!-- Video Link (Optional) -->
+                        <div class="col-12">
+                            <label class="form-label small fw-bold"><i class="bi bi-camera-video text-danger me-1"></i> Promotional Video URL / Reel (Optional)</label>
+                            <input type="url" name="video_url" id="editBVideoUrl" class="form-control form-control-sm" placeholder="https://www.youtube.com/watch?v=... or shorts / direct mp4">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.725rem;">Optional video embed / reel link</small>
+                        </div>
+
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Position</label>
                             <select name="position" id="editBPosition" class="form-select">
@@ -282,6 +301,7 @@ function openEditBannerModal(banner) {
     document.getElementById('editBSubtitle').value = banner.subtitle || '';
     document.getElementById('editBLink').value = banner.link;
     document.getElementById('editBCta').value = banner.cta_text || 'Shop Now';
+    document.getElementById('editBVideoUrl').value = banner.video_url || '';
     document.getElementById('editBPosition').value = banner.position || 'home_hero';
     document.getElementById('editBSort').value = banner.sort_order || 0;
     document.getElementById('editBStatus').value = banner.status || 'active';

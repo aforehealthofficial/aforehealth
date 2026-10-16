@@ -25,6 +25,7 @@ class CheckoutController {
 
         if ($user) {
             $savedAddresses = $userModel->getAddresses($user['id']);
+            $cartModel->updateLead($cartModel->getActiveCartId(), $user['name'] ?? null, $user['mobile'] ?? null, $user['email'] ?? null);
         }
 
         $paymentService = new PaymentService();
@@ -125,10 +126,16 @@ class CheckoutController {
             'notes' => $_POST['notes'] ?? null
         ];
 
+        // Capture lead on cart for recovery if payment/order drops
+        $cartModel->updateLead($cartModel->getActiveCartId(), $fullName, $mobile, $email);
+
         try {
             $orderModel = new Order();
             $orderResult = $orderModel->createFromCart($checkoutData);
             $orderNumber = $orderResult['order_number'];
+
+            // Mark cart as successfully converted
+            $cartModel->markRecovered($cartModel->getActiveCartId());
 
             // Store idempotency token
             if (!empty($idempotencyToken)) {

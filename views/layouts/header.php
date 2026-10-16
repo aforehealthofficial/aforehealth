@@ -69,6 +69,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AFOREHEALTH">
+    <meta name="csrf-token" content="<?= csrf_token() ?>">
 
     <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -96,6 +97,8 @@
         <div class="container text-center">
             <span>✨ <strong>Free Shipping</strong> on orders above ₹499 | 100% Discreet Packaging Guaranteed</span>
             <a href="<?= url('offers') ?>">View Offers</a>
+            <span class="mx-2 text-white-50 d-none d-md-inline">|</span>
+            <a href="<?= url('find-my-fit') ?>" class="text-white text-decoration-underline fw-bold d-none d-md-inline">Find My Fit Quiz</a>
         </div>
     </div>
 
@@ -138,9 +141,8 @@
                             $uMobile = $uInfo['mobile'] ?? '';
                             $uFirst = explode(' ', trim($uName))[0] ?? 'Account';
                         ?>
-                            <a href="#" class="nav-icon-link dropdown-toggle d-flex align-items-center gap-1 text-decoration-none" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account Menu">
+                            <a href="#" class="nav-icon-link text-decoration-none" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account: <?= e($uName) ?>">
                                 <i class="bi bi-person-check-fill fs-5 text-primary"></i>
-                                <span class="d-none d-xl-inline small fw-bold text-dark text-truncate" style="max-width: 100px;"><?= e($uFirst) ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-2 border-0 mt-2" aria-labelledby="userMenuDropdown" style="min-width: 220px; z-index: 1060;">
                                 <li class="px-3 py-2 border-bottom mb-1">
@@ -158,7 +160,7 @@
                                 <li><a class="dropdown-item rounded-3 py-2 small text-danger fw-bold" href="<?= url('logout') ?>"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
                             </ul>
                         <?php else: ?>
-                            <a href="#" class="nav-icon-link dropdown-toggle text-decoration-none" id="guestMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Login / Register">
+                            <a href="#" class="nav-icon-link text-decoration-none" id="guestMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Login / Register">
                                 <i class="bi bi-person fs-5"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-3 border-0 mt-2" aria-labelledby="guestMenuDropdown" style="min-width: 220px; z-index: 1060;">
@@ -201,7 +203,7 @@
             $isCat = fn($slug) => str_contains($currPath, '/category/' . $slug);
         ?>
         <nav class="nav-bar-sub d-none d-lg-block">
-            <div class="container-fluid px-xl-5 px-lg-3">
+            <div class="container">
                 <ul class="nav-main-menu">
                     <li class="nav-main-item"><a href="<?= url('category/period-panties') ?>" class="<?= $isCat('period-panties') ? 'active' : '' ?>">PERIOD PANTIES</a></li>
                     <li class="nav-main-item"><a href="<?= url('category/everyday-panties') ?>" class="<?= $isCat('everyday-panties') ? 'active' : '' ?>">EVERYDAY PANTIES</a></li>
@@ -244,6 +246,7 @@
                 <a href="<?= url('category/pads-and-liners') ?>" class="list-group-item list-group-item-action fw-semibold py-3">100% Organic Cotton Pads &amp; Liners</a>
                 <a href="<?= url('category/intimate-care') ?>" class="list-group-item list-group-item-action fw-semibold py-3">Intimate Hygiene &amp; pH 3.8 Care</a>
                 <a href="<?= url('combos') ?>" class="list-group-item list-group-item-action fw-bold text-primary py-3"><i class="bi bi-tag-fill me-2"></i> Value Bundles &amp; Combos</a>
+                <a href="<?= url('find-my-fit') ?>" class="list-group-item list-group-item-action fw-bold text-primary py-3"><i class="bi bi-magic me-2"></i> Find My Fit &amp; Flow Quiz</a>
                 <a href="<?= url('offers') ?>" class="list-group-item list-group-item-action fw-bold text-danger py-3"><i class="bi bi-percent me-2"></i> Exclusive Offers</a>
                 <a href="<?= url('blog') ?>" class="list-group-item list-group-item-action py-3"><i class="bi bi-book me-2"></i> Period Care &amp; Health Guides</a>
             </div>

@@ -55,10 +55,27 @@
             </div>
         </div>
 
-        <!-- Featured Banner Art -->
-        <div class="mb-4 rounded-4 overflow-hidden border">
-            <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 400px; object-fit: cover;">
-        </div>
+        <!-- Educational Video or Featured Banner Art -->
+        <?php if (!empty($post['video_url'])): 
+            $blogVideo = parse_video_source($post['video_url']);
+        ?>
+            <?php if (!empty($blogVideo)): ?>
+                <div class="mb-4 rounded-4 overflow-hidden shadow-sm border bg-black ratio ratio-16x9">
+                    <?php if ($blogVideo['is_embed']): ?>
+                        <iframe src="<?= e($blogVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    <?php else: ?>
+                        <video controls class="w-100 h-100 object-fit-contain">
+                            <source src="<?= e($blogVideo['src']) ?>" type="video/mp4">
+                        </video>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <!-- Featured Banner Art -->
+            <div class="mb-4 rounded-4 overflow-hidden border">
+                <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 400px; object-fit: cover;">
+            </div>
+        <?php endif; ?>
 
         <!-- Lead Excerpt -->
         <p class="lead text-muted mb-4 fst-italic" style="border-left: 4px solid var(--afh-primary); padding-left: 16px;">

@@ -18,6 +18,11 @@ Router::post('/cart/remove', 'CartController@remove');
 Router::post('/cart/coupon', 'CartController@applyCoupon');
 Router::post('/cart/remove-coupon', 'CartController@removeCoupon');
 Router::get('/cart/drawer', 'CartController@drawerData');
+Router::get('/cart/recover', 'CartController@recover');
+
+// Find My Fit Quiz
+Router::get('/find-my-fit', 'FitQuizController@index');
+Router::post('/api/fit-quiz/recommend', 'FitQuizController@recommend');
 
 // Checkout & Orders
 Router::get('/checkout', 'CheckoutController@index');
@@ -188,8 +193,13 @@ Router::post('/admin/categories/delete', 'Admin\AdminCategoryController@delete',
 
 // Admin Orders
 Router::get('/admin/orders', 'Admin\AdminOrderController@index', ['admin']);
+Router::get('/admin/orders/{number}/shipping-label', 'Admin\AdminOrderController@shippingLabel', ['admin']);
 Router::get('/admin/orders/{number}', 'Admin\AdminOrderController@show', ['admin']);
 Router::post('/admin/orders/update-status', 'Admin\AdminOrderController@updateStatus', ['admin']);
+
+// Admin Abandoned Carts Recovery
+Router::get('/admin/abandoned-carts', 'Admin\AdminAbandonedCartController@index', ['admin']);
+Router::post('/admin/abandoned-carts/delete', 'Admin\AdminAbandonedCartController@delete', ['admin']);
 
 // Admin Review Moderation
 Router::get('/admin/reviews', 'Admin\AdminReviewController@index', ['admin']);

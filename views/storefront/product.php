@@ -47,18 +47,51 @@
         <!-- Left: Image Gallery -->
         <div class="col-lg-6">
             <div class="position-sticky" style="top: 120px;">
-                <!-- Main Featured Image -->
-                <div class="product-gallery-main mb-3 rounded-4 overflow-hidden border shadow-sm bg-white" style="aspect-ratio: 1/1;">
+                <!-- Main Featured Media -->
+                <div class="product-gallery-main mb-3 rounded-4 overflow-hidden border shadow-sm bg-white position-relative" style="aspect-ratio: 1/1;">
                     <img id="mainGalleryImg" src="<?= upload_url('products/' . $product['primary_image']) ?>" alt="<?= e($product['name']) ?>" class="w-100 h-100 object-fit-cover" style="transition: transform 0.3s ease;">
+                    <?php if (!empty($product['video'])): ?>
+                        <div id="mainGalleryVideoWrap" class="w-100 h-100 position-absolute top-0 start-0 bg-black d-none">
+                            <?php if ($product['video']['is_embed']): ?>
+                                <iframe id="mainGalleryIframe" src="" data-src="<?= e($product['video']['src']) ?>" class="w-100 h-100 border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <?php else: ?>
+                                <video id="mainGalleryVideoTag" controls class="w-100 h-100 object-fit-contain" preload="metadata" playsinline>
+                                    <source src="<?= e($product['video']['src']) ?>" type="video/mp4">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Thumbnails Carousel / Row -->
-                <div class="d-flex gap-2 overflow-x-auto pb-2">
+                <div class="d-flex gap-2 overflow-x-auto pb-1 align-items-center no-scrollbar product-gallery-thumbs" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Primary thumbnail -->
+                    <div class="gallery-thumb rounded-3 overflow-hidden border border-2 border-primary cursor-pointer active" style="width: 80px; height: 80px; flex-shrink: 0;" onclick="showGalleryImage('<?= upload_url('products/' . $product['primary_image']) ?>', this)">
+                        <img src="<?= upload_url('products/' . $product['primary_image']) ?>" alt="<?= e($product['name']) ?>" class="w-100 h-100 object-fit-cover">
+                    </div>
+
                     <?php foreach ($product['images'] as $img): ?>
-                        <div class="gallery-thumb rounded-3 overflow-hidden border cursor-pointer" style="width: 80px; height: 80px; flex-shrink: 0;" onclick="document.getElementById('mainGalleryImg').src = '<?= upload_url('products/' . $img['image_path']) ?>'">
-                            <img src="<?= upload_url('products/' . $img['image_path']) ?>" alt="<?= e($img['alt_text']) ?>" class="w-100 h-100 object-fit-cover">
+                        <div class="gallery-thumb rounded-3 overflow-hidden border cursor-pointer" style="width: 80px; height: 80px; flex-shrink: 0;" onclick="showGalleryImage('<?= upload_url('products/' . $img['image_path']) ?>', this)">
+                            <img src="<?= upload_url('products/' . $img['image_path']) ?>" alt="<?= e($img['alt_text'] ?: $product['name']) ?>" class="w-100 h-100 object-fit-cover">
                         </div>
                     <?php endforeach; ?>
+
+                    <!-- Video Thumbnail Pill -->
+                    <?php if (!empty($product['video'])): ?>
+                        <div class="gallery-thumb video-thumb rounded-3 overflow-hidden border border-2 border-danger cursor-pointer position-relative d-flex flex-column align-items-center justify-content-center bg-dark text-white text-center shadow-sm" style="width: 80px; height: 80px; flex-shrink: 0;" onclick="showGalleryVideo(this)" title="Watch Product Video">
+                            <?php if (!empty($product['video']['thumbnail'])): ?>
+                                <img src="<?= e($product['video']['thumbnail']) ?>" alt="Video preview" class="w-100 h-100 object-fit-cover opacity-75">
+                            <?php else: ?>
+                                <div class="w-100 h-100 bg-dark d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-play-circle-fill text-danger fs-3"></i>
+                                </div>
+                            <?php endif; ?>
+                            <span class="badge bg-danger position-absolute bottom-0 start-50 translate-middle-x mb-1 px-1.5 py-0.5 fw-bold" style="font-size: 0.625rem; letter-spacing: 0.05em;">
+                                <i class="bi bi-play-fill"></i> VIDEO
+                            </span>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Hygiene Seal Notice Box -->
@@ -101,10 +134,17 @@
                 <h1 class="h2 fw-extrabold text-dark mb-2"><?= e($product['name']) ?></h1>
 
                 <!-- Ratings & Reviews Header -->
-                <div class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
-                    <div class="text-warning fs-6">★★★★★</div>
-                    <span class="fw-bold"><?= number_format((float)$product['rating_avg'], 1) ?></span>
-                    <a href="#productReviewsSection" class="text-muted small text-decoration-underline">(<?= (int)$product['rating_count'] ?> Verified Reviews)</a>
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="text-warning fs-6">★★★★★</div>
+                        <span class="fw-bold"><?= number_format((float)$product['rating_avg'], 1) ?></span>
+                        <a href="#productReviewsSection" class="text-muted small text-decoration-underline">(<?= (int)$product['rating_count'] ?> Verified Reviews)</a>
+                    </div>
+                    <?php if (!empty($product['video'])): ?>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1 shadow-none" onclick="showGalleryVideo()" style="font-size: 0.78rem;">
+                            <i class="bi bi-play-circle-fill"></i> Watch Product Demo
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Price Box -->
@@ -152,12 +192,12 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <label class="form-label fw-bold small text-uppercase text-dark m-0">Select Size:</label>
                                 <div>
-                                    <button type="button" class="btn btn-link btn-sm text-primary p-0 text-decoration-underline fw-semibold me-3" data-bs-toggle="modal" data-bs-target="#sizeChartModal">
+                                    <button type="button" class="btn btn-link btn-sm text-primary p-0 text-decoration-underline fw-semibold me-2" data-bs-toggle="modal" data-bs-target="#sizeChartModal">
                                         <i class="bi bi-rulers me-1"></i> Size Guide
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1 fw-bold" data-bs-toggle="modal" data-bs-target="#sizeFinderModal">
-                                        <i class="bi bi-magic me-1"></i> Find My Size
-                                    </button>
+                                    <a href="<?= url('find-my-fit') ?>" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-0.5 fw-bold" style="font-size: 0.75rem;">
+                                        <i class="bi bi-stars me-1"></i> Flow Quiz
+                                    </a>
                                 </div>
                             </div>
                             <div class="d-flex flex-wrap gap-2">
@@ -296,6 +336,29 @@
                             <div id="careCollapse" class="accordion-collapse collapse" data-bs-parent="#productInfoAccordion">
                                 <div class="accordion-body text-muted">
                                     <?= nl2br(e($product['care_instructions'])) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($product['video'])): ?>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-dark d-flex align-items-center gap-2" type="button" data-bs-toggle="collapse" data-bs-target="#videoCollapse">
+                                    <i class="bi bi-play-circle-fill text-danger"></i> Product Demonstration &amp; Video Walkthrough
+                                </button>
+                            </h2>
+                            <div id="videoCollapse" class="accordion-collapse collapse" data-bs-parent="#productInfoAccordion">
+                                <div class="accordion-body p-3">
+                                    <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm bg-black">
+                                        <?php if ($product['video']['is_embed']): ?>
+                                            <iframe src="<?= e($product['video']['src']) ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        <?php else: ?>
+                                            <video controls class="w-100 h-100 object-fit-contain" playsinline preload="metadata">
+                                                <source src="<?= e($product['video']['src']) ?>" type="video/mp4">
+                                            </video>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -828,6 +891,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function showGalleryImage(imgSrc, element) {
+    const videoWrap = document.getElementById('mainGalleryVideoWrap');
+    if (videoWrap) {
+        videoWrap.classList.add('d-none');
+        const vidTag = document.getElementById('mainGalleryVideoTag');
+        if (vidTag) vidTag.pause();
+        const iframe = document.getElementById('mainGalleryIframe');
+        if (iframe) iframe.src = '';
+    }
+    const mainImg = document.getElementById('mainGalleryImg');
+    if (mainImg) {
+        mainImg.classList.remove('d-none');
+        mainImg.src = imgSrc;
+    }
+    document.querySelectorAll('.gallery-thumb').forEach(el => {
+        el.classList.remove('border-primary', 'border-2', 'active');
+    });
+    if (element) {
+        element.classList.add('border-primary', 'border-2', 'active');
+    }
+}
+
+function showGalleryVideo(element) {
+    const mainImg = document.getElementById('mainGalleryImg');
+    const videoWrap = document.getElementById('mainGalleryVideoWrap');
+    if (mainImg && videoWrap) {
+        mainImg.classList.add('d-none');
+        videoWrap.classList.remove('d-none');
+        const iframe = document.getElementById('mainGalleryIframe');
+        if (iframe && iframe.getAttribute('data-src')) {
+            iframe.src = iframe.getAttribute('data-src');
+        }
+        const vidTag = document.getElementById('mainGalleryVideoTag');
+        if (vidTag) {
+            vidTag.currentTime = 0;
+            vidTag.play().catch(() => {});
+        }
+    }
+    document.querySelectorAll('.gallery-thumb').forEach(el => {
+        el.classList.remove('border-primary', 'border-2', 'active');
+    });
+    const vThumb = element || document.querySelector('.gallery-thumb.video-thumb');
+    if (vThumb) {
+        vThumb.classList.add('border-primary', 'border-2', 'active');
+    }
+    if (!element) {
+        document.querySelector('.product-gallery-main')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
 </script>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

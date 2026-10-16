@@ -45,13 +45,16 @@ class AdminBannerController {
             $imageMobile = upload_file($_FILES['image_mobile'], 'banners');
         }
 
+        // Video URL (optional)
+        $videoUrl = trim($_POST['video_url'] ?? '');
+
         $pdo = getDbConnection();
         $stmt = $pdo->prepare("
-            INSERT INTO banners (title, subtitle, image_desktop, image_mobile, link, cta_text, position, sort_order, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO banners (title, subtitle, image_desktop, image_mobile, video_url, link, cta_text, position, sort_order, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
-            $title, $subtitle, $imageDesktop, $imageMobile, $link, $ctaText, $position, $sortOrder, $status
+            $title, $subtitle, $imageDesktop, $imageMobile, $videoUrl ?: null, $link, $ctaText, $position, $sortOrder, $status
         ]);
 
         set_flash('success', "Banner '{$title}' created successfully.");
@@ -66,6 +69,7 @@ class AdminBannerController {
         $position = trim($_POST['position'] ?? 'home_hero');
         $sortOrder = (int)($_POST['sort_order'] ?? 0);
         $status = in_array($_POST['status'] ?? '', ['active', 'inactive']) ? $_POST['status'] : 'active';
+        $videoUrl = trim($_POST['video_url'] ?? '');
 
         $pdo = getDbConnection();
         $stmt = $pdo->prepare("SELECT * FROM banners WHERE id = ?");
@@ -95,12 +99,12 @@ class AdminBannerController {
 
         $upd = $pdo->prepare("
             UPDATE banners SET
-                title = ?, subtitle = ?, image_desktop = ?, image_mobile = ?,
+                title = ?, subtitle = ?, image_desktop = ?, image_mobile = ?, video_url = ?,
                 link = ?, cta_text = ?, position = ?, sort_order = ?, status = ?
             WHERE id = ?
         ");
         $upd->execute([
-            $title, $subtitle, $imageDesktop, $imageMobile,
+            $title, $subtitle, $imageDesktop, $imageMobile, $videoUrl ?: null,
             $link, $ctaText, $position, $sortOrder, $status,
             $id
         ]);

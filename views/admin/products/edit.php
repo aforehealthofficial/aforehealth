@@ -89,6 +89,59 @@
                         </div>
                     </div>
                 <?php endif; ?>
+
+                <!-- Product Video (Demo, Reels, Explainer) -->
+                <div class="border-top pt-3 mt-3">
+                    <label class="form-label small fw-bold text-dark d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-camera-video-fill text-danger"></i> Product Video (Demo / Reels / Explainer)
+                        <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.7rem;">Optional</span>
+                    </label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small mb-1">Option 1: Video URL (YouTube, Vimeo, Shorts, or MP4 link)</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white"><i class="bi bi-youtube text-danger"></i></span>
+                                <input type="url" name="video_url" id="prodVideoUrlInput" class="form-control" placeholder="https://www.youtube.com/watch?v=... or shorts" value="<?= e($product['video_url'] ?? '') ?>" oninput="previewVideoEmbed(this.value)">
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Paste a YouTube, Vimeo, or direct video link</small>
+                            <?php 
+                                $vEmbed = !empty($product['video_url']) ? parse_video_source($product['video_url']) : null;
+                            ?>
+                            <div id="videoUrlPreviewWrap" class="mt-2 rounded-3 overflow-hidden ratio ratio-16x9 <?= !empty($vEmbed) && !empty($vEmbed['is_embed']) ? '' : 'd-none' ?> border bg-black shadow-sm">
+                                <iframe id="videoUrlIframe" src="<?= !empty($vEmbed) && !empty($vEmbed['is_embed']) ? e($vEmbed['src']) : '' ?>" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small mb-1">Option 2: Direct Video File Upload (.mp4, .webm)</label>
+                            <input type="file" name="video_file" id="prodVideoFileInput" class="form-control form-control-sm" accept="video/mp4,video/webm,video/ogg,video/quicktime" onchange="previewUploadedVideo(this)">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Upload new video file to replace current one</small>
+
+                            <?php if (!empty($product['video_file'])): ?>
+                                <div class="mt-2 p-2 border rounded-3 bg-light d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                        <i class="bi bi-file-earmark-play-fill text-danger fs-4"></i>
+                                        <div class="small text-truncate" style="max-width: 200px;">
+                                            <strong>Current file:</strong> <?= e($product['video_file']) ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox" name="remove_video_file" value="1" id="removeVidFile">
+                                        <label class="form-check-label text-danger small" for="removeVidFile">Remove</label>
+                                    </div>
+                                </div>
+                                <div class="mt-2 ratio ratio-16x9 rounded-3 overflow-hidden border bg-black shadow-sm">
+                                    <video controls class="w-100 h-100">
+                                        <source src="<?= upload_url('products/' . $product['video_file']) ?>">
+                                    </video>
+                                </div>
+                            <?php else: ?>
+                                <div id="videoFilePreviewWrap" class="mt-2 rounded-3 overflow-hidden ratio ratio-16x9 d-none border bg-black shadow-sm">
+                                    <video id="videoFileTag" controls class="w-100 h-100"></video>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 3. Existing Variants Manager (Editable) -->
@@ -304,6 +357,46 @@ function addNewVariantRow() {
     `;
     tbody.appendChild(tr);
     newVarCounter++;
+}
+
+function previewVideoEmbed(url) {
+    const wrap = document.getElementById('videoUrlPreviewWrap');
+    const iframe = document.getElementById('videoUrlIframe');
+    if (!url || url.trim() === '') {
+        wrap.classList.add('d-none');
+        iframe.src = '';
+        return;
+    }
+    let embedSrc = '';
+    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+    if (ytMatch) {
+        embedSrc = `https://www.youtube-nocookie.com/embed/${ytMatch[1]}`;
+    } else {
+        const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)/i);
+        if (vimeoMatch) {
+            embedSrc = `https://player.vimeo.com/video/${vimeoMatch[vimeoMatch.length - 1]}`;
+        }
+    }
+    if (embedSrc) {
+        iframe.src = embedSrc;
+        wrap.classList.remove('d-none');
+    } else {
+        wrap.classList.add('d-none');
+    }
+}
+
+function previewUploadedVideo(input) {
+    const wrap = document.getElementById('videoFilePreviewWrap');
+    const video = document.getElementById('videoFileTag');
+    if (input.files && input.files[0]) {
+        if (video) {
+            video.src = URL.createObjectURL(input.files[0]);
+            if (wrap) wrap.classList.remove('d-none');
+        }
+    } else {
+        if (wrap) wrap.classList.add('d-none');
+        if (video) video.src = '';
+    }
 }
 </script>
 

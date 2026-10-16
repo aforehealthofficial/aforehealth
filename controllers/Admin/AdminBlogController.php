@@ -100,9 +100,11 @@ class AdminBlogController {
             $slug = $slug . '-' . time();
         }
 
+        $videoUrl = trim($_POST['video_url'] ?? '');
+
         $stmt = $pdo->prepare("
-            INSERT INTO blog_posts (category_id, title, slug, author, excerpt, content, featured_image, status, published_at, seo_title, seo_description)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO blog_posts (category_id, title, slug, author, excerpt, content, featured_image, video_url, status, published_at, seo_title, seo_description)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $publishedAt = ($status === 'published') ? date('Y-m-d H:i:s') : null;
         $stmt->execute([
@@ -113,6 +115,7 @@ class AdminBlogController {
             $excerpt,
             $content,
             $featuredImage,
+            $videoUrl ?: null,
             $status,
             $publishedAt,
             $seoTitle,
@@ -198,10 +201,12 @@ class AdminBlogController {
             $publishedAt = date('Y-m-d H:i:s');
         }
 
+        $videoUrl = trim($_POST['video_url'] ?? '');
+
         $upd = $pdo->prepare("
             UPDATE blog_posts 
             SET category_id = ?, title = ?, slug = ?, author = ?, excerpt = ?, content = ?, 
-                featured_image = ?, status = ?, published_at = ?, seo_title = ?, seo_description = ?
+                featured_image = ?, video_url = ?, status = ?, published_at = ?, seo_title = ?, seo_description = ?
             WHERE id = ?
         ");
         $upd->execute([
@@ -212,6 +217,7 @@ class AdminBlogController {
             $excerpt,
             $content,
             $featuredImage,
+            $videoUrl ?: null,
             $status,
             $publishedAt,
             $seoTitle,

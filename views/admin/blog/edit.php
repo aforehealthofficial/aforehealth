@@ -64,7 +64,16 @@
                         <div id="imgPreviewWrap" class="border rounded-3 overflow-hidden bg-white shadow-sm flex-shrink-0" style="width: 100px; height: 65px;">
                             <img id="previewImgEl" src="<?= upload_url('blog/' . ($post['featured_image'] ?? 'blog_science_period_panties.svg')) ?>" class="w-100 h-100 object-fit-cover" alt="Current Cover">
                         </div>
-                    </div>
+                </div>
+
+                <!-- Featured Video Embed (Optional) -->
+                <div class="mb-4 p-3 bg-light rounded-4 border">
+                    <label class="form-label small fw-bold text-dark d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-youtube text-danger fs-5"></i> Educational Video Embed (YouTube / Vimeo / Reel)
+                        <span class="badge bg-secondary-subtle text-secondary border fw-normal" style="font-size: 0.7rem;">Optional</span>
+                    </label>
+                    <p class="text-muted small mb-2">Embed a video tutorial, doctor explainer, or product test video inside the article.</p>
+                    <input type="url" name="video_url" class="form-control form-control-sm" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..." value="<?= e($post['video_url'] ?? '') ?>">
                 </div>
 
                 <!-- Teaser Excerpt -->

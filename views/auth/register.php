@@ -17,6 +17,8 @@
         </div>
 
         <form action="<?= url('register') ?>" method="POST">
+            <?= csrf_field() ?>
+            <input type="hidden" name="referral_code" value="<?= e($referralCode ?? '') ?>">
             <div class="mb-3">
                 <label class="form-label small fw-bold text-dark">Full Name *</label>
                 <input type="text" name="name" class="form-control" placeholder="e.g. Ananya Patel" required autofocus>

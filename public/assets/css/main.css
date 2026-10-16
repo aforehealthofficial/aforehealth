@@ -32,13 +32,55 @@
   --afh-transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+html {
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
 body {
   font-family: var(--afh-font-sans);
   background-color: var(--afh-bg);
   color: var(--afh-dark);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+/* ==========================================================================
+   Universal Scrollbar Hiding (Clean & Sleek User Experience)
+   ========================================================================== */
+/* Hide scrollbar for Chrome, Safari, Edge, Opera */
+*::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar,
+.product-gallery-thumbs::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.nav-bar-sub::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+*,
+html,
+body,
+.no-scrollbar,
+.product-gallery-thumbs,
+.overflow-x-auto,
+.nav-bar-sub {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+/* Remove dropdown carets from header icon links */
+.nav-icon-link::after,
+.nav-icon-link.dropdown-toggle::after {
+  display: none !important;
 }
 
 /* Typography Enhancements */
@@ -164,14 +206,19 @@ a:hover {
   background: #FFFFFF;
   border-top: 1px solid #FAF0F4;
   padding: 0;
-  overflow: visible;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.nav-bar-sub::-webkit-scrollbar {
+  display: none;
 }
 .nav-main-menu {
   display: flex;
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  gap: clamp(6px, 1.1vw, 18px);
+  gap: clamp(4px, 0.9vw, 16px);
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
@@ -181,9 +228,9 @@ a:hover {
   display: inline-flex;
   align-items: center;
   padding: 10px 2px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.015em;
   color: var(--afh-dark);
   text-transform: uppercase;
   position: relative;
@@ -191,11 +238,26 @@ a:hover {
 }
 @media (max-width: 1399px) {
   .nav-main-menu {
-    gap: clamp(4px, 0.8vw, 12px);
+    gap: clamp(3px, 0.6vw, 10px);
   }
   .nav-main-item > a {
-    font-size: 0.72rem;
-    letter-spacing: 0.005em;
+    font-size: 0.70rem;
+    letter-spacing: 0;
+    padding: 10px 1px;
+  }
+}
+@media (max-width: 1199px) {
+  .nav-main-menu {
+    gap: clamp(2px, 0.4vw, 6px);
+  }
+  .nav-main-item > a {
+    font-size: 0.65rem;
+    padding: 8px 1px;
+  }
+  .badge-sale-tag {
+    font-size: 0.55rem;
+    padding: 1px 3px;
+    margin-left: 2px;
   }
 }
 .nav-main-item > a:hover,
@@ -1171,5 +1233,37 @@ a:hover {
 }
 .avatar-stack-item:first-child {
   margin-left: 0;
+}
+
+/* ==========================================================================
+   FAQ Accordion Modern Styling
+   ========================================================================== */
+#homeFaqAccordion .accordion-item {
+  border-color: #F0E8ED !important;
+  transition: all 0.2s ease;
+  background-color: #FFFFFF;
+}
+#homeFaqAccordion .accordion-item:hover {
+  border-color: var(--afh-secondary) !important;
+  box-shadow: 0 4px 14px rgba(139, 94, 131, 0.06);
+}
+#homeFaqAccordion .accordion-button {
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: #FFFFFF;
+  color: var(--afh-dark);
+}
+#homeFaqAccordion .accordion-button:not(.collapsed) {
+  background-color: #FAF5F8;
+  color: var(--afh-primary);
+  box-shadow: none;
+}
+#homeFaqAccordion .accordion-button:focus {
+  box-shadow: none;
+  border-color: transparent;
+}
+#homeFaqAccordion .accordion-button::after {
+  background-size: 0.85rem;
+  transition: transform 0.2s ease;
 }
 

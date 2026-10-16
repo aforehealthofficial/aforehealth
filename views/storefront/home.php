@@ -43,12 +43,28 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6 order-1 order-lg-2 text-center">
-                                    <a href="<?= e(url(ltrim($b['link'], '/'))) ?>" class="d-block text-decoration-none">
-                                        <picture>
-                                            <source media="(max-width: 767px)" srcset="<?= upload_url('banners/' . ($b['image_mobile'] ?: $b['image_desktop'])) ?>">
-                                            <img src="<?= upload_url('banners/' . $b['image_desktop']) ?>" alt="<?= e($b['title']) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
-                                        </picture>
-                                    </a>
+                                    <?php if (!empty($b['video_url'])): 
+                                        $carVideo = parse_video_source($b['video_url']);
+                                    ?>
+                                        <?php if (!empty($carVideo)): ?>
+                                            <div class="rounded-4 overflow-hidden shadow-sm ratio ratio-16x9 bg-black border">
+                                                <?php if ($carVideo['is_embed']): ?>
+                                                    <iframe src="<?= e($carVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                                <?php else: ?>
+                                                    <video controls autoplay muted loop playsinline class="w-100 h-100 object-fit-cover">
+                                                        <source src="<?= e($carVideo['src']) ?>" type="video/mp4">
+                                                    </video>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <a href="<?= e(url(ltrim($b['link'], '/'))) ?>" class="d-block text-decoration-none">
+                                            <picture>
+                                                <source media="(max-width: 767px)" srcset="<?= upload_url('banners/' . ($b['image_mobile'] ?: $b['image_desktop'])) ?>">
+                                                <img src="<?= upload_url('banners/' . $b['image_desktop']) ?>" alt="<?= e($b['title']) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
+                                            </picture>
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -92,12 +108,28 @@
                     </div>
                 </div>
                 <div class="col-lg-6 order-1 order-lg-2 text-center">
-                    <a href="<?= e($heroLink) ?>" class="d-block text-decoration-none">
-                        <picture>
-                            <source media="(max-width: 767px)" srcset="<?= e($heroMobImg) ?>">
-                            <img src="<?= e($heroDeskImg) ?>" alt="<?= e($heroTitle) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
-                        </picture>
-                    </a>
+                    <?php if (!empty($activeBanner['video_url'])): 
+                        $bVideo = parse_video_source($activeBanner['video_url']);
+                    ?>
+                        <?php if (!empty($bVideo)): ?>
+                            <div class="rounded-4 overflow-hidden shadow-sm ratio ratio-16x9 bg-black border">
+                                <?php if ($bVideo['is_embed']): ?>
+                                    <iframe src="<?= e($bVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                <?php else: ?>
+                                    <video controls autoplay muted loop playsinline class="w-100 h-100 object-fit-cover">
+                                        <source src="<?= e($bVideo['src']) ?>" type="video/mp4">
+                                    </video>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <a href="<?= e($heroLink) ?>" class="d-block text-decoration-none">
+                            <picture>
+                                <source media="(max-width: 767px)" srcset="<?= e($heroMobImg) ?>">
+                                <img src="<?= e($heroDeskImg) ?>" alt="<?= e($heroTitle) ?>" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
+                            </picture>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -371,24 +403,24 @@
 </section>
 
 <!-- 9. Frequently Asked Questions Accordion -->
-<section class="py-5 bg-white border-top">
-    <div class="container py-lg-4" style="max-width: 860px;">
-        <div class="text-center mb-5">
-            <span class="badge bg-light text-primary px-3 py-1 rounded-pill fw-bold text-uppercase">Got Questions?</span>
-            <h2 class="fw-bold mt-2">Frequently Asked Questions</h2>
-            <p class="text-muted">Everything you need to know about sizing, washing, and leakproof wear</p>
+<section class="py-4 py-lg-5 bg-white border-top" id="faq-section">
+    <div class="container" style="max-width: 820px;">
+        <div class="text-center mb-3 mb-md-4">
+            <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase" style="background: var(--afh-secondary-light); color: var(--afh-primary); font-size: 0.72rem; letter-spacing: 0.06em;">Got Questions?</span>
+            <h2 class="fw-bold mt-2 mb-1" style="font-size: clamp(1.4rem, 2.5vw, 2rem);">Frequently Asked Questions</h2>
+            <p class="text-muted small m-0">Everything you need to know about sizing, washing, and leakproof wear</p>
         </div>
 
-        <div class="accordion accordion-flush" id="homeFaqAccordion">
+        <div class="accordion accordion-flush d-flex flex-column gap-2" id="homeFaqAccordion">
             <?php foreach ($faqs as $idx => $fq): ?>
-                <div class="accordion-item border rounded-3 mb-3 overflow-hidden shadow-sm">
+                <div class="accordion-item border rounded-3 overflow-hidden shadow-xs">
                     <h2 class="accordion-header" id="heading<?= $idx ?>">
-                        <button class="accordion-button fw-bold text-dark <?= $idx === 0 ? '' : 'collapsed' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $idx ?>" aria-expanded="<?= $idx === 0 ? 'true' : 'false' ?>">
+                        <button class="accordion-button fw-bold text-dark py-3 px-3 px-md-4 <?= $idx === 0 ? '' : 'collapsed' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $idx ?>" aria-expanded="<?= $idx === 0 ? 'true' : 'false' ?>">
                             <?= e($fq['question']) ?>
                         </button>
                     </h2>
                     <div id="collapse<?= $idx ?>" class="accordion-collapse collapse <?= $idx === 0 ? 'show' : '' ?>" data-bs-parent="#homeFaqAccordion">
-                        <div class="accordion-body text-muted" style="line-height: 1.7;">
+                        <div class="accordion-body text-muted pt-0 pb-3 px-3 px-md-4" style="line-height: 1.6; font-size: 0.925rem;">
                             <?= e($fq['answer']) ?>
                         </div>
                     </div>
@@ -396,18 +428,18 @@
             <?php endforeach; ?>
         </div>
 
-        <div class="text-center mt-4">
-            <a href="<?= url('faq') ?>" class="btn btn-outline-primary fw-bold">View All 15+ FAQs →</a>
+        <div class="text-center mt-3 pt-1">
+            <a href="<?= url('faq') ?>" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-4 py-2">View All 15+ FAQs →</a>
         </div>
     </div>
 </section>
 
 <!-- 10. WhatsApp Community Call-To-Action Banner -->
-<section class="py-4 py-md-5 bg-white border-top">
-    <div class="container" style="max-width: 960px;">
-        <div class="sisterhood-card p-4 p-md-5 text-center shadow-sm">
-            <div class="d-inline-flex align-items-center gap-2 mb-3">
-                <span class="badge bg-success text-white px-3 py-1 rounded-pill fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">
+<section class="py-4 py-lg-4 bg-white border-top">
+    <div class="container" style="max-width: 880px;">
+        <div class="sisterhood-card p-3 p-sm-4 p-md-4 text-center shadow-sm">
+            <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-success text-white px-3 py-1 rounded-pill fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.7rem;">
                     <i class="bi bi-shield-lock-fill me-1"></i> Private &amp; Discreet
                 </span>
                 <div class="avatar-stack d-none d-sm-inline-flex">
@@ -418,26 +450,26 @@
                 </div>
             </div>
 
-            <h2 class="h2 fw-bold text-dark mb-2">
+            <h2 class="fw-bold text-dark mb-1" style="font-size: clamp(1.35rem, 2.4vw, 1.85rem);">
                 Join the AFOREHEALTH <span class="text-success">WhatsApp Sisterhood</span>
             </h2>
-            <p class="text-muted mx-auto mb-4" style="max-width: 620px; font-size: 0.98rem; line-height: 1.6;">
+            <p class="text-muted mx-auto mb-3" style="max-width: 600px; font-size: 0.925rem; line-height: 1.55;">
                 Over 25,000 women share real experiences, get discreet gynecologist advice, and enjoy VIP secret discounts. 100% confidential.
             </p>
 
-            <div class="d-flex flex-wrap justify-content-center gap-2 gap-md-3 mb-4">
-                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+            <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                <span class="badge bg-white text-dark border px-2.5 py-1.5 rounded-pill small fw-semibold" style="font-size: 0.78rem;">
                     <i class="bi bi-check-circle-fill text-success me-1"></i> Free Gynaecologist Q&amp;A
                 </span>
-                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+                <span class="badge bg-white text-dark border px-2.5 py-1.5 rounded-pill small fw-semibold" style="font-size: 0.78rem;">
                     <i class="bi bi-check-circle-fill text-success me-1"></i> Secret VIP Flash Drops
                 </span>
-                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small fw-semibold">
+                <span class="badge bg-white text-dark border px-2.5 py-1.5 rounded-pill small fw-semibold" style="font-size: 0.78rem;">
                     <i class="bi bi-check-circle-fill text-success me-1"></i> Zero Spam Guarantee
                 </span>
             </div>
 
-            <a href="<?= e(get_setting('whatsapp_group_url') ?: 'https://chat.whatsapp.com/sample') ?>" target="_blank" class="btn btn-success btn-lg px-4 py-2 px-md-5 py-md-3 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+            <a href="<?= e(get_setting('whatsapp_group_url') ?: 'https://chat.whatsapp.com/sample') ?>" target="_blank" class="btn btn-success px-4 py-2 px-md-5 py-md-2.5 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.925rem;">
                 <i class="bi bi-whatsapp fs-5"></i> JOIN OUR WHATSAPP COMMUNITY <i class="bi bi-arrow-right"></i>
             </a>
         </div>

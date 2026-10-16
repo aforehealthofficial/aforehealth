@@ -119,6 +119,11 @@
                     <span class="sidebar-badge sidebar-badge-neutral"><?= $sbCounts['orders'] ?></span>
                 </a>
             </li>
+            <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/abandoned-carts') ? 'active' : '' ?>">
+                <a href="<?= url('admin/abandoned-carts') ?>">
+                    <i class="bi bi-cart-x text-danger"></i> Abandoned Carts
+                </a>
+            </li>
             <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/customers') ? 'active' : '' ?>">
                 <a href="<?= url('admin/customers') ?>">
                     <i class="bi bi-people"></i> Customers
