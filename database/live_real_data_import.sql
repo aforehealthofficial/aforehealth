@@ -1,6 +1,6 @@
 -- =====================================================================
 -- AFOREHEALTH - Complete Production Real Data Import
--- Generated: 2026-10-16 19:03:33
+-- Generated: 2026-10-16 19:10:13
 -- Includes: Real Products with Photos, Hero Banners, Categories, Pricing, Reviews, Settings
 -- =====================================================================
 
