@@ -1,13 +1,102 @@
 -- =====================================================================
 -- AFOREHEALTH - Complete Production Real Data Import
--- Generated: 2026-10-16 19:10:13
--- Includes: Real Products with Photos, Hero Banners, Categories, Pricing, Reviews, Settings
+-- Generated: 2026-10-16 19:26:23
+-- Ready for phpMyAdmin / MySQL CLI live server import
 -- =====================================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
+SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+SET NAMES utf8mb4;
 
 -- -----------------------------------------------------------------
--- Data for table `settings` (35 rows)
+-- Table `roles` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `roles`;
+INSERT INTO `roles` (`id`, `name`, `slug`, `description`, `created_at`) VALUES
+(1, 'Super Admin', 'super-admin', 'Full access to all system modules and settings', '2026-10-17 00:33:24'),
+(2, 'Admin', 'admin', 'Can manage products, orders, reviews and view reports', '2026-10-17 00:33:24'),
+(3, 'Order Manager', 'order-manager', 'Can manage orders, shipments, returns and tracking', '2026-10-17 00:33:24'),
+(4, 'Product Manager', 'product-manager', 'Can manage catalog, categories, variants and inventory', '2026-10-17 00:33:24'),
+(5, 'Customer Support', 'customer-support', 'Can manage tickets, reviews and customer inquiries', '2026-10-17 00:33:24'),
+(6, 'Content Manager', 'content-manager', 'Can manage blog posts, FAQs, banners and CMS pages', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `permissions` (13 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `permissions`;
+INSERT INTO `permissions` (`id`, `name`, `slug`, `module`, `created_at`) VALUES
+(1, 'View Dashboard', 'view-dashboard', 'dashboard', '2026-10-17 00:33:24'),
+(2, 'Manage Products', 'manage-products', 'catalog', '2026-10-17 00:33:24'),
+(3, 'Manage Categories', 'manage-categories', 'catalog', '2026-10-17 00:33:24'),
+(4, 'Manage Inventory', 'manage-inventory', 'catalog', '2026-10-17 00:33:24'),
+(5, 'Manage Reviews', 'manage-reviews', 'catalog', '2026-10-17 00:33:24'),
+(6, 'Manage Orders', 'manage-orders', 'orders', '2026-10-17 00:33:24'),
+(7, 'Manage Returns', 'manage-returns', 'orders', '2026-10-17 00:33:24'),
+(8, 'Manage Customers', 'manage-customers', 'customers', '2026-10-17 00:33:24'),
+(9, 'Manage Coupons', 'manage-coupons', 'marketing', '2026-10-17 00:33:24'),
+(10, 'Manage Content', 'manage-content', 'content', '2026-10-17 00:33:24'),
+(11, 'View Reports', 'view-reports', 'reports', '2026-10-17 00:33:24'),
+(12, 'Manage Settings', 'manage-settings', 'settings', '2026-10-17 00:33:24'),
+(13, 'Manage Admins', 'manage-admins', 'system', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `role_permissions` (13 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `role_permissions`;
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13);
+
+-- -----------------------------------------------------------------
+-- Table `admins` (3 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `admins`;
+INSERT INTO `admins` (`id`, `name`, `email`, `password`, `role_id`, `status`, `last_login_at`, `created_at`, `updated_at`) VALUES
+(1, 'Super Administrator', 'admin@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 1, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24'),
+(2, 'Pooja Nair (Catalog)', 'catalog@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 4, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24'),
+(3, 'Rohit Mehta (Operations)', 'operations@aforehealth.com', '$2y$12$m/AlGkcFBX3hkTYkUJ0fnOrhSACGzhTkIB8ixpd.XVDWLR.POFDKq', 3, 'active', NULL, '2026-10-17 00:33:24', '2026-10-17 00:33:24');
+
+-- -----------------------------------------------------------------
+-- Table `admin_users` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `admin_users`;
+INSERT INTO `admin_users` (`id`, `name`, `email`, `password_hash`, `status`, `last_login_at`, `created_at`, `updated_at`) VALUES
+(1, 'AFOREHEALTH Administrator', 'admin@aforehealth.com', '$2y$12$bR4YJHXzXcHOSwyyhAliLebQTPqCRdp0iR3nizhPQWVt3oGGmbHNa', 'active', NULL, '2026-10-08 09:51:41', '2026-10-08 09:51:41');
+
+-- -----------------------------------------------------------------
+-- Table `users` (5 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `users`;
+INSERT INTO `users` (`id`, `name`, `mobile`, `password`, `email`, `dob`, `gender`, `referral_code`, `wallet_balance`, `status`, `whatsapp_opt_in`, `created_at`, `updated_at`, `two_factor_code`, `two_factor_expires_at`) VALUES
+(1, 'Priya Sharma', 9876543210, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'priya.sharma@example.com', '1995-04-12', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(2, 'Ananya Patel', 9811122233, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'ananya.p@example.com', '1998-09-24', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(3, 'Dr. Radhika Sen', 9822233344, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'radhika.sen@example.com', '1990-11-05', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(4, 'Sneha Roy', 9833344455, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'sneha.roy@example.com', '2001-02-18', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL),
+(5, 'Pooja Deshmukh', 9844455566, '$2y$12$sYfQa83genu.1VgnlIILHelb0Ly5Oge9yf7AsieUswVPoovhJgLeW', 'pooja.d@example.com', '1993-07-30', 'female', NULL, '0.00', 'active', '0', '2026-10-17 00:33:26', '2026-10-17 00:33:26', NULL, NULL);
+
+-- -----------------------------------------------------------------
+-- Table `addresses` (4 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `addresses`;
+INSERT INTO `addresses` (`id`, `user_id`, `full_name`, `mobile`, `house_flat`, `area`, `landmark`, `city`, `state`, `pincode`, `address_type`, `is_default`, `created_at`) VALUES
+(1, 1, 'Priya Sharma', 9876543210, 'Flat 402, Sunshine Heights', 'Linking Road, Bandra West', 'Near National College', 'Mumbai', 'Maharashtra', 400050, 'home', 1, '2026-10-17 00:33:27'),
+(2, 1, 'Priya Sharma (Office)', 9876543210, 'Floor 8, Tower B, Godrej BKC', 'G-Block, BKC', 'Opp. Citi Bank', 'Mumbai', 'Maharashtra', 400051, 'work', '0', '2026-10-17 00:33:27'),
+(3, 2, 'Ananya Patel', 9811122233, 'Villa 12, Palm Meadows', 'Whitefield Main Road', 'Behind Forum Mall', 'Bengaluru', 'Karnataka', 560066, 'home', 1, '2026-10-17 00:33:27'),
+(4, 3, 'Dr. Radhika Sen', 9822233344, 'C-14, Green Park Extension', 'South Delhi', 'Near Metro Station', 'New Delhi', 'Delhi', 110016, 'home', 1, '2026-10-17 00:33:27');
+
+-- -----------------------------------------------------------------
+-- Table `settings` (35 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `settings`;
 INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `setting_group`, `updated_at`) VALUES
@@ -48,7 +137,7 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `setting_group`, `
 (35, 'seo_default_description', 'India\'s trusted intimate-care and period-care brand. Shop leakproof period panties, breathable everyday underwear, organic cotton pads, and pH-balanced hygiene essentials.', 'general', '2026-10-17 00:33:25');
 
 -- -----------------------------------------------------------------
--- Data for table `banners` (3 rows)
+-- Table `banners` (3 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `banners`;
 INSERT INTO `banners` (`id`, `title`, `subtitle`, `image_desktop`, `image_mobile`, `video_url`, `link`, `cta_text`, `position`, `sort_order`, `status`) VALUES
@@ -57,7 +146,7 @@ INSERT INTO `banners` (`id`, `title`, `subtitle`, `image_desktop`, `image_mobile
 (3, 'First Period Confidence Kit', 'Empowering teenage girls with leakproof underwear, organic cotton pads, and discreet carry pouches.', 'hero_banner_3.jpg', 'hero_banner_3.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', '/category/period-kits', 'SHOP STARTER KITS', 'home_hero', 3, 'active');
 
 -- -----------------------------------------------------------------
--- Data for table `categories` (6 rows)
+-- Table `categories` (6 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `categories`;
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `banner`, `sort_order`, `status`, `seo_title`, `seo_description`, `created_at`) VALUES
@@ -69,7 +158,7 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `banner`
 (6, 'Combos & Value Packs', 'combos', 'Multi-packs and curated bundles designed to give you maximum value while building your complete period routine.', 'cat_combos.jpg', 'cat_combos.jpg', 6, 'active', NULL, NULL, '2026-10-17 00:33:25');
 
 -- -----------------------------------------------------------------
--- Data for table `subcategories` (10 rows)
+-- Table `subcategories` (10 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `subcategories`;
 INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `image`, `sort_order`, `status`, `created_at`) VALUES
@@ -85,7 +174,7 @@ INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`,
 (10, 6, 'Multi-Flow Bundles', 'multi-flow-bundles', 'Trio and quad packs tailored for a complete menstrual cycle.', NULL, '0', 'active', '2026-10-17 00:33:25');
 
 -- -----------------------------------------------------------------
--- Data for table `collections` (4 rows)
+-- Table `collections` (4 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `collections`;
 INSERT INTO `collections` (`id`, `name`, `slug`, `description`, `badge`, `image`, `status`, `sort_order`, `created_at`) VALUES
@@ -95,7 +184,7 @@ INSERT INTO `collections` (`id`, `name`, `slug`, `description`, `badge`, `image`
 (4, 'Postpartum & High-Rise Care', 'postpartum-high-rise', 'Doctor-approved soothing recovery underwear engineered for postpartum bleeding.', 'RECOVERY', 'coll_postpartum.svg', 'active', 4, '2026-10-17 00:33:25');
 
 -- -----------------------------------------------------------------
--- Data for table `products` (38 rows)
+-- Table `products` (38 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `products`;
 INSERT INTO `products` (`id`, `name`, `slug`, `sku`, `category_id`, `subcategory_id`, `collection_id`, `brand`, `short_description`, `description`, `specifications`, `material`, `care_instructions`, `hygiene_notice`, `size_chart`, `mrp`, `price`, `discount_percent`, `stock`, `low_stock_threshold`, `weight_grams`, `shipping_class`, `gst_percent`, `status`, `is_featured`, `is_bestseller`, `is_new_arrival`, `tags`, `primary_image`, `video_url`, `video_file`, `rating_avg`, `rating_count`, `seo_title`, `seo_description`, `seo_keywords`, `created_at`, `updated_at`) VALUES
@@ -139,7 +228,7 @@ INSERT INTO `products` (`id`, `name`, `slug`, `sku`, `category_id`, `subcategory
 (38, 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch)', 'the-ultimate-confidence-box', 'AFH-CB-038', 6, 10, 1, 'AFOREHEALTH', 'The complete leakproof master kit: 2 Heavy Period Panties, 1 Plant-Based Stain Wash (200ml), and 1 Waterproof Travel Pouch.', 'Our signature flagship bundle loved by over 20,000 customers. Everything required to maintain, wear, wash, and travel with your period panties with maximum convenience and longevity.', NULL, 'Premium organic fabrics, enzymatic detergent, waterproof PU pouch.', 'Wash and care manual included.', 'Sealed luxury gift packaging.', NULL, 3197.00, 2199.00, 31, 85, 5, 150, 'standard', 12.00, 'published', 1, 1, '0', NULL, 'prod_the_ultimate_confidence_box.jpg', 'https://www.youtube.com/watch?v=ayzN5f3qN8g', NULL, 5.00, 294, 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) | AFOREHEALTH', 'The complete leakproof master kit: 2 Heavy Period Panties, 1 Plant-Based Stain Wash (200ml), and 1 Waterproof Travel Pouch.', NULL, '2026-10-17 00:33:26', '2026-10-17 00:33:26');
 
 -- -----------------------------------------------------------------
--- Data for table `product_variants` (196 rows)
+-- Table `product_variants` (196 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `product_variants`;
 INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`, `size`, `price`, `mrp`, `stock`, `image`, `status`, `created_at`) VALUES
@@ -347,7 +436,7 @@ INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `color`, `color_code`
 (196, 38, 'AFH-CB-038-SIG-XXL', 'Signature Plum & Noir', '#8B5E83', 'XXL', 2199.00, 3197.00, 17, 'prod_the_ultimate_confidence_box.jpg', 'active', '2026-10-17 00:33:26');
 
 -- -----------------------------------------------------------------
--- Data for table `product_images` (114 rows)
+-- Table `product_images` (114 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `product_images`;
 INSERT INTO `product_images` (`id`, `product_id`, `image_path`, `alt_text`, `is_primary`, `sort_order`, `created_at`) VALUES
@@ -471,7 +560,7 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_path`, `alt_text`, `is_
 (114, 38, 'prod_lifestyle_the_ultimate_confidence_box.jpg', 'AFOREHEALTH The Ultimate Confidence Box (2 Period Panties + Stain Wash + Travel Pouch) Lifestyle & Packaging View', '0', 3, '2026-10-17 00:33:26');
 
 -- -----------------------------------------------------------------
--- Data for table `inventory` (196 rows)
+-- Table `inventory` (196 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `inventory`;
 INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `reserved_stock`, `available_stock`, `low_stock_threshold`, `updated_at`) VALUES
@@ -679,7 +768,7 @@ INSERT INTO `inventory` (`id`, `product_id`, `product_variant_id`, `stock`, `res
 (196, 38, 196, 17, '0', 17, 5, '2026-10-17 00:33:26');
 
 -- -----------------------------------------------------------------
--- Data for table `inventory_logs` (196 rows)
+-- Table `inventory_logs` (196 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `inventory_logs`;
 INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `previous_stock`, `change_amount`, `new_stock`, `reason`, `admin_id`, `created_at`) VALUES
@@ -887,7 +976,42 @@ INSERT INTO `inventory_logs` (`id`, `product_id`, `product_variant_id`, `sku`, `
 (196, 38, 196, 'AFH-CB-038-SIG-XXL', '0', 17, 17, 'Initial inventory stock intake', 1, '2026-10-17 00:33:26');
 
 -- -----------------------------------------------------------------
--- Data for table `blog_categories` (4 rows)
+-- Table `bundles` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `bundles`;
+INSERT INTO `bundles` (`id`, `name`, `slug`, `description`, `discount_type`, `discount_value`, `min_items`, `featured_image`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Custom Period Care Starter Kit', 'custom-period-care-starter-kit', 'Build your ultimate customized period routine: Pick 1 Period Panty, 1 Pad Pack, and 1 Intimate Wash & enjoy an instant 20% bundle discount.', 'percentage', 20.00, 3, 'bundle_period_starter.svg', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `bundle_items` (3 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `bundle_items`;
+INSERT INTO `bundle_items` (`id`, `bundle_id`, `category_id`, `product_id`, `is_required`, `created_at`) VALUES
+(1, 1, 1, NULL, 1, '2026-10-08 11:25:05'),
+(2, 1, 4, NULL, 1, '2026-10-08 11:25:05'),
+(3, 1, 5, NULL, 1, '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `flash_sales` (1 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `flash_sales`;
+INSERT INTO `flash_sales` (`id`, `title`, `slug`, `discount_percent`, `banner_text`, `start_at`, `end_at`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Weekend Comfort Flash Sale', 'weekend-comfort-sale', 25.00, '🔥 Weekend Comfort Sale: Extra 25% OFF on Select Period Essentials!', '2026-10-08 10:25:05', '2026-10-11 11:25:05', 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `flash_sale_products` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `flash_sale_products`;
+INSERT INTO `flash_sale_products` (`id`, `flash_sale_id`, `product_id`, `discount_price`, `max_quantity`, `created_at`) VALUES
+(1, 1, 1, NULL, 50, '2026-10-08 11:25:05'),
+(2, 1, 2, NULL, 50, '2026-10-08 11:25:05'),
+(3, 1, 3, NULL, 50, '2026-10-08 11:25:05'),
+(4, 1, 4, NULL, 50, '2026-10-08 11:25:05'),
+(5, 1, 5, NULL, 50, '2026-10-08 11:25:05'),
+(6, 1, 6, NULL, 50, '2026-10-08 11:25:05');
+
+-- -----------------------------------------------------------------
+-- Table `blog_categories` (4 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `blog_categories`;
 INSERT INTO `blog_categories` (`id`, `name`, `slug`, `created_at`) VALUES
@@ -897,7 +1021,7 @@ INSERT INTO `blog_categories` (`id`, `name`, `slug`, `created_at`) VALUES
 (4, 'Sustainable Living', 'sustainable-living', '2026-10-17 00:33:27');
 
 -- -----------------------------------------------------------------
--- Data for table `blog_posts` (4 rows)
+-- Table `blog_posts` (4 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `blog_posts`;
 INSERT INTO `blog_posts` (`id`, `category_id`, `title`, `slug`, `author`, `excerpt`, `content`, `featured_image`, `video_url`, `status`, `published_at`, `seo_title`, `seo_description`, `created_at`, `updated_at`) VALUES
@@ -907,7 +1031,7 @@ INSERT INTO `blog_posts` (`id`, `category_id`, `title`, `slug`, `author`, `excer
 (4, 4, 'Breaking Down the 350-Pad Waste Problem: The Environmental Impact of Periods', 'environmental-impact-single-use-pads-sustainable-period', 'AFOREHEALTH Wellness Team', 'Each plastic sanitary pad takes up to 800 years to decompose. Here is how switching to reusable period wear can save both money and the planet.', '<p>Did you know that an average woman uses approximately 11,000 to 15,000 disposable sanitary pads in her lifetime? In India alone, over 12 billion plastic pads are thrown into municipal landfills or discarded in water bodies every year.</p><p>A single commercial pad contains the plastic equivalent of four shopping carrier bags. By switching to AFOREHEALTH reusable period panties and cloth pads, you can prevent thousands of plastic items from reaching our water systems while enjoying unmatched daily comfort.</p>', 'blog_eco_periods.jpg', 'https://www.youtube.com/watch?v=_6xkfIoHmdI', 'published', '2026-10-17 00:33:27', NULL, NULL, '2026-10-17 00:33:27', '2026-10-17 00:33:27');
 
 -- -----------------------------------------------------------------
--- Data for table `faqs` (10 rows)
+-- Table `faqs` (10 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `faqs`;
 INSERT INTO `faqs` (`id`, `category`, `question`, `answer`, `sort_order`, `status`) VALUES
@@ -923,7 +1047,7 @@ INSERT INTO `faqs` (`id`, `category`, `question`, `answer`, `sort_order`, `statu
 (10, 'Wholesale & Combos', 'Do you offer bulk discounts or gift sets?', 'Yes! Our Combos & Value Packs offer up to 35% savings over purchasing individual items, and we provide curated gift hampers like the First Period Box for teens.', '0', 'active');
 
 -- -----------------------------------------------------------------
--- Data for table `pages` (6 rows)
+-- Table `pages` (6 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `pages`;
 INSERT INTO `pages` (`id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `updated_at`) VALUES
@@ -935,7 +1059,19 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `content`, `seo_title`, `seo_descrip
 (6, 'cancellation-policy', 'Cancellation Policy', '<h2>Easy Order Cancellation</h2><p>You can cancel your order at any time before it has been dispatched from our fulfillment warehouse.</p><ul><li>To cancel, visit <strong>My Account > My Orders</strong> and click \'Cancel Order\', or message our WhatsApp support team at +91 98765 43210.</li><li>If the order has already been shipped, you can refuse acceptance at the time of delivery. Once the parcel returns to us, your refund will be initiated automatically.</li></ul>', NULL, NULL, '2026-10-17 00:33:27');
 
 -- -----------------------------------------------------------------
--- Data for table `coupons` (5 rows)
+-- Table `cms_pages` (6 rows)
+-- -----------------------------------------------------------------
+DELETE FROM `cms_pages`;
+INSERT INTO `cms_pages` (`id`, `title`, `slug`, `content`, `seo_title`, `seo_description`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'About AFOREHEALTH', 'about-us', '<h2>Our Purpose: Comfort. Care. Confidence.</h2><p>AFOREHEALTH was created to bridge a vital gap in Indian women\'s wellness: everyday intimate care that is comfortable, body-positive, scientifically formulated, and deeply respectful of personal privacy.</p><p>For too long, women in India have had to compromise between scratchy, synthetic innerwear, plastic-laden pads that cause painful rashes, and the unnecessary stigma around purchasing intimate hygiene products.</p><p>We believe every woman deserves pure comfort, skin-friendly fabrics, sustainable period alternatives, and seamless delivery without anxiety. That is why every AFOREHEALTH product is tested for skin friendliness, manufactured using premium modal and organic cotton, and shipped in 100% discreet packaging.</p>', 'About AFOREHEALTH | Women\'s Intimate & Period Care India', 'Learn how AFOREHEALTH is revolutionizing women\'s intimate health and period care in India with comfort, privacy, and body-friendly materials.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(2, 'Privacy & Discreet Shipping Policy', 'privacy-policy', '<h2>Your Privacy Matters Most</h2><p>At AFOREHEALTH, privacy is not an afterthought—it is foundational to everything we do.</p><h3>Discreet Packaging Guarantee</h3><p>Every single parcel is shipped in plain, unmarked, tamper-evident external packaging. The shipping label only lists the delivery address and courier tracking barcode; it contains zero descriptions of intimate products or period care items.</p><h3>Data Protection</h3><p>We only use your mobile number for fast OTP authentication and essential order delivery notifications. We will never sell, rent, or spam your contact information.</p>', 'Discreet Packaging & Privacy Policy | AFOREHEALTH', 'Our 100% discreet packaging guarantee and transparent privacy policy for Indian women.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(3, 'Shipping & Delivery Policy', 'shipping-policy', '<h2>Fast & Reliable Nationwide Delivery</h2><p>We partner with premier Indian logistics carriers including Delhivery, Blue Dart, DTDC, and Shiprocket to ensure your orders reach you swiftly and safely.</p><ul><li><strong>Free Express Shipping:</strong> Available on all prepaid and COD orders above ₹599.</li><li><strong>Standard Shipping:</strong> A flat ₹50 shipping fee applies on orders below ₹599.</li><li><strong>Dispatch Time:</strong> Orders placed before 2:00 PM are dispatched the same day.</li><li><strong>Delivery Timelines:</strong> 2-4 business days for major cities, 3-6 business days for rest of India.</li></ul>', 'Shipping Policy | AFOREHEALTH India', 'Shipping timelines, free delivery threshold, and courier details across India.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(4, 'Return, Exchange & Refund Policy', 'return-policy', '<h2>Intimate Hygiene & Return Guidelines</h2><p>To uphold the highest personal hygiene and safety benchmarks for all customers, innerwear, panties, menstrual cups, and opened personal washes cannot be returned once delivered.</p><h3>Eligibility for Replacement or Refund:</h3><ul><li>Product received was damaged or broken in transit.</li><li>Wrong size or incorrect item delivered due to fulfilling error.</li><li>Manufacturing defect reported within 48 hours of delivery.</li></ul><p>To initiate a claim, navigate to your My Orders dashboard or connect with our WhatsApp support with an unboxing photo.</p>', 'Return & Refund Policy | AFOREHEALTH', 'Understand our hygiene-compliant return, replacement, and refund policy.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(5, 'Terms & Conditions', 'terms-conditions', '<h2>Terms of Service</h2><p>Welcome to AFOREHEALTH. By accessing our platform, placing orders, or joining our wellness community, you agree to comply with our commercial terms and conditions governed under Indian consumer and cyber laws.</p><p>All prices are quoted in Indian Rupees (₹ INR) inclusive of applicable GST taxes. Orders are subject to stock availability and address serviceability.</p>', 'Terms & Conditions | AFOREHEALTH', 'Legal terms and conditions for using AFOREHEALTH website and services.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41'),
+(6, 'Complete Size & Fit Guide', 'size-guide', '<h2>Find Your Perfect AFOREHEALTH Fit</h2><p>Comfortable intimate wear begins with the right fit. Use a soft measuring tape and keep it snug but not tight against your body.</p><h3>Period Panties & Briefs Size Chart (Inches)</h3><table class=\"table table-bordered\"><thead><tr><th>Size</th><th>Waist (Inches)</th><th>Hip (Inches)</th><th>Indian Dress Size</th></tr></thead><tbody><tr><td>XS</td><td>24 - 26</td><td>32 - 34</td><td>UK/IND 6</td></tr><tr><td>S</td><td>26 - 28</td><td>34 - 36</td><td>UK/IND 8</td></tr><tr><td>M</td><td>28 - 30</td><td>36 - 38</td><td>UK/IND 10</td></tr><tr><td>L</td><td>30 - 32</td><td>38 - 40</td><td>UK/IND 12</td></tr><tr><td>XL</td><td>32 - 35</td><td>40 - 43</td><td>UK/IND 14</td></tr><tr><td>XXL</td><td>35 - 38</td><td>43 - 46</td><td>UK/IND 16</td></tr></tbody></table>', 'Innerwear & Period Panty Size Guide | AFOREHEALTH', 'Comprehensive size guide and measurement chart for Indian women.', 1, '2026-10-08 09:51:41', '2026-10-08 09:51:41');
+
+-- -----------------------------------------------------------------
+-- Table `coupons` (5 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `coupons`;
 INSERT INTO `coupons` (`id`, `code`, `title`, `discount_type`, `discount_value`, `min_order_amount`, `max_discount_amount`, `start_date`, `expiry_date`, `usage_limit`, `usage_count`, `per_customer_limit`, `applicable_categories`, `first_order_only`, `cod_allowed`, `status`, `created_at`) VALUES
@@ -946,7 +1082,7 @@ INSERT INTO `coupons` (`id`, `code`, `title`, `discount_type`, `discount_value`,
 (5, 'FREESHIP', 'Free Shipping on Any Order', 'fixed', 50.00, '0.00', 50.00, '2026-01-01', '2026-12-31', 5000, '0', 5, NULL, '0', 1, 'active', '2026-10-17 00:33:27');
 
 -- -----------------------------------------------------------------
--- Data for table `pincodes` (20 rows)
+-- Table `pincodes` (20 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `pincodes`;
 INSERT INTO `pincodes` (`id`, `pincode`, `city`, `state`, `delivery_days`, `cod_available`, `prepaid_available`, `shipping_charge`, `status`, `created_at`, `updated_at`) VALUES
@@ -972,7 +1108,7 @@ INSERT INTO `pincodes` (`id`, `pincode`, `city`, `state`, `delivery_days`, `cod_
 (20, 190001, 'Srinagar', 'Jammu and Kashmir', 6, '0', 1, 50.00, 'active', '2026-10-08 11:25:05', '2026-10-08 11:25:05');
 
 -- -----------------------------------------------------------------
--- Data for table `reviews` (7 rows)
+-- Table `reviews` (7 rows)
 -- -----------------------------------------------------------------
 DELETE FROM `reviews`;
 INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `order_id`, `rating`, `title`, `comment`, `status`, `created_at`, `updated_at`) VALUES
@@ -985,4 +1121,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `order_id`, `rating`, `tit
 (7, 1, 5, NULL, 4, 'Great absorbency, wish there were more color options', 'Worked wonderfully during heavy cycle. Would love to see pastel blue and lavender colors launched soon!', 'pending', '2026-10-17 00:33:27', '2026-10-17 00:33:27');
 
 SET FOREIGN_KEY_CHECKS = 1;
--- === IMPORT COMPLETED SUCCESSFULLY ===
+-- =====================================================================
+-- SUCCESS: Total 916 records across 29 tables imported!
+-- =====================================================================
