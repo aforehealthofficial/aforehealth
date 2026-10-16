@@ -165,6 +165,16 @@ class Cart extends BaseModel {
     public function addItem(int $productId, ?int $variantId, int $quantity = 1): array {
         $cartId = $this->getActiveCartId();
 
+        // If no variant specified, check if product has active variants and pick first available
+        if (empty($variantId)) {
+            $vStmt = $this->db->prepare("SELECT id FROM product_variants WHERE product_id = ? AND stock > 0 ORDER BY id ASC LIMIT 1");
+            $vStmt->execute([$productId]);
+            $firstVarId = $vStmt->fetchColumn();
+            if ($firstVarId) {
+                $variantId = (int)$firstVarId;
+            }
+        }
+
         // Check if item already exists in cart
         if ($variantId) {
             $stmt = $this->db->prepare("SELECT id, quantity FROM cart_items WHERE cart_id = ? AND product_id = ? AND variant_id = ? LIMIT 1");
@@ -251,5 +261,56 @@ class Cart extends BaseModel {
         $this->db->prepare("DELETE FROM cart_items WHERE cart_id = ?")->execute([$cartId]);
         unset($_SESSION['applied_coupon']);
         unset($_SESSION['applied_bundle']);
+    }
+
+    public function updateLead(int $cartId, ?string $name, ?string $mobile, ?string $email, ?string $customToken = null): string {
+        $token = $customToken ?: bin2hex(random_bytes(16));
+        $this->db->prepare("
+            UPDATE carts SET 
+                customer_name = COALESCE(NULLIF(?, ''), customer_name),
+                customer_mobile = COALESCE(NULLIF(?, ''), customer_mobile),
+                customer_email = COALESCE(NULLIF(?, ''), customer_email),
+                recovery_token = COALESCE(recovery_token, ?)
+            WHERE id = ?
+        ")->execute([$name, $mobile, $email, $token, $cartId]);
+        return $token;
+    }
+
+    public function getByRecoveryToken(string $token): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM carts WHERE recovery_token = ? LIMIT 1");
+        $stmt->execute([$token]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function restoreByToken(string $token): bool {
+        $cart = $this->getByRecoveryToken($token);
+        if (!$cart) return false;
+
+        $targetCartId = (int)$cart['id'];
+        $currentCartId = $this->getActiveCartId();
+
+        if ($currentCartId !== $targetCartId) {
+            // Copy or transfer items from abandoned cart to current active cart session
+            $stmt = $this->db->prepare("SELECT product_id, variant_id, quantity FROM cart_items WHERE cart_id = ?");
+            $stmt->execute([$targetCartId]);
+            $items = $stmt->fetchAll();
+
+            foreach ($items as $item) {
+                $this->addItem((int)$item['product_id'], $item['variant_id'] ? (int)$item['variant_id'] : null, (int)$item['quantity']);
+            }
+        }
+
+        // Apply recovery discount coupon RECOVER10 automatically
+        $couponModel = new Coupon();
+        $coupon = $couponModel->findByCode('RECOVER10');
+        if ($coupon) {
+            $_SESSION['applied_coupon'] = $coupon;
+        }
+
+        return true;
+    }
+
+    public function markRecovered(int $cartId): void {
+        $this->db->prepare("UPDATE carts SET is_recovered = 1 WHERE id = ?")->execute([$cartId]);
     }
 }

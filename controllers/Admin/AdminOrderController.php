@@ -95,7 +95,40 @@ class AdminOrderController {
         $orderModel = new Order();
         $orderModel->updateStatus($orderId, $newStatus, $notes, $courier ?: null, $tracking ?: null);
 
+        // Send email update to customer from info@aforehealth.com
+        $order = $orderModel->findByOrderNumber($orderNumber);
+        if ($order && !empty($order['customer_email'])) {
+            try {
+                $emailService = new \Services\EmailService();
+                $emailService->sendOrderStatusUpdate(
+                    $order['customer_email'],
+                    $order,
+                    $newStatus,
+                    $courier ?: null,
+                    $tracking ?: null,
+                    $notes ?: null
+                );
+            } catch (\Exception $e) {
+                error_log("Failed to send order status email: " . $e->getMessage());
+            }
+        }
+
         set_flash('success', "Order #{$orderNumber} status updated to {$newStatus}.");
         redirect('/admin/orders/' . $orderNumber);
+    }
+
+    public function shippingLabel(string $orderNumber): void {
+        $orderModel = new Order();
+        $order = $orderModel->findByOrderNumber($orderNumber);
+
+        if (!$order) {
+            set_flash('danger', 'Order not found.');
+            redirect('/admin/orders');
+        }
+
+        view('admin.orders.shipping-label', [
+            'pageTitle' => 'Shipping Label - ' . $order['order_number'],
+            'order' => $order
+        ]);
     }
 }

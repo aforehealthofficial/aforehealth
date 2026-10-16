@@ -38,7 +38,7 @@
 
             <!-- Sort and Per Page dropdown -->
             <form method="GET" action="<?= url('shop') ?>" id="sortForm" class="d-flex align-items-center gap-2">
-                <?php foreach ($filters as $k => $v): if ($k !== 'sort' && !empty($v)): ?>
+                <?php foreach ($filters as $k => $v): if ($k !== 'sort' && $k !== 'per_page' && !empty($v)): ?>
                     <input type="hidden" name="<?= e($k) ?>" value="<?= e($v) ?>">
                 <?php endif; endforeach; ?>
 
@@ -54,9 +54,9 @@
 
                 <label class="small text-muted text-nowrap d-none d-sm-inline" for="perPageSelect">Show:</label>
                 <select name="per_page" id="perPageSelect" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="20" <?= ($perPage ?? 20) == 20 ? 'selected' : '' ?>>20</option>
-                    <option value="30" <?= ($perPage ?? 20) == 30 ? 'selected' : '' ?>>30</option>
-                    <option value="48" <?= ($perPage ?? 20) == 48 ? 'selected' : '' ?>>48</option>
+                    <option value="20" <?= ($perPage ?? 20) == 20 ? 'selected' : '' ?>>20 per page</option>
+                    <option value="30" <?= ($perPage ?? 20) == 30 ? 'selected' : '' ?>>30 per page</option>
+                    <option value="50" <?= ($perPage ?? 20) == 50 ? 'selected' : '' ?>>50 per page</option>
                 </select>
             </form>
         </div>

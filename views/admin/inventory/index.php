@@ -1,10 +1,25 @@
 <?php require __DIR__ . '/../layout-header.php'; ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
     <div>
         <h4 class="fw-bold m-0 text-dark">Inventory &amp; Stock Levels</h4>
         <p class="text-muted small m-0">Live stock counts, low stock alerts, and complete audit movement trail</p>
     </div>
+
+    <!-- Filters & Search Form -->
+    <form method="GET" action="<?= url('admin/inventory') ?>" class="d-flex flex-wrap gap-2">
+        <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+            <option value="20" <?= ($perPage ?? 20) == 20 ? 'selected' : '' ?>>20 per page</option>
+            <option value="30" <?= ($perPage ?? 20) == 30 ? 'selected' : '' ?>>30 per page</option>
+            <option value="50" <?= ($perPage ?? 20) == 50 ? 'selected' : '' ?>>50 per page</option>
+            <option value="100" <?= ($perPage ?? 20) == 100 ? 'selected' : '' ?>>100 per page</option>
+        </select>
+
+        <div class="input-group input-group-sm" style="width: 260px;">
+            <input type="text" name="q" class="form-control" placeholder="Search product or SKU..." value="<?= e($search ?? '') ?>">
+            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
 </div>
 
 <div class="row g-4 mb-4">
@@ -13,7 +28,7 @@
         <div class="admin-table-card">
             <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
                 <h6 class="fw-bold m-0 text-dark d-flex align-items-center gap-2">
-                    Current Stock by Product <span class="badge bg-secondary-subtle text-dark rounded-pill">Total: <?= count($items) ?></span>
+                    Current Stock by Product <span class="badge bg-secondary-subtle text-dark rounded-pill">Total: <?= $total ?? count($items) ?></span>
                 </h6>
             </div>
             <div class="table-responsive">
@@ -32,9 +47,9 @@
                         <?php foreach ($items as $idx => $it): ?>
                             <tr>
                                 <td class="text-center text-muted fw-bold small"><?= $idx + 1 ?></td>
-                                <td><strong class="small text-dark"><?= e($it['product_name']) ?></strong></td>
-                                <td><code class="text-primary-emphasis bg-light px-2 py-1 rounded"><?= e($it['sku']) ?></code></td>
-                                <td><span class="badge bg-light text-dark border"><?= e($it['category_name']) ?></span></td>
+                                <td style="max-width: 220px;"><strong class="small text-dark d-inline-block text-truncate" style="max-width: 100%;" title="<?= e($it['product_name']) ?>"><?= e($it['product_name']) ?></strong></td>
+                                <td style="white-space: nowrap;"><code class="text-primary-emphasis bg-light px-2 py-1 rounded"><?= e($it['sku']) ?></code></td>
+                                <td style="white-space: nowrap;"><span class="badge bg-light text-dark border"><?= e($it['category_name']) ?></span></td>
                                 <td>
                                     <?php if ($it['stock'] <= 0): ?>
                                         <span class="stock-badge stock-badge-out">
@@ -66,6 +81,25 @@
                     </tbody>
                 </table>
             </div>
+
+            <?php if (($totalPages ?? 1) > 1): ?>
+                <div class="d-flex justify-content-between align-items-center p-3 border-top bg-light rounded-bottom-4">
+                    <small class="text-muted">Showing page <?= $page ?> of <?= $totalPages ?> (Total <?= $total ?> products)</small>
+                    <nav>
+                        <ul class="pagination pagination-sm m-0">
+                            <?php if ($page > 1): ?>
+                                <li class="page-item"><a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">«</a></li>
+                            <?php endif; ?>
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= $i == $page ? 'active' : '' ?>"><a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a></li>
+                            <?php endfor; ?>
+                            <?php if ($page < $totalPages): ?>
+                                <li class="page-item"><a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">»</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -80,7 +114,7 @@
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Select Product *</label>
                     <select name="product_id" id="adjProductSelect" class="form-select" required onchange="onSidebarProductChange(this)">
-                        <?php foreach ($items as $it): ?>
+                        <?php foreach (($allProducts ?? $items) as $it): ?>
                             <option value="<?= $it['product_id'] ?>" data-stock="<?= (int)$it['stock'] ?>" data-sku="<?= e($it['sku']) ?>">
                                 <?= e($it['sku']) ?> - <?= e($it['product_name']) ?> (<?= (int)$it['stock'] ?> in stock)
                             </option>

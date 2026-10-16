@@ -111,4 +111,22 @@ class CartController {
         $cart = $cartModel->getCartDetails();
         json_response(['success' => true, 'cart' => $cart]);
     }
+
+    public function recover(): void {
+        $token = trim($_GET['token'] ?? '');
+        if (empty($token)) {
+            redirect('/cart');
+        }
+
+        $cartModel = new Cart();
+        $restored = $cartModel->restoreByToken($token);
+
+        if ($restored) {
+            set_flash('success', '✨ Welcome back! Your cart items have been restored, and an EXTRA 10% OFF coupon (RECOVER10) has been auto-applied!');
+            redirect('/checkout');
+        } else {
+            set_flash('warning', 'Cart recovery link has expired or is invalid.');
+            redirect('/cart');
+        }
+    }
 }

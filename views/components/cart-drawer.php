@@ -8,7 +8,7 @@
     <div class="cart-drawer-header">
         <div class="d-flex align-items-center gap-2">
             <i class="bi bi-bag text-primary fs-5"></i>
-            <h5 class="m-0 fw-bold">Shopping Bag (<span class="cart-badge-count"><?= get_cart_count() ?></span>)</h5>
+            <h5 class="m-0 fw-bold text-nowrap">Shopping Bag (<span class="cart-drawer-item-count"><?= get_cart_count() ?></span>)</h5>
         </div>
         <button type="button" class="cart-drawer-close" aria-label="Close Shopping Bag">&times;</button>
     </div>

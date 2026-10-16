@@ -119,6 +119,86 @@
         </div>
     <?php endif; ?>
 
+    <!-- Floating WhatsApp Quick Support Widget -->
+    <div class="afh-floating-whatsapp-wrap" id="afhFloatingWhatsapp">
+        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', get_setting('whatsapp_number', '919876543210')) ?>?text=<?= urlencode('Hi AFOREHEALTH Care, I would like guidance on period underwear and sizing.') ?>"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="afh-whatsapp-btn shadow-lg"
+           aria-label="Chat with our care specialist on WhatsApp"
+           title="Chat on WhatsApp">
+            <span class="afh-whatsapp-pulse"></span>
+            <i class="bi bi-whatsapp"></i>
+            <span class="afh-whatsapp-text d-none d-md-inline-block">Chat with Specialist</span>
+        </a>
+    </div>
+
+    <style>
+    .afh-floating-whatsapp-wrap {
+        position: fixed;
+        right: 22px;
+        bottom: 26px;
+        z-index: 1040;
+    }
+    @media (max-width: 768px) {
+        .afh-floating-whatsapp-wrap {
+            bottom: 78px;
+            right: 16px;
+        }
+    }
+    .afh-whatsapp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        color: #ffffff !important;
+        text-decoration: none !important;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+        position: relative;
+    }
+    @media (max-width: 768px) {
+        .afh-whatsapp-btn {
+            padding: 12px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+        }
+        .afh-whatsapp-btn i {
+            font-size: 1.5rem;
+        }
+    }
+    .afh-whatsapp-btn:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45) !important;
+        color: #ffffff !important;
+    }
+    .afh-whatsapp-btn i {
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+    .afh-whatsapp-pulse {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 999px;
+        border: 2px solid rgba(37, 211, 102, 0.7);
+        animation: afhPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        pointer-events: none;
+    }
+    @keyframes afhPulse {
+        0% { transform: scale(0.95); opacity: 0.9; }
+        70% { transform: scale(1.18); opacity: 0; }
+        100% { transform: scale(1.22); opacity: 0; }
+    }
+    </style>
+
     <!-- Mobile Bottom Navigation Bar -->
     <?php require __DIR__ . '/../components/mobile-nav.php'; ?>
 
@@ -185,7 +265,7 @@
                             data.products.forEach(p => {
                                 html += `
                                     <a href="${p.url}" class="d-flex align-items-center gap-2 p-2 rounded-3 text-decoration-none border-bottom">
-                                        <img src="${p.image_url}" style="width: 45px; height: 45px; object-fit: contain;" class="rounded border p-1" alt="">
+                                        <img src="${p.image_url}" style="width: 45px; height: 45px; object-fit: contain;" class="rounded border p-1" alt="${p.name}">
                                         <div class="flex-grow-1">
                                             <div class="small fw-bold text-dark text-truncate" style="max-width: 250px;">${p.name}</div>
                                             <div class="small fw-bold" style="color: var(--afh-primary);">${p.formatted_price}</div>

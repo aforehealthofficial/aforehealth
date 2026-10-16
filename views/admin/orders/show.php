@@ -6,6 +6,9 @@
         <h4 class="fw-bold m-0 text-dark">Order #<?= e($order['order_number']) ?></h4>
     </div>
     <div class="d-flex gap-2">
+        <a href="<?= url('admin/orders/' . $order['order_number'] . '/shipping-label') ?>" target="_blank" class="btn btn-outline-primary fw-bold">
+            <i class="bi bi-tag me-1"></i> Print 4×6 Shipping Label
+        </a>
         <a href="<?= url('order/invoice/' . $order['order_number']) ?>" target="_blank" class="btn btn-outline-dark fw-bold">
             <i class="bi bi-printer me-1"></i> Print Tax Invoice
         </a>
@@ -156,7 +159,19 @@
             <div class="small mb-3">
                 <strong class="text-dark fs-6"><?= e($order['customer_name']) ?></strong><br>
                 <span>Phone: +91 <?= e($order['customer_mobile']) ?></span><br>
-                <span>Email: <?= e($order['customer_email'] ?: 'Not provided') ?></span>
+                <span>Email: <?= e($order['customer_email'] ?: 'Not provided') ?></span><br>
+                <div class="mt-2 pt-2 border-top">
+                    <span class="text-muted small fw-bold">WhatsApp Community Consent:</span><br>
+                    <?php if (!empty($order['whatsapp_opt_in'])): ?>
+                        <span class="badge bg-success-subtle text-success border border-success fw-bold px-2 py-1 mt-1">
+                            <i class="bi bi-whatsapp me-1"></i> OPTED-IN (CONSENT GIVEN)
+                        </span>
+                    <?php else: ?>
+                        <span class="badge bg-light text-muted border fw-normal px-2 py-1 mt-1">
+                            <i class="bi bi-x-circle me-1"></i> Not Opted In
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <h6 class="fw-bold text-uppercase small text-muted mb-2">Delivery Address:</h6>

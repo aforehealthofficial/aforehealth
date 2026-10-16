@@ -5,14 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($pageTitle ?? 'AFOREHEALTH | Everyday Comfort. Period Confidence.') ?></title>
     <meta name="description" content="<?= e($metaDescription ?? 'India\'s trusted women\'s intimate-care and period-care e-commerce brand. Discover leakproof period panties, breathable cotton underwear, organic pads, and pH 3.8 intimate washes.') ?>">
-    <link rel="canonical" href="<?= e(url($_SERVER['REQUEST_URI'] ?? '')) ?>">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     
-    <!-- Open Graph / Meta -->
+    <!-- Clean Canonical URL without tracking query parameters -->
+    <?php
+        $rawUri = $_SERVER['REQUEST_URI'] ?? '/';
+        $canonicalPath = parse_url($rawUri, PHP_URL_PATH) ?: '/';
+    ?>
+    <link rel="canonical" href="<?= e(url(ltrim($canonicalPath, '/'))) ?>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="AFOREHEALTH">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_IN">
     <meta property="og:title" content="<?= e($pageTitle ?? 'AFOREHEALTH') ?>">
-    <meta property="og:description" content="Everyday Comfort. Period Confidence. India-focused leakproof and intimate care essentials.">
+    <meta property="og:description" content="<?= e($metaDescription ?? 'Everyday Comfort. Period Confidence. India-focused leakproof underwear, organic pads, and intimate care essentials.') ?>">
     <meta property="og:image" content="<?= asset('images/logo.svg') ?>">
-    <meta property="og:url" content="<?= e(url()) ?>">
+    <meta property="og:url" content="<?= e(url(ltrim($canonicalPath, '/'))) ?>">
     <meta name="theme-color" content="#8B5E83">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= e($pageTitle ?? 'AFOREHEALTH') ?>">
+    <meta name="twitter:description" content="<?= e($metaDescription ?? 'Everyday Comfort. Period Confidence. India-focused leakproof underwear, organic pads, and intimate care essentials.') ?>">
+    <meta name="twitter:image" content="<?= asset('images/logo.svg') ?>">
+
+    <!-- Schema.org JSON-LD (Organization & WebSite with Sitelinks Searchbox) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "<?= url('/#organization') ?>",
+          "name": "AFOREHEALTH",
+          "url": "<?= url() ?>",
+          "logo": "<?= asset('images/logo.svg') ?>",
+          "description": "India-focused women intimate-care and period-care brand.",
+          "sameAs": [
+            "https://www.instagram.com/aforehealth",
+            "https://www.facebook.com/aforehealth"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "<?= url('/#website') ?>",
+          "url": "<?= url() ?>",
+          "name": "AFOREHEALTH",
+          "publisher": { "@id": "<?= url('/#organization') ?>" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "<?= url('search?q={search_term_string}') ?>",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Favicon & PWA -->
     <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
@@ -20,6 +69,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AFOREHEALTH">
+    <meta name="csrf-token" content="<?= csrf_token() ?>">
 
     <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,6 +97,8 @@
         <div class="container text-center">
             <span>✨ <strong>Free Shipping</strong> on orders above ₹499 | 100% Discreet Packaging Guaranteed</span>
             <a href="<?= url('offers') ?>">View Offers</a>
+            <span class="mx-2 text-white-50 d-none d-md-inline">|</span>
+            <a href="<?= url('find-my-fit') ?>" class="text-white text-decoration-underline fw-bold d-none d-md-inline">Find My Fit Quiz</a>
         </div>
     </div>
 
@@ -81,17 +133,23 @@
                         <i class="bi bi-search fs-5"></i>
                     </a>
 
-                    <!-- Account Dropdown with Profile & Logout -->
-                    <div class="dropdown">
-                        <?php if (is_authenticated()): ?>
-                            <a href="#" class="nav-icon-link dropdown-toggle d-flex align-items-center gap-1 text-decoration-none" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account Menu">
+                    <!-- Account Dropdown with Profile & Logout (Desktop & Tablet) -->
+                    <div class="dropdown d-none d-md-block">
+                        <?php if (is_authenticated()): 
+                            $uInfo = auth_user() ?? [];
+                            $uName = $uInfo['name'] ?? 'Account';
+                            $uMobile = $uInfo['mobile'] ?? '';
+                            $uFirst = explode(' ', trim($uName))[0] ?? 'Account';
+                        ?>
+                            <a href="#" class="nav-icon-link text-decoration-none" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account: <?= e($uName) ?>">
                                 <i class="bi bi-person-check-fill fs-5 text-primary"></i>
-                                <span class="d-none d-xl-inline small fw-bold text-dark text-truncate" style="max-width: 100px;"><?= e(explode(' ', auth_user()['name'])[0]) ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-2 border-0 mt-2" aria-labelledby="userMenuDropdown" style="min-width: 220px; z-index: 1060;">
                                 <li class="px-3 py-2 border-bottom mb-1">
-                                    <div class="fw-bold text-dark small text-truncate"><?= e(auth_user()['name']) ?></div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">+91 <?= e(auth_user()['mobile']) ?></div>
+                                    <div class="fw-bold text-dark small text-truncate"><?= e($uName) ?></div>
+                                    <?php if (!empty($uMobile)): ?>
+                                        <div class="text-muted" style="font-size: 0.75rem;">+91 <?= e($uMobile) ?></div>
+                                    <?php endif; ?>
                                 </li>
                                 <li><a class="dropdown-item rounded-3 py-2 small" href="<?= url('account') ?>"><i class="bi bi-speedometer2 me-2 text-primary"></i> My Dashboard</a></li>
                                 <li><a class="dropdown-item rounded-3 py-2 small" href="<?= url('account/profile') ?>"><i class="bi bi-person me-2 text-primary"></i> My Profile</a></li>
@@ -102,7 +160,7 @@
                                 <li><a class="dropdown-item rounded-3 py-2 small text-danger fw-bold" href="<?= url('logout') ?>"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
                             </ul>
                         <?php else: ?>
-                            <a href="#" class="nav-icon-link dropdown-toggle text-decoration-none" id="guestMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Login / Register">
+                            <a href="#" class="nav-icon-link text-decoration-none" id="guestMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Login / Register">
                                 <i class="bi bi-person fs-5"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-3 border-0 mt-2" aria-labelledby="guestMenuDropdown" style="min-width: 220px; z-index: 1060;">
@@ -113,15 +171,15 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- Wishlist -->
-                    <a href="<?= url('account/wishlist') ?>" class="nav-icon-link position-relative" title="Wishlist" aria-label="Wishlist">
+                    <!-- Wishlist (Desktop & Tablet) -->
+                    <a href="<?= url('account/wishlist') ?>" class="nav-icon-link position-relative d-none d-sm-flex" title="Wishlist" aria-label="Wishlist">
                         <i class="bi bi-heart fs-5"></i>
                         <?php $wCount = get_wishlist_count(); ?>
                         <span class="badge-count wishlist-badge" style="<?= $wCount > 0 ? '' : 'display:none;' ?>"><?= $wCount ?></span>
                     </a>
 
-                    <!-- Compare -->
-                    <a href="<?= url('compare') ?>" class="nav-icon-link position-relative" title="Compare Products" aria-label="Compare">
+                    <!-- Compare (Desktop) -->
+                    <a href="<?= url('compare') ?>" class="nav-icon-link position-relative d-none d-md-flex" title="Compare Products" aria-label="Compare">
                         <i class="bi bi-layout-split fs-5"></i>
                         <?php $cmpCount = count($_SESSION['compare_ids'] ?? []); ?>
                         <span class="badge-count compare-badge-count" style="<?= $cmpCount > 0 ? '' : 'display:none;' ?>"><?= $cmpCount ?></span>
@@ -139,21 +197,24 @@
         </div>
 
         <!-- 3. Sub Navigation Bar (Desktop) -->
+        <?php
+            $currPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+            $currQuery = $_SERVER['QUERY_STRING'] ?? '';
+            $isCat = fn($slug) => str_contains($currPath, '/category/' . $slug);
+        ?>
         <nav class="nav-bar-sub d-none d-lg-block">
             <div class="container">
                 <ul class="nav-main-menu">
-                    <li class="nav-main-item"><a href="<?= url('shop') ?>">SHOP ALL</a></li>
-                    <li class="nav-main-item"><a href="<?= url('build-your-kit') ?>" class="fw-bold text-primary"><i class="bi bi-gift me-1"></i>BUILD YOUR KIT</a></li>
-                    <li class="nav-main-item"><a href="<?= url('category/period-panties') ?>">PERIOD PANTIES</a></li>
-                    <li class="nav-main-item"><a href="<?= url('category/everyday-panties') ?>">EVERYDAY PANTIES</a></li>
-                    <li class="nav-main-item"><a href="<?= url('category/period-kits') ?>">PERIOD KITS</a></li>
-                    <li class="nav-main-item"><a href="<?= url('category/pads-and-liners') ?>">PADS &amp; LINERS</a></li>
-                    <li class="nav-main-item"><a href="<?= url('category/intimate-care') ?>">INTIMATE CARE</a></li>
-                    <li class="nav-main-item"><a href="<?= url('combos') ?>">COMBOS &amp; SAVE</a></li>
-                    <li class="nav-main-item"><a href="<?= url('shop?sort=popularity') ?>">BESTSELLERS</a></li>
-                    <li class="nav-main-item"><a href="<?= url('shop?sort=newest') ?>">NEW ARRIVALS</a></li>
-                    <li class="nav-main-item"><a href="<?= url('offers') ?>">OFFERS <span class="badge-sale-tag">SAVE 35%</span></a></li>
-                    <li class="nav-main-item"><a href="<?= url('blog') ?>">WELLNESS BLOG</a></li>
+                    <li class="nav-main-item"><a href="<?= url('category/period-panties') ?>" class="<?= $isCat('period-panties') ? 'active' : '' ?>">PERIOD PANTIES</a></li>
+                    <li class="nav-main-item"><a href="<?= url('category/everyday-panties') ?>" class="<?= $isCat('everyday-panties') ? 'active' : '' ?>">EVERYDAY PANTIES</a></li>
+                    <li class="nav-main-item"><a href="<?= url('category/period-kits') ?>" class="<?= $isCat('period-kits') ? 'active' : '' ?>">PERIOD KITS</a></li>
+                    <li class="nav-main-item"><a href="<?= url('category/pads-and-liners') ?>" class="<?= $isCat('pads-and-liners') ? 'active' : '' ?>">PADS &amp; LINERS</a></li>
+                    <li class="nav-main-item"><a href="<?= url('category/intimate-care') ?>" class="<?= $isCat('intimate-care') ? 'active' : '' ?>">INTIMATE CARE</a></li>
+                    <li class="nav-main-item"><a href="<?= url('combos') ?>" class="<?= str_contains($currPath, '/combos') ? 'active' : '' ?>">COMBOS &amp; SAVE</a></li>
+                    <li class="nav-main-item"><a href="<?= url('shop?sort=popularity') ?>" class="<?= (str_contains($currPath, '/shop') && str_contains($currQuery, 'popularity')) ? 'active' : '' ?>">BESTSELLERS</a></li>
+                    <li class="nav-main-item"><a href="<?= url('offers') ?>" class="<?= str_contains($currPath, '/offers') ? 'active' : '' ?>">OFFERS <span class="badge-sale-tag">SAVE 35%</span></a></li>
+                    <li class="nav-main-item"><a href="<?= url('build-your-kit') ?>" class="text-primary fw-bold <?= str_contains($currPath, '/build-your-kit') ? 'active' : '' ?>"><i class="bi bi-gift me-1"></i>BUILD YOUR KIT</a></li>
+                    <li class="nav-main-item"><a href="<?= url('blog') ?>" class="<?= str_contains($currPath, '/blog') ? 'active' : '' ?>">WELLNESS BLOG</a></li>
                 </ul>
             </div>
         </nav>
@@ -185,16 +246,23 @@
                 <a href="<?= url('category/pads-and-liners') ?>" class="list-group-item list-group-item-action fw-semibold py-3">100% Organic Cotton Pads &amp; Liners</a>
                 <a href="<?= url('category/intimate-care') ?>" class="list-group-item list-group-item-action fw-semibold py-3">Intimate Hygiene &amp; pH 3.8 Care</a>
                 <a href="<?= url('combos') ?>" class="list-group-item list-group-item-action fw-bold text-primary py-3"><i class="bi bi-tag-fill me-2"></i> Value Bundles &amp; Combos</a>
+                <a href="<?= url('find-my-fit') ?>" class="list-group-item list-group-item-action fw-bold text-primary py-3"><i class="bi bi-magic me-2"></i> Find My Fit &amp; Flow Quiz</a>
                 <a href="<?= url('offers') ?>" class="list-group-item list-group-item-action fw-bold text-danger py-3"><i class="bi bi-percent me-2"></i> Exclusive Offers</a>
                 <a href="<?= url('blog') ?>" class="list-group-item list-group-item-action py-3"><i class="bi bi-book me-2"></i> Period Care &amp; Health Guides</a>
             </div>
 
             <div class="p-4 border-top mt-2 bg-light">
-                <?php if (is_authenticated()): ?>
+                <?php if (is_authenticated()): 
+                    $mInfo = auth_user() ?? [];
+                    $mName = $mInfo['name'] ?? 'Account';
+                    $mMobile = $mInfo['mobile'] ?? '';
+                ?>
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <div class="fw-bold"><?= e(auth_user()['name']) ?></div>
-                            <small class="text-muted">+91 <?= e(auth_user()['mobile']) ?></small>
+                            <div class="fw-bold"><?= e($mName) ?></div>
+                            <?php if (!empty($mMobile)): ?>
+                                <small class="text-muted">+91 <?= e($mMobile) ?></small>
+                            <?php endif; ?>
                         </div>
                         <a href="<?= url('logout') ?>" class="btn btn-sm btn-outline-danger fw-bold"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
                     </div>

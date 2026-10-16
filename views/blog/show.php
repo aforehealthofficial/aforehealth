@@ -10,6 +10,33 @@
         </ol>
     </nav>
 
+    <!-- Schema.org BlogPosting Structured Data for Google Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": <?= json_encode($post['title']) ?>,
+      "image": [
+        <?= json_encode(upload_url('blog/' . $post['featured_image'])) ?>
+      ],
+      "datePublished": "<?= date('c', strtotime($post['published_at'])) ?>",
+      "dateModified": "<?= date('c', strtotime($post['updated_at'] ?? $post['published_at'])) ?>",
+      "author": [{
+          "@type": "Person",
+          "name": <?= json_encode($post['author'] ?? 'AFOREHEALTH Wellness Team') ?>
+      }],
+      "publisher": {
+          "@type": "Organization",
+          "name": "AFOREHEALTH",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "<?= asset('images/logo.svg') ?>"
+          }
+      },
+      "description": <?= json_encode($post['excerpt']) ?>
+    }
+    </script>
+
     <article class="bg-white rounded-4 shadow-sm p-4 p-md-5 border mb-5">
         <div class="mb-3">
             <span class="badge bg-light text-primary fw-bold text-uppercase px-3 py-2"><?= e($post['category_name']) ?></span>
@@ -28,10 +55,27 @@
             </div>
         </div>
 
-        <!-- Featured Banner Art -->
-        <div class="mb-4 rounded-4 overflow-hidden border">
-            <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 400px; object-fit: cover;">
-        </div>
+        <!-- Educational Video or Featured Banner Art -->
+        <?php if (!empty($post['video_url'])): 
+            $blogVideo = parse_video_source($post['video_url']);
+        ?>
+            <?php if (!empty($blogVideo)): ?>
+                <div class="mb-4 rounded-4 overflow-hidden shadow-sm border bg-black ratio ratio-16x9">
+                    <?php if ($blogVideo['is_embed']): ?>
+                        <iframe src="<?= e($blogVideo['src']) ?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    <?php else: ?>
+                        <video controls class="w-100 h-100 object-fit-contain">
+                            <source src="<?= e($blogVideo['src']) ?>" type="video/mp4">
+                        </video>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <!-- Featured Banner Art -->
+            <div class="mb-4 rounded-4 overflow-hidden border">
+                <img src="<?= upload_url('blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="w-100" style="max-height: 400px; object-fit: cover;">
+            </div>
+        <?php endif; ?>
 
         <!-- Lead Excerpt -->
         <p class="lead text-muted mb-4 fst-italic" style="border-left: 4px solid var(--afh-primary); padding-left: 16px;">
@@ -44,27 +88,43 @@
         </div>
 
         <!-- WhatsApp Community Sisterhood Box -->
-        <div class="p-4 rounded-4 my-5 text-center" style="background: linear-gradient(135deg, #E8F5EE 0%, #D8EDE1 100%); border: 1px solid #C4E6D0;">
+        <div class="sisterhood-card p-4 my-5 text-center shadow-sm">
+            <span class="badge bg-success text-white px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">
+                <i class="bi bi-shield-lock-fill me-1"></i> Private &amp; Discreet
+            </span>
             <h5 class="fw-bold text-dark mb-2">Have questions about your menstrual health?</h5>
-            <p class="text-muted small mb-3">Join our WhatsApp sisterhood community to connect with other women and healthcare experts.</p>
-            <a href="<?= e(get_setting('whatsapp_group_url')) ?>" target="_blank" class="btn btn-success fw-bold px-4 py-2 rounded-pill">
-                <i class="bi bi-whatsapp me-1"></i> Join AFOREHEALTH Community
+            <p class="text-muted small mb-3 mx-auto" style="max-width: 500px;">
+                Join our WhatsApp sisterhood community to connect with other women, ask doctors confidential questions, and get VIP tips.
+            </p>
+            <a href="<?= e(get_setting('whatsapp_group_url') ?: 'https://chat.whatsapp.com/sample') ?>" target="_blank" class="btn btn-success fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+                <i class="bi bi-whatsapp fs-5"></i> Join AFOREHEALTH Sisterhood
             </a>
         </div>
     </article>
 
     <!-- Recent Guides -->
     <?php if (!empty($recentPosts)): ?>
-        <div class="mb-5">
-            <h4 class="fw-bold mb-4">Related Guides &amp; Articles</h4>
+        <div class="mb-5 pt-4 border-top">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold m-0 text-dark">Related Guides &amp; Articles</h4>
+                <a href="<?= url('blog') ?>" class="btn btn-outline-primary btn-sm fw-bold rounded-pill">View All Articles</a>
+            </div>
             <div class="row g-3">
                 <?php foreach ($recentPosts as $rp): ?>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
-                            <h6 class="fw-bold mb-2">
-                                <a href="<?= url('blog/' . $rp['slug']) ?>" class="text-dark"><?= e($rp['title']) ?></a>
-                            </h6>
-                            <a href="<?= url('blog/' . $rp['slug']) ?>" class="small text-primary fw-bold mt-auto">Read More →</a>
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white transition-all hover-lift">
+                            <a href="<?= url('blog/' . $rp['slug']) ?>" class="d-block overflow-hidden" style="height: 140px;">
+                                <img src="<?= upload_url('blog/' . ($rp['featured_image'] ?? 'blog_science_period_panties.svg')) ?>" alt="<?= e($rp['title']) ?>" class="w-100 h-100 object-fit-cover">
+                            </a>
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <h6 class="fw-bold mb-2">
+                                    <a href="<?= url('blog/' . $rp['slug']) ?>" class="text-dark text-decoration-none"><?= e($rp['title']) ?></a>
+                                </h6>
+                                <p class="text-muted small mb-3 flex-grow-1" style="font-size: 0.8rem; line-height: 1.5;">
+                                    <?= e(substr($rp['excerpt'] ?? '', 0, 80)) ?>...
+                                </p>
+                                <a href="<?= url('blog/' . $rp['slug']) ?>" class="small text-primary fw-bold mt-auto d-inline-flex align-items-center gap-1">Read Guide <i class="bi bi-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

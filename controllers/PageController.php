@@ -68,6 +68,20 @@ class PageController {
         ");
         $stmt->execute([$name, $mobile, !empty($email) ? $email : null, $subject, $message]);
 
+        // Dispatch notifications from info@aforehealth.com
+        try {
+            $emailService = new \Services\EmailService();
+            $emailService->sendContactFormNotification([
+                'name' => $name,
+                'mobile' => $mobile,
+                'email' => $email,
+                'subject' => $subject,
+                'message' => $message
+            ]);
+        } catch (\Exception $e) {
+            error_log("Contact notification error: " . $e->getMessage());
+        }
+
         set_flash('success', 'Thank you! Your message has been received. Our team will get back to you within 24 hours.');
         redirect('/contact-us');
     }

@@ -65,16 +65,43 @@
                 <span class="status-pill status-<?= strtolower($order['order_status']) ?>"><?= e($order['order_status']) ?></span>
             </div>
 
-            <!-- Status Timeline (7 Steps) -->
-            <div class="row text-center mb-4 g-2">
-                <?php $idx = 0; foreach ($flowSteps as $stKey => $stLabel): ?>
-                    <div class="col">
-                        <div class="p-2 rounded-3 <?= ($curIndex >= $idx && $curIndex !== -1) ? 'bg-success text-white' : 'bg-light text-muted border' ?>" style="font-size: 0.72rem; min-height: 50px; display: flex; flex-direction: column; justify-content: center;">
-                            <i class="bi <?= ($curIndex >= $idx && $curIndex !== -1) ? 'bi-check-circle-fill' : 'bi-circle' ?> mb-1"></i>
-                            <span class="fw-bold"><?= $stLabel ?></span>
+            <!-- Connected Status Timeline (7 Steps) -->
+            <?php
+                $pct = 0;
+                if ($curIndex >= 0) {
+                    $pct = min(100, round(($curIndex / (count($flowSteps) - 1)) * 90));
+                }
+                $icons = [
+                    'PENDING' => 'bi-receipt',
+                    'CONFIRMED' => 'bi-patch-check-fill',
+                    'PROCESSING' => 'bi-gear-wide-connected',
+                    'PACKED' => 'bi-box-seam-fill',
+                    'SHIPPED' => 'bi-truck',
+                    'OUT_FOR_DELIVERY' => 'bi-bicycle',
+                    'DELIVERED' => 'bi-house-check-fill'
+                ];
+            ?>
+            <div class="track-stepper-container">
+                <div class="track-stepper-progress-bg"></div>
+                <div class="track-stepper-progress-bar" style="width: <?= $pct ?>%;"></div>
+                <div class="track-stepper-steps">
+                    <?php $idx = 0; foreach ($flowSteps as $stKey => $stLabel):
+                        $isCompleted = ($curIndex > $idx && $curIndex !== -1);
+                        $isActive = ($curIndex === $idx && $curIndex !== -1);
+                        $stepClass = $isCompleted ? 'completed' : ($isActive ? 'active' : '');
+                    ?>
+                        <div class="track-step-item <?= $stepClass ?>">
+                            <div class="track-step-circle">
+                                <?php if ($isCompleted): ?>
+                                    <i class="bi bi-check-lg"></i>
+                                <?php else: ?>
+                                    <i class="bi <?= $icons[$stKey] ?? 'bi-circle' ?>"></i>
+                                <?php endif; ?>
+                            </div>
+                            <span class="track-step-label"><?= $stLabel ?></span>
                         </div>
-                    </div>
-                <?php $idx++; endforeach; ?>
+                    <?php $idx++; endforeach; ?>
+                </div>
             </div>
 
             <!-- Courier Details -->

@@ -19,23 +19,33 @@
     <!-- Admin Sidebar -->
     <?php
         $sbDb = getDbConnection();
+        $safeCount = function(string $sql) use ($sbDb): int {
+            try {
+                $res = $sbDb->query($sql);
+                return $res ? (int)$res->fetchColumn() : 0;
+            } catch (\Throwable $e) {
+                return 0;
+            }
+        };
+
         $sbCounts = [
-            'products' => (int)$sbDb->query("SELECT COUNT(*) FROM products")->fetchColumn(),
-            'categories' => (int)$sbDb->query("SELECT COUNT(*) FROM categories")->fetchColumn(),
-            'inventory' => (int)$sbDb->query("SELECT COUNT(*) FROM products")->fetchColumn(),
-            'inventory_low' => (int)$sbDb->query("SELECT COUNT(*) FROM products WHERE stock <= low_stock_threshold")->fetchColumn(),
-            'reviews_pending' => (int)$sbDb->query("SELECT COUNT(*) FROM reviews WHERE status = 'pending'")->fetchColumn(),
-            'reviews_total' => (int)$sbDb->query("SELECT COUNT(*) FROM reviews")->fetchColumn(),
-            'questions_pending' => (int)$sbDb->query("SELECT COUNT(*) FROM product_questions WHERE status = 'pending'")->fetchColumn(),
-            'questions_total' => (int)$sbDb->query("SELECT COUNT(*) FROM product_questions")->fetchColumn(),
-            'bundles' => (int)$sbDb->query("SELECT COUNT(*) FROM bundle_products")->fetchColumn(),
-            'orders' => (int)$sbDb->query("SELECT COUNT(*) FROM orders")->fetchColumn(),
-            'customers' => (int)$sbDb->query("SELECT COUNT(*) FROM users WHERE role != 'admin'")->fetchColumn(),
-            'pincodes' => (int)$sbDb->query("SELECT COUNT(*) FROM shipping_pincodes WHERE is_serviceable = 1")->fetchColumn(),
-            'coupons' => (int)$sbDb->query("SELECT COUNT(*) FROM coupons WHERE is_active = 1")->fetchColumn(),
-            'flash_sales' => (int)$sbDb->query("SELECT COUNT(*) FROM flash_sales WHERE is_active = 1")->fetchColumn(),
-            'blog' => (int)$sbDb->query("SELECT COUNT(*) FROM blog_posts")->fetchColumn(),
-            'notifications' => (int)$sbDb->query("SELECT COUNT(*) FROM notifications WHERE is_read = 0")->fetchColumn(),
+            'products' => $safeCount("SELECT COUNT(*) FROM products"),
+            'categories' => $safeCount("SELECT COUNT(*) FROM categories"),
+            'inventory' => $safeCount("SELECT COUNT(*) FROM products"),
+            'inventory_low' => $safeCount("SELECT COUNT(*) FROM products WHERE stock <= low_stock_threshold"),
+            'reviews_pending' => $safeCount("SELECT COUNT(*) FROM reviews WHERE status = 'pending'"),
+            'reviews_total' => $safeCount("SELECT COUNT(*) FROM reviews"),
+            'questions_pending' => $safeCount("SELECT COUNT(*) FROM product_questions WHERE status = 'pending'"),
+            'questions_total' => $safeCount("SELECT COUNT(*) FROM product_questions"),
+            'bundles' => $safeCount("SELECT COUNT(*) FROM bundles"),
+            'orders' => $safeCount("SELECT COUNT(*) FROM orders"),
+            'customers' => $safeCount("SELECT COUNT(*) FROM users"),
+            'pincodes' => $safeCount("SELECT COUNT(*) FROM pincodes WHERE status = 'active'"),
+            'coupons' => $safeCount("SELECT COUNT(*) FROM coupons WHERE status = 'active'"),
+            'flash_sales' => $safeCount("SELECT COUNT(*) FROM flash_sales WHERE status = 'active'"),
+            'banners' => $safeCount("SELECT COUNT(*) FROM banners"),
+            'blog' => $safeCount("SELECT COUNT(*) FROM blog_posts"),
+            'notifications' => $safeCount("SELECT COUNT(*) FROM notifications WHERE is_read = 0"),
         ];
     ?>
     <aside class="admin-sidebar">
@@ -109,6 +119,11 @@
                     <span class="sidebar-badge sidebar-badge-neutral"><?= $sbCounts['orders'] ?></span>
                 </a>
             </li>
+            <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/abandoned-carts') ? 'active' : '' ?>">
+                <a href="<?= url('admin/abandoned-carts') ?>">
+                    <i class="bi bi-cart-x text-danger"></i> Abandoned Carts
+                </a>
+            </li>
             <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/customers') ? 'active' : '' ?>">
                 <a href="<?= url('admin/customers') ?>">
                     <i class="bi bi-people"></i> Customers
@@ -137,6 +152,12 @@
                     <?php else: ?>
                         <span class="sidebar-badge sidebar-badge-neutral">0</span>
                     <?php endif; ?>
+                </a>
+            </li>
+            <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/banners') ? 'active' : '' ?>">
+                <a href="<?= url('admin/banners') ?>">
+                    <i class="bi bi-images"></i> Home Banners
+                    <span class="sidebar-badge sidebar-badge-neutral"><?= $sbCounts['banners'] ?></span>
                 </a>
             </li>
             <li class="sidebar-item <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/blog') ? 'active' : '' ?>">
@@ -189,30 +210,47 @@
         
         <!-- Topbar -->
         <header class="admin-topbar">
-            <div class="d-flex align-items-center gap-3">
-                <button class="btn btn-light d-lg-none p-1" id="admin-sidebar-toggle-top"><i class="bi bi-list fs-4"></i></button>
+            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                <button class="btn btn-light d-lg-none p-1" id="admin-sidebar-toggle-top" aria-label="Toggle Navigation"><i class="bi bi-list fs-4"></i></button>
+                <button class="btn btn-light d-none d-lg-flex p-2 rounded-circle border shadow-xs" id="admin-sidebar-collapse-btn" title="Collapse / Expand Sidebar"><i class="bi bi-layout-sidebar-inset fs-5"></i></button>
                 <h5 class="m-0 fw-bold text-dark d-none d-sm-block"><?= e($pageTitle ?? 'AFOREHEALTH Admin') ?></h5>
             </div>
-            <div class="d-flex align-items-center gap-3">
-                <a href="<?= url('admin/notifications') ?>" class="btn btn-light position-relative p-2 rounded-circle" title="Notifications">
+            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                <a href="<?= url('admin/notifications') ?>" class="btn btn-light position-relative p-2 rounded-circle border shadow-xs" title="Notifications">
                     <i class="bi bi-bell fs-5 text-dark"></i>
-                    <?php if (($notifCnt ?? 0) > 0): ?>
+                    <?php if (($sbCounts['notifications'] ?? 0) > 0): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
-                            <?= $notifCnt ?>
+                            <?= $sbCounts['notifications'] ?>
                         </span>
                     <?php endif; ?>
                 </a>
-                <a href="<?= url() ?>" target="_blank" class="btn btn-outline-secondary btn-sm fw-bold rounded-pill">
-                    <i class="bi bi-box-arrow-up-right me-1"></i> View Storefront
+                <a href="<?= url() ?>" target="_blank" class="btn btn-outline-secondary btn-sm fw-bold rounded-pill d-none d-md-inline-flex align-items-center gap-1">
+                    <i class="bi bi-box-arrow-up-right"></i> Storefront
                 </a>
-                <div class="d-flex align-items-center gap-2">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #8B263E, #A63A50); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(139,38,62,0.25);">
-                        <?= strtoupper(substr(auth_admin()['name'] ?? 'A', 0, 1)) ?>
-                    </div>
-                    <div class="d-none d-md-block text-start small">
-                        <strong class="d-block text-dark"><?= e(auth_admin()['name'] ?? 'Admin') ?></strong>
-                        <span class="text-muted" style="font-size: 0.75rem;"><?= e(auth_admin()['role_name'] ?? 'Super Admin') ?></span>
-                    </div>
+                
+                <!-- Admin Profile Dropdown with Logout -->
+                <div class="dropdown">
+                    <button class="btn p-1 border-0 d-flex align-items-center gap-2 dropdown-toggle bg-transparent" type="button" id="adminUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #8B263E, #A63A50); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(139,38,62,0.25);">
+                            <?= strtoupper(substr(auth_admin()['name'] ?? 'A', 0, 1)) ?>
+                        </div>
+                        <div class="d-none d-md-block text-start small me-1">
+                            <strong class="d-block text-dark"><?= e(auth_admin()['name'] ?? 'Super Administrator') ?></strong>
+                            <span class="text-muted" style="font-size: 0.75rem;"><?= e(auth_admin()['role_name'] ?? 'Super Admin') ?></span>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-2 border-0 mt-2" aria-labelledby="adminUserDropdown" style="min-width: 220px; z-index: 1060;">
+                        <li class="px-3 py-2 border-bottom mb-1">
+                            <div class="fw-bold text-dark small text-truncate"><?= e(auth_admin()['name'] ?? 'Super Administrator') ?></div>
+                            <div class="text-muted" style="font-size: 0.75rem;"><?= e(auth_admin()['email'] ?? 'admin@aforehealth.com') ?></div>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill mt-1" style="font-size: 0.65rem;"><?= e(auth_admin()['role_name'] ?? 'Super Admin') ?></span>
+                        </li>
+                        <li><a class="dropdown-item rounded-3 py-2 small" href="<?= url('admin/settings') ?>"><i class="bi bi-gear me-2 text-primary"></i> System Settings</a></li>
+                        <li><a class="dropdown-item rounded-3 py-2 small" href="<?= url('admin/notifications') ?>"><i class="bi bi-bell me-2 text-primary"></i> Notifications</a></li>
+                        <li><a class="dropdown-item rounded-3 py-2 small" href="<?= url() ?>" target="_blank"><i class="bi bi-box-arrow-up-right me-2 text-primary"></i> View Storefront</a></li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li><a class="dropdown-item rounded-3 py-2 small text-danger fw-bold" href="<?= url('admin/logout') ?>"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </header>

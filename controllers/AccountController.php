@@ -162,53 +162,89 @@ class AccountController {
     }
 
     public function wishlist(): void {
-        $userId = auth_user()['id'];
+        $user = auth_user();
         $pdo = getDbConnection();
+        $products = [];
 
-        $stmt = $pdo->prepare("
-            SELECT p.*, c.name as category_name
-            FROM wishlists w
-            JOIN products p ON w.product_id = p.id
-            JOIN categories c ON p.category_id = c.id
-            WHERE w.user_id = ?
-            ORDER BY w.created_at DESC
-        ");
-        $stmt->execute([$userId]);
-        $items = $stmt->fetchAll();
+        if ($user) {
+            $stmt = $pdo->prepare("
+                SELECT p.*, c.name as category_name
+                FROM wishlists w
+                JOIN products p ON w.product_id = p.id
+                JOIN categories c ON p.category_id = c.id
+                WHERE w.user_id = ?
+                ORDER BY w.created_at DESC
+            ");
+            $stmt->execute([$user['id']]);
+            $products = $stmt->fetchAll();
+        } else {
+            $guestWishlist = $_SESSION['guest_wishlist'] ?? [];
+            if (!empty($guestWishlist)) {
+                $placeholders = implode(',', array_fill(0, count($guestWishlist), '?'));
+                $stmt = $pdo->prepare("
+                    SELECT p.*, c.name as category_name
+                    FROM products p
+                    JOIN categories c ON p.category_id = c.id
+                    WHERE p.id IN ($placeholders)
+                ");
+                $stmt->execute($guestWishlist);
+                $products = $stmt->fetchAll();
+            }
+        }
 
         view('account.wishlist', [
             'pageTitle' => 'My Wishlist - AFOREHEALTH',
-            'items' => $items
+            'products' => $products,
+            'items' => $products
         ]);
     }
 
     public function toggleWishlist(): void {
         $productId = (int)($_POST['product_id'] ?? 0);
-        $userId = auth_user()['id'];
+        $user = auth_user();
 
-        $pdo = getDbConnection();
-        $stmt = $pdo->prepare("SELECT id FROM wishlists WHERE user_id = ? AND product_id = ?");
-        $stmt->execute([$userId, $productId]);
-        $exists = $stmt->fetch();
-
-        if ($exists) {
-            $del = $pdo->prepare("DELETE FROM wishlists WHERE id = ?");
-            $del->execute([$exists['id']]);
-            $inWishlist = false;
-            $msg = 'Product removed from your wishlist.';
+        if (!$user) {
+            if (!isset($_SESSION['guest_wishlist'])) {
+                $_SESSION['guest_wishlist'] = [];
+            }
+            if (in_array($productId, $_SESSION['guest_wishlist'])) {
+                $_SESSION['guest_wishlist'] = array_values(array_diff($_SESSION['guest_wishlist'], [$productId]));
+                $inWishlist = false;
+                $msg = 'Product removed from your wishlist.';
+            } else {
+                $_SESSION['guest_wishlist'][] = $productId;
+                $inWishlist = true;
+                $msg = 'Product saved to your wishlist.';
+            }
+            $count = count($_SESSION['guest_wishlist']);
         } else {
-            $ins = $pdo->prepare("INSERT INTO wishlists (user_id, product_id) VALUES (?, ?)");
-            $ins->execute([$userId, $productId]);
-            $inWishlist = true;
-            $msg = 'Product saved to your wishlist.';
+            $userId = (int)$user['id'];
+            $pdo = getDbConnection();
+            $stmt = $pdo->prepare("SELECT id FROM wishlists WHERE user_id = ? AND product_id = ?");
+            $stmt->execute([$userId, $productId]);
+            $exists = $stmt->fetch();
+
+            if ($exists) {
+                $del = $pdo->prepare("DELETE FROM wishlists WHERE id = ?");
+                $del->execute([$exists['id']]);
+                $inWishlist = false;
+                $msg = 'Product removed from your wishlist.';
+            } else {
+                $ins = $pdo->prepare("INSERT INTO wishlists (user_id, product_id) VALUES (?, ?)");
+                $ins->execute([$userId, $productId]);
+                $inWishlist = true;
+                $msg = 'Product saved to your wishlist.';
+            }
+            $count = get_wishlist_count();
         }
 
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (isset($_SERVER['HTTP_ACCEPT']) && str_contains($_SERVER['HTTP_ACCEPT'], 'application/json'))) {
             json_response([
                 'success' => true,
+                'added' => $inWishlist,
                 'in_wishlist' => $inWishlist,
                 'message' => $msg,
-                'wishlist_count' => get_wishlist_count()
+                'wishlist_count' => $count
             ]);
         }
 

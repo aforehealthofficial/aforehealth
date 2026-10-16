@@ -8,7 +8,7 @@ class InvoiceService {
         $companyAddress = nl2br(e(get_setting('store_address')));
         $gstin = get_setting('store_gstin', '27AAACA1234A1Z5');
         $phone = get_setting('store_phone', '+91 98765 43210');
-        $email = get_setting('store_email', 'care@aforehealth.com');
+        $email = get_setting('store_email', 'info@aforehealth.com');
 
         $itemsHtml = '';
         foreach ($order['items'] as $idx => $it) {

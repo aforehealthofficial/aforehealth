@@ -3,7 +3,14 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <a href="<?= url('admin/customers') ?>" class="small text-muted text-decoration-none">← Back to Customers</a>
-        <h4 class="fw-bold m-0 text-dark"><?= e($customer['name']) ?></h4>
+        <div class="d-flex align-items-center gap-2">
+            <h4 class="fw-bold m-0 text-dark"><?= e($customer['name']) ?></h4>
+            <?php if (!empty($customer['whatsapp_opt_in'])): ?>
+                <span class="badge bg-success-subtle text-success border border-success fw-bold">
+                    <i class="bi bi-whatsapp me-1"></i> WhatsApp Community Member
+                </span>
+            <?php endif; ?>
+        </div>
         <small class="text-muted">+91 <?= e($customer['mobile']) ?> • <?= e($customer['email'] ?: 'No email') ?></small>
     </div>
 </div>

@@ -22,6 +22,9 @@ class HomeController {
         // Fetch FAQs for homepage accordion
         $faqs = $pdo->query("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6")->fetchAll();
 
+        // Fetch active home hero banners
+        $heroBanners = $pdo->query("SELECT * FROM banners WHERE status = 'active' AND position = 'home_hero' ORDER BY sort_order ASC, id DESC")->fetchAll();
+
         view('storefront.home', [
             'pageTitle' => 'AFOREHEALTH | Everyday Comfort. Period Confidence.',
             'categories' => $categories,
@@ -29,7 +32,8 @@ class HomeController {
             'featured' => $featured,
             'newArrivals' => $newArrivals,
             'reviews' => $homepageReviews,
-            'faqs' => $faqs
+            'faqs' => $faqs,
+            'heroBanners' => $heroBanners
         ]);
     }
 }

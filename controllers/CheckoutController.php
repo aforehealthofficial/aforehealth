@@ -25,6 +25,7 @@ class CheckoutController {
 
         if ($user) {
             $savedAddresses = $userModel->getAddresses($user['id']);
+            $cartModel->updateLead($cartModel->getActiveCartId(), $user['name'] ?? null, $user['mobile'] ?? null, $user['email'] ?? null);
         }
 
         $paymentService = new PaymentService();
@@ -40,11 +41,19 @@ class CheckoutController {
             $_SESSION['checkout_idempotency_token'] = bin2hex(random_bytes(16));
         }
 
+        // Check if customer is placing their first order
+        $orderModel = new Order();
+        $isFirstOrder = true;
+        if ($user) {
+            $isFirstOrder = $orderModel->isFirstOrder($user['id'], $user['mobile'] ?? '');
+        }
+
         view('storefront.checkout', [
             'pageTitle' => 'Secure Checkout - AFOREHEALTH',
             'cart' => $cart,
             'user' => $user,
             'savedAddresses' => $savedAddresses,
+            'isFirstOrder' => $isFirstOrder,
             'razorpayKey' => $razorpayKey,
             'codEnabled' => $codEnabled,
             'codFee' => $codFee,
@@ -84,6 +93,7 @@ class CheckoutController {
         $state = trim($_POST['state'] ?? '');
         $pincode = trim($_POST['pincode'] ?? '');
         $paymentMethod = $_POST['payment_method'] ?? 'razorpay';
+        $whatsappOptIn = !empty($_POST['whatsapp_opt_in']) ? 1 : 0;
 
         if (empty($fullName) || strlen($mobile) !== 10 || empty($house) || empty($city) || empty($state) || strlen($pincode) !== 6) {
             json_response(['success' => false, 'message' => 'Please provide a valid Indian shipping address with 10-digit mobile and 6-digit PIN code.'], 400);
@@ -112,13 +122,20 @@ class CheckoutController {
             'email' => $email,
             'address' => $address,
             'payment_method' => $paymentMethod,
+            'whatsapp_opt_in' => $whatsappOptIn,
             'notes' => $_POST['notes'] ?? null
         ];
+
+        // Capture lead on cart for recovery if payment/order drops
+        $cartModel->updateLead($cartModel->getActiveCartId(), $fullName, $mobile, $email);
 
         try {
             $orderModel = new Order();
             $orderResult = $orderModel->createFromCart($checkoutData);
             $orderNumber = $orderResult['order_number'];
+
+            // Mark cart as successfully converted
+            $cartModel->markRecovered($cartModel->getActiveCartId());
 
             // Store idempotency token
             if (!empty($idempotencyToken)) {

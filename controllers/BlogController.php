@@ -51,7 +51,8 @@ class BlogController {
         $recentPosts = $recentStmt->fetchAll();
 
         view('blog.show', [
-            'pageTitle' => e($post['title']) . ' - AFOREHEALTH',
+            'pageTitle' => (!empty($post['seo_title']) ? $post['seo_title'] : $post['title']) . ' - AFOREHEALTH',
+            'metaDescription' => !empty($post['seo_description']) ? $post['seo_description'] : $post['excerpt'],
             'post' => $post,
             'recentPosts' => $recentPosts
         ]);

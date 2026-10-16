@@ -55,6 +55,7 @@ CREATE TABLE `users` (
   `gender` ENUM('female','male','other','prefer_not_to_say') DEFAULT 'female',
   `wallet_balance` DECIMAL(10,2) DEFAULT 0.00,
   `status` ENUM('active','inactive','suspended') DEFAULT 'active',
+  `whatsapp_opt_in` TINYINT(1) DEFAULT 0,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `idx_users_mobile` (`mobile`)
@@ -174,6 +175,8 @@ CREATE TABLE `products` (
   `is_new_arrival` TINYINT(1) DEFAULT 0,
   `tags` VARCHAR(255) NULL,
   `primary_image` VARCHAR(255) NULL,
+  `video_url` VARCHAR(500) NULL,
+  `video_file` VARCHAR(255) NULL,
   `rating_avg` DECIMAL(3,2) DEFAULT 5.00,
   `rating_count` INT DEFAULT 0,
   `seo_title` VARCHAR(255) NULL,
@@ -330,6 +333,7 @@ CREATE TABLE `orders` (
   `cod_fee` DECIMAL(10,2) DEFAULT 0.00,
   `grand_total` DECIMAL(10,2) NOT NULL,
   `payment_method` ENUM('razorpay','upi','card','netbanking','cod') NOT NULL DEFAULT 'razorpay',
+  `whatsapp_opt_in` TINYINT(1) DEFAULT 0,
   `payment_status` ENUM('pending','authorized','paid','failed','refunded') DEFAULT 'pending',
   `order_status` ENUM('PENDING','CONFIRMED','PROCESSING','PACKED','SHIPPED','OUT_FOR_DELIVERY','DELIVERED','CANCELLED','RETURN_REQUESTED','RETURN_APPROVED','RETURNED','REFUNDED','FAILED') DEFAULT 'CONFIRMED',
   `shipping_address_json` LONGTEXT NOT NULL,
@@ -515,6 +519,7 @@ CREATE TABLE `blog_posts` (
   `excerpt` TEXT NOT NULL,
   `content` LONGTEXT NOT NULL,
   `featured_image` VARCHAR(255) NULL,
+  `video_url` VARCHAR(500) NULL,
   `status` ENUM('published','draft') DEFAULT 'published',
   `published_at` DATETIME NULL,
   `seo_title` VARCHAR(255) NULL,
@@ -552,6 +557,7 @@ CREATE TABLE `banners` (
   `subtitle` VARCHAR(255) NULL,
   `image_desktop` VARCHAR(255) NOT NULL,
   `image_mobile` VARCHAR(255) NULL,
+  `video_url` VARCHAR(500) NULL,
   `link` VARCHAR(255) NOT NULL,
   `cta_text` VARCHAR(100) DEFAULT 'Shop Now',
   `position` VARCHAR(50) DEFAULT 'home_hero',
@@ -613,13 +619,16 @@ CREATE TABLE `login_logs` (
 CREATE TABLE `otp_verifications` (
   `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `mobile` VARCHAR(20) NOT NULL,
-  `otp_code` VARCHAR(10) NOT NULL,
+  `otp_code` VARCHAR(10) NULL DEFAULT NULL,
+  `twofactor_session_id` VARCHAR(100) NULL,
   `purpose` ENUM('login','register','change_mobile','checkout') DEFAULT 'login',
   `attempts` INT DEFAULT 0,
+  `ip_address` VARCHAR(45) NULL,
   `expires_at` DATETIME NOT NULL,
   `verified_at` DATETIME NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX `idx_otp_mobile` (`mobile`),
+  INDEX `idx_otp_twofactor_session` (`twofactor_session_id`),
   INDEX `idx_otp_expires` (`expires_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
