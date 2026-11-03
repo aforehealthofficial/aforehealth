@@ -22,7 +22,7 @@ class TwoFactorService {
     public function __construct() {
         $this->apiKey = trim(env('TWOFACTOR_API_KEY', get_setting('twofactor_api_key', '')));
         $templateEnv = env('TWOFACTOR_TEMPLATE_NAME', get_setting('twofactor_template_name', null));
-        $this->templateName = $templateEnv !== null ? trim($templateEnv) : 'AFOREHEALTH_LOGIN_OTP';
+        $this->templateName = ($templateEnv !== null && trim($templateEnv) !== '') ? trim($templateEnv) : 'OTP1';
         $this->baseUrl = rtrim(env('TWOFACTOR_BASE_URL', 'https://2factor.in/API/V1'), '/');
     }
 
@@ -89,12 +89,13 @@ class TwoFactorService {
 
     /**
      * Send OTP via 2Factor AUTOGEN API
-     * Endpoint: GET https://2factor.in/API/V1/{API_KEY}/SMS/{PHONE_NUMBER}/AUTOGEN/{TEMPLATE_NAME}
+     * Endpoint: GET https://2factor.in/API/V1/{API_KEY}/SMS/{PHONE_NUMBER}/AUTOGEN/OTP1
      */
     public function sendAutogenOtp(string $rawPhone): array {
         $phoneData = $this->normalizePhone($rawPhone);
-        $providerPhone = $phoneData['international'];
         $localPhone = $phoneData['local'];
+        // Use 10-digit customer mobile number as specified in 2Factor OTP1 endpoint instructions
+        $providerPhone = env('TWOFACTOR_USE_91', false) ? $phoneData['international'] : $localPhone;
 
         // Mock mode for automated testing without sending live paid SMS
         if (self::isMockMode()) {
@@ -120,23 +121,15 @@ class TwoFactorService {
             ];
         }
 
-        // URL encode parameters safely (supports both custom template and default system template)
-        if (!empty($this->templateName)) {
-            $url = sprintf(
-                '%s/%s/SMS/%s/AUTOGEN/%s',
-                $this->baseUrl,
-                rawurlencode($this->apiKey),
-                rawurlencode($providerPhone),
-                rawurlencode($this->templateName)
-            );
-        } else {
-            $url = sprintf(
-                '%s/%s/SMS/%s/AUTOGEN',
-                $this->baseUrl,
-                rawurlencode($this->apiKey),
-                rawurlencode($providerPhone)
-            );
-        }
+        // Endpoint: https://2factor.in/API/V1/{API_KEY}/SMS/{PHONE_NUMBER}/AUTOGEN/OTP1
+        $template = !empty($this->templateName) ? $this->templateName : 'OTP1';
+        $url = sprintf(
+            '%s/%s/SMS/%s/AUTOGEN/%s',
+            $this->baseUrl,
+            rawurlencode($this->apiKey),
+            rawurlencode($providerPhone),
+            rawurlencode($template)
+        );
 
         $response = $this->executeCurl($url);
 
