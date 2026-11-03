@@ -1,37 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="favBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2D282E" />
-      <stop offset="100%" stop-color="#19161B" />
-    </linearGradient>
-    <linearGradient id="favAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A63A50" />
-      <stop offset="50%" stop-color="#8B5E83" />
-      <stop offset="100%" stop-color="#E8B7C8" />
-    </linearGradient>
-  </defs>
-
-  <!-- Squircle Background -->
-  <rect width="64" height="64" rx="16" fill="url(#favBgGrad)" />
-  <rect x="1" y="1" width="62" height="62" rx="15" fill="none" stroke="#8B5E83" stroke-opacity="0.3" stroke-width="1.5" />
-
-  <!-- Stylized 'AF' Monogram -->
-  <g transform="translate(6, 6)">
-    <!-- Left diagonal leg of A -->
-    <polygon points="21,6 30,6 11,46 2,46" fill="#FFFFFF" />
-    <!-- Top arch/apex join -->
-    <polygon points="21,6 48,6 44,14 28,14" fill="#FFFFFF" />
-    <!-- Right vertical of F -->
-    <polygon points="42,6 50,6 42,46 34,46" fill="#FFFFFF" opacity="0.9" />
-    
-    <!-- Accent F-Bars in Website Rose-Berry Accent Color -->
-    <!-- Top accent bar of F -->
-    <rect x="23" y="7" width="26" height="7" rx="1.5" fill="url(#favAccentGrad)" />
-    <!-- Middle accent bar of F -->
-    <polygon points="17,23 44,23 40,30 14,30" fill="url(#favAccentGrad)" />
-
-    <!-- Center Dot from 'O' Accent -->
-    <circle cx="28" cy="38" r="4" fill="url(#favAccentGrad)" />
-    <circle cx="27" cy="37" r="1.5" fill="#FFF9FA" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" width="64" height="64">
+  <image href="data:image/png;base64,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" x="0" y="0" width="64" height="64" />
 </svg>
