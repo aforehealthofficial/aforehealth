@@ -94,8 +94,9 @@ class TwoFactorService {
     public function sendAutogenOtp(string $rawPhone): array {
         $phoneData = $this->normalizePhone($rawPhone);
         $localPhone = $phoneData['local'];
-        // Use 10-digit customer mobile number as specified in 2Factor OTP1 endpoint instructions
-        $providerPhone = env('TWOFACTOR_USE_91', false) ? $phoneData['international'] : $localPhone;
+        // 2Factor SMS Gateway expects Indian phone numbers prefixed with country code 91
+        // (e.g. 919876543210) so carrier DLT scrubbers route the SMS correctly without falling back to voice.
+        $providerPhone = env('TWOFACTOR_STRIP_91', false) ? $localPhone : $phoneData['international'];
 
         // Mock mode for automated testing without sending live paid SMS
         if (self::isMockMode()) {
