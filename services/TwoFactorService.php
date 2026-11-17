@@ -22,7 +22,12 @@ class TwoFactorService {
     public function __construct() {
         $this->apiKey = trim(env('TWOFACTOR_API_KEY', get_setting('twofactor_api_key', '')));
         $templateEnv = env('TWOFACTOR_TEMPLATE_NAME', get_setting('twofactor_template_name', null));
-        $this->templateName = ($templateEnv !== null && trim($templateEnv) !== '') ? trim($templateEnv) : 'OTP1';
+        // Always enforce approved DLT template 'OTP1'. If legacy/unsupported 'AFOREHEALTH_LOGIN_OTP' exists in server .env, override to 'OTP1'.
+        if (empty($templateEnv) || trim($templateEnv) === 'AFOREHEALTH_LOGIN_OTP') {
+            $this->templateName = 'OTP1';
+        } else {
+            $this->templateName = trim($templateEnv);
+        }
         $this->baseUrl = rtrim(env('TWOFACTOR_BASE_URL', 'https://2factor.in/API/V1'), '/');
     }
 
@@ -123,7 +128,7 @@ class TwoFactorService {
         }
 
         // Endpoint: https://2factor.in/API/V1/{API_KEY}/SMS/{PHONE_NUMBER}/AUTOGEN/OTP1
-        $template = !empty($this->templateName) ? $this->templateName : 'OTP1';
+        $template = (!empty($this->templateName) && $this->templateName !== 'AFOREHEALTH_LOGIN_OTP') ? $this->templateName : 'OTP1';
         $url = sprintf(
             '%s/%s/SMS/%s/AUTOGEN/%s',
             $this->baseUrl,
